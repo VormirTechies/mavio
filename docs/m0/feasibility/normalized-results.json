@@ -1,0 +1,46 @@
+{
+  "input": {
+    "durationSeconds": 6,
+    "sizeBytes": 697051,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "bitrateBitsPerSecond": 929401,
+    "streams": [
+      {
+        "index": 0,
+        "kind": "video",
+        "codec": "h264",
+        "width": 320,
+        "height": 180
+      },
+      {
+        "index": 1,
+        "kind": "audio",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 1
+      }
+    ]
+  },
+  "output": {
+    "durationSeconds": 2.5,
+    "sizeBytes": 233328,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "bitrateBitsPerSecond": 746649,
+    "streams": [
+      {
+        "index": 0,
+        "kind": "video",
+        "codec": "h264",
+        "width": 320,
+        "height": 180
+      },
+      {
+        "index": 1,
+        "kind": "audio",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 1
+      }
+    ]
+  }
+}

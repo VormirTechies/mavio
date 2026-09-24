@@ -1,0 +1,33 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "isolated": true,
+  "checks": [
+    {
+      "name": "explicit same-origin assets load"
+    },
+    {
+      "name": "missing core rejected",
+      "error": "TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:4387/missing-core.js"
+    },
+    {
+      "name": "missing wasm rejected",
+      "error": "RuntimeError: Aborted(CompileError: WebAssembly.instantiate(): BufferSource argument is empty). Build with -sASSERTIONS for more info."
+    },
+    {
+      "name": "deadline stops hanging load",
+      "error": "Error: TIMEOUT"
+    },
+    {
+      "name": "pre-aborted load",
+      "error": "Error: CANCELLED"
+    },
+    {
+      "name": "active abort stops hanging load",
+      "error": "Error: CANCELLED"
+    },
+    {
+      "name": "reload and exec after failures"
+    }
+  ],
+  "passed": true
+}

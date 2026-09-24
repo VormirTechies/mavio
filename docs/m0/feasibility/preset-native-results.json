@@ -1,0 +1,38 @@
+[
+  {
+    "id": "video-balanced-v1",
+    "file": "preset-native-video-balanced-v1.mp4",
+    "elapsedMs": 351.3065,
+    "bytes": 265057
+  },
+  {
+    "id": "video-small-v1",
+    "file": "preset-native-video-small-v1.mp4",
+    "elapsedMs": 382.70099999999996,
+    "bytes": 189881
+  },
+  {
+    "id": "audio-balanced-v1",
+    "file": "preset-native-audio-balanced-v1.mp3",
+    "elapsedMs": 164.56420000000003,
+    "bytes": 97300
+  },
+  {
+    "id": "audio-pcm-v1",
+    "file": "preset-native-audio-pcm-v1.wav",
+    "elapsedMs": 108.3472999999999,
+    "bytes": 577614
+  },
+  {
+    "id": "jpeg-balanced-v1",
+    "file": "preset-native-jpeg-balanced-v1.jpeg",
+    "elapsedMs": 123.7648999999999,
+    "bytes": 8747
+  },
+  {
+    "id": "png-lossless-v1",
+    "file": "preset-native-png-lossless-v1.png",
+    "elapsedMs": 152.59440000000018,
+    "bytes": 15571
+  }
+]

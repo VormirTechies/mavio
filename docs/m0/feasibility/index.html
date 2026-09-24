@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Mavio engine feasibility</title></head><body>
+<h1>Mavio metadata and trim feasibility</h1><button id="run">Run browser validation</button><p id="status">Ready</p><video id="video" controls></video><pre id="results"></pre>
+<script type="module">
+import { FFmpeg } from '/node_modules/@ffmpeg/ffmpeg/dist/esm/index.js';
+const state = document.querySelector('#status');
+const result = { userAgent:navigator.userAgent, isolated:crossOriginIsolated, checks:[], progress:[] };
+window.result=result;
+function check(name,condition,detail){result.checks.push({name,passed:!!condition,detail});if(!condition)throw Error(name);}
+const engine=new FFmpeg();
+let logs=[];
+engine.on('log',e=>logs.push(e.message));
+engine.on('progress',e=>result.progress.push(e));
+const config={coreURL:'/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.js',wasmURL:'/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.wasm'};
+async function probe(input,out){
+ // Narrow experimental shim for pinned core 0.12.10, upstream issue #817.
+ // Unique/fresh output prevents a prior successful result masking a failed probe.
+ try{await engine.deleteFile(out);}catch{}
+ const code=await engine.ffprobe(['-v','error','-show_error','-show_format','-show_streams','-of','json',input,'-o',out]);
+ const parsed=JSON.parse(await engine.readFile(out,'utf8'));
+ if(![0,-1].includes(code)||parsed.error||!parsed.format||!Array.isArray(parsed.streams)||!parsed.streams.length)throw Error('Invalid probe result '+input);
+ check('validated ffprobe '+input,true,{rawCode:code,shim:code===-1});return parsed;
+}
+async function run(){
+try{
+ document.querySelector('#run').disabled=true;state.textContent='Loading engine';await engine.load(config);
+ await engine.exec(['-version']);result.engineVersion=logs.find(x=>x.startsWith('ffmpeg version'));
+ const bytes=new Uint8Array(await (await fetch('/fixture.mp4')).arrayBuffer());
+ await engine.writeFile('fixture.mp4',bytes);state.textContent='Probing metadata';
+ result.input=await probe('fixture.mp4','input.json');
+ check('input metadata',result.input.streams[0].width===320 && Math.abs(Number(result.input.format.duration)-6)<0.05);
+ state.textContent='Trimming';
+ const code=await engine.exec(['-i','fixture.mp4','-ss','1.25','-t','2.5','-map','0:v:0','-map','0:a:0','-c:v','libx264','-preset','ultrafast','-crf','23','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','trim.mp4']);
+ check('trim execution',code===0,{code}); result.output=await probe('trim.mp4','output.json');
+ check('trim duration',Math.abs(Number(result.output.format.duration)-2.5)<=1/24,result.output.format.duration);
+ const data=await engine.readFile('trim.mp4');
+ await fetch('/save/browser-trim.mp4',{method:'POST',body:data});
+ const blobURL=URL.createObjectURL(new Blob([data],{type:'video/mp4'}));const video=document.querySelector('#video');video.src=blobURL;
+ await new Promise((resolve,reject)=>{video.onloadeddata=resolve;video.onerror=()=>reject(Error('video decode'));video.load();});
+ check('HTML video decoded',video.videoWidth===320,{duration:video.duration,width:video.videoWidth});
+ await engine.writeFile('invalid.bin',new TextEncoder().encode('not media'));
+ let badRejected=false;try{await probe('invalid.bin','invalid.json');}catch{badRejected=true;}
+ check('invalid media rejects with shim',badRejected);
+ for(const file of ['fixture.mp4','input.json','trim.mp4','output.json','invalid.bin','invalid.json'])await engine.deleteFile(file);
+ result.remaining=await engine.listDir('/');check('virtual file cleanup',!result.remaining.some(x=>['fixture.mp4','trim.mp4','input.json','output.json','invalid.bin'].includes(x.name)));
+ check('output survives cleanup',video.readyState>=2);
+ state.textContent='Testing cancellation';
+ await engine.writeFile('fixture.mp4',new Uint8Array(await(await fetch('/fixture.mp4')).arrayBuffer()));
+ let timer;const before=performance.now();
+ const pending=engine.exec(['-stream_loop','-1','-i','fixture.mp4','-c:v','libx264','-preset','veryslow','cancelled.mp4']);
+ timer=setTimeout(()=>engine.terminate(),300);
+ let rejected=false;try{await pending;}catch(e){rejected=true;result.cancelError=String(e);}finally{clearTimeout(timer);}
+ check('termination rejects pending job',rejected);result.cancelTotalMs=performance.now()-before;
+ await engine.load(config);await engine.writeFile('fixture.mp4',new Uint8Array(await(await fetch('/fixture.mp4')).arrayBuffer()));
+ const reused=await probe('fixture.mp4','reuse.json');check('reload and reuse',Math.abs(Number(reused.format.duration)-6)<0.05);
+ await engine.deleteFile('fixture.mp4');await engine.deleteFile('reuse.json');engine.terminate();
+ check('output survives disposal',video.readyState>=2);result.passed=true;state.textContent='PASS';
+}catch(e){result.error=String(e);result.logs=logs.slice(-30);state.textContent='FAIL';engine.terminate();}
+finally{document.querySelector('#results').textContent=JSON.stringify(result,null,2);await fetch('/save/browser-results.json',{method:'POST',body:JSON.stringify(result,null,2)});}
+}
+document.querySelector('#run').onclick=run;
+</script></body></html>

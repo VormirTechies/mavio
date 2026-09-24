@@ -1,0 +1,13 @@
+node_modules/
+browser-profile/
+*.mp4
+invalid.bin
+contracts.ts
+browser-before.png
+browser-after.png
+preset-*.mp3
+preset-*.wav
+preset-*.jpeg
+preset-*.png
+init-before.png
+init-after.png

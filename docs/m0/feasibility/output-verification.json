@@ -1,0 +1,20 @@
+[
+  {
+    "file": "native-trim.mp4",
+    "frameCount": 60,
+    "startTime": "0.000000",
+    "duration": "2.500000",
+    "firstFramePSNR": 48.91664862170976,
+    "lastFramePSNR": 46.22058465280577,
+    "decoded": true
+  },
+  {
+    "file": "browser-trim.mp4",
+    "frameCount": 60,
+    "startTime": "0.000000",
+    "duration": "2.500000",
+    "firstFramePSNR": 48.91664862170976,
+    "lastFramePSNR": 46.22058465280577,
+    "decoded": true
+  }
+]

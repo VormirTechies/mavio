@@ -1,0 +1,42 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "results": [
+    {
+      "id": "video-balanced-v1",
+      "file": "preset-browser-video-balanced-v1.mp4",
+      "elapsedMs": 1437.3449999997392,
+      "bytes": 264267
+    },
+    {
+      "id": "video-small-v1",
+      "file": "preset-browser-video-small-v1.mp4",
+      "elapsedMs": 1036.75,
+      "bytes": 188855
+    },
+    {
+      "id": "audio-balanced-v1",
+      "file": "preset-browser-audio-balanced-v1.mp3",
+      "elapsedMs": 102.64499999955297,
+      "bytes": 97300
+    },
+    {
+      "id": "audio-pcm-v1",
+      "file": "preset-browser-audio-pcm-v1.wav",
+      "elapsedMs": 20.834999999962747,
+      "bytes": 577614
+    },
+    {
+      "id": "jpeg-balanced-v1",
+      "file": "preset-browser-jpeg-balanced-v1.jpeg",
+      "elapsedMs": 29.100000000558794,
+      "bytes": 8749
+    },
+    {
+      "id": "png-lossless-v1",
+      "file": "preset-browser-png-lossless-v1.png",
+      "elapsedMs": 18.794999999925494,
+      "bytes": 15573
+    }
+  ],
+  "passed": true
+}

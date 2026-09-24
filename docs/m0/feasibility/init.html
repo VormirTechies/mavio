@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Mavio initialization checks</title></head><body><h1>Mavio initialization checks</h1><button id="run">Run initialization checks</button><p id="status">Ready</p><pre id="results"></pre><script type="module">
+import {FFmpeg} from '/node_modules/@ffmpeg/ffmpeg/dist/esm/index.js';
+const config={coreURL:'/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.js',wasmURL:'/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.wasm'};
+async function load(engine,assets,ms=10000,signal){
+ if(signal?.aborted)throw Error('CANCELLED');let timer,abort;
+ try{return await Promise.race([engine.load(assets),new Promise((_,reject)=>{
+ timer=setTimeout(()=>{reject(Error('TIMEOUT'));engine.terminate();},ms);
+ abort=()=>{reject(Error('CANCELLED'));engine.terminate();};signal?.addEventListener('abort',abort,{once:true});
+ })]);}catch(e){engine.terminate();throw e;}finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
+}
+document.querySelector('#run').onclick=async()=>{
+ const result={userAgent:navigator.userAgent,isolated:crossOriginIsolated,checks:[]};const engine=new FFmpeg();
+ const rejected=async(name,fn,expected)=>{let error;try{await fn();}catch(e){error=String(e);}if(!error)throw Error(name+' unexpectedly succeeded');if(expected&&!error.includes(expected))throw Error(name+' wrong rejection: '+error);result.checks.push({name,error});};
+ try{
+ document.querySelector('#run').disabled=true;
+ await load(engine,config);result.checks.push({name:'explicit same-origin assets load'});engine.terminate();
+ await rejected('missing core rejected',()=>load(engine,{...config,coreURL:'/missing-core.js'}));
+ await rejected('missing wasm rejected',()=>load(engine,{...config,wasmURL:'/missing-core.wasm'}));
+ await rejected('deadline stops hanging load',()=>load(engine,{...config,coreURL:'/delayed-core.js'},100),'TIMEOUT');
+ const ac=new AbortController();ac.abort();await rejected('pre-aborted load',()=>load(engine,config,10000,ac.signal),'CANCELLED');
+ const live=new AbortController();const promise=load(engine,{...config,coreURL:'/delayed-core.js'},10000,live.signal);setTimeout(()=>live.abort(),100);await rejected('active abort stops hanging load',()=>promise,'CANCELLED');
+ await load(engine,config);const code=await engine.exec(['-version']);if(code!==0)throw Error('reuse failed');result.checks.push({name:'reload and exec after failures'});
+ result.passed=true;document.querySelector('#status').textContent='PASS';
+ }catch(e){result.error=String(e);document.querySelector('#status').textContent='FAIL';}
+ finally{engine.terminate();document.querySelector('#results').textContent=JSON.stringify(result,null,2);await fetch('/save/init-browser-results.json',{method:'POST',body:JSON.stringify(result,null,2)});}
+};</script></body></html>

@@ -1,0 +1,8 @@
+[
+ {"id":"video-balanced-v1","format":"mp4","args":["-map","0:v:0","-map","0:a:0?","-c:v","libx264","-crf","23","-preset","veryfast","-pix_fmt","yuv420p","-c:a","aac","-b:a","128k","-movflags","+faststart"]},
+ {"id":"video-small-v1","format":"mp4","args":["-map","0:v:0","-map","0:a:0?","-c:v","libx264","-crf","28","-preset","veryfast","-pix_fmt","yuv420p","-c:a","aac","-b:a","96k","-movflags","+faststart"]},
+ {"id":"audio-balanced-v1","format":"mp3","args":["-map","0:a:0","-vn","-c:a","libmp3lame","-b:a","128k"]},
+ {"id":"audio-pcm-v1","format":"wav","args":["-map","0:a:0","-vn","-c:a","pcm_s16le"]},
+ {"id":"jpeg-balanced-v1","format":"jpeg","args":["-map","0:v:0","-frames:v","1","-an","-c:v","mjpeg","-q:v","3","-pix_fmt","yuvj420p"]},
+ {"id":"png-lossless-v1","format":"png","args":["-map","0:v:0","-frames:v","1","-an","-c:v","png","-pix_fmt","rgb24","-compression_level","6"]}
+]

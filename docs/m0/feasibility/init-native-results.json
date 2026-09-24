@@ -1,0 +1,20 @@
+{
+  "platform": "win32",
+  "node": "v22.22.2",
+  "checks": [
+    "explicit absolute binary path",
+    "controlled PATH discovery",
+    "invalid explicit path does not fall back",
+    "missing PATH candidate",
+    "relative override rejected",
+    "timeout kills helper process",
+    "pre-aborted signal",
+    "active initialization abort kills helper",
+    "successful retry after timeout/abort"
+  ],
+  "versions": {
+    "ffmpeg": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+    "ffprobe": "ffprobe version 4.0.2 Copyright (c) 2007-2018 the FFmpeg developers"
+  },
+  "passed": true
+}

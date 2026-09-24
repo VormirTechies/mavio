@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Mavio preset validation</title></head><body><h1>Mavio preset validation</h1><button id="run">Run all six presets</button><p id="status">Ready</p><pre id="results"></pre><script type="module">
+import {FFmpeg} from '/node_modules/@ffmpeg/ffmpeg/dist/esm/index.js';
+document.querySelector('#run').onclick=async()=>{
+ const result={userAgent:navigator.userAgent,results:[]};const engine=new FFmpeg();
+ try{
+ document.querySelector('#run').disabled=true;
+ await engine.load({coreURL:'/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.js',wasmURL:'/node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.wasm'});
+ await engine.writeFile('fixture.mp4',new Uint8Array(await(await fetch('/fixture.mp4')).arrayBuffer()));
+ const presets=await(await fetch('/presets.json')).json();
+ for(const p of presets){
+ document.querySelector('#status').textContent=p.id;
+ const output=`preset-browser-${p.id}.${p.format}`;const start=performance.now();
+ const code=await engine.exec(['-i','fixture.mp4',...p.args,output]);const elapsedMs=performance.now()-start;
+ if(code!==0)throw Error(p.id+' exit '+code);
+ const data=await engine.readFile(output);await fetch('/save/'+output,{method:'POST',body:data});
+ result.results.push({id:p.id,file:output,elapsedMs,bytes:data.length});await engine.deleteFile(output);
+ }
+ await engine.deleteFile('fixture.mp4');result.passed=true;document.querySelector('#status').textContent='PASS';
+ }catch(e){result.error=String(e);document.querySelector('#status').textContent='FAIL';}
+ finally{engine.terminate();document.querySelector('#results').textContent=JSON.stringify(result,null,2);await fetch('/save/preset-browser-results.json',{method:'POST',body:JSON.stringify(result,null,2)});}
+};</script></body></html>
