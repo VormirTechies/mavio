@@ -4,4 +4,6 @@
 package-lock.json
 docs/m0/**
 testing/fixtures/**
+!testing/fixtures/**/*.md
+!testing/fixtures/**/*.json
 *.tgz
