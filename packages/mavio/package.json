@@ -1,0 +1,38 @@
+{
+  "name": "@vormir/mavio",
+  "version": "0.0.2",
+  "description": "A universal JavaScript multimedia SDK for browser and Node.js runtimes.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "files": ["dist", "LICENSE", "README.md"],
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/browser.d.ts",
+        "default": "./dist/browser.js"
+      },
+      "node": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      },
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "default": "./dist/browser.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:types": "tsc -p tests/types/tsconfig.browser.json && tsc -p tests/types/tsconfig.node.json",
+    "test": "node --test tests/runtime/exports.test.mjs",
+    "prepack": "npm run build"
+  }
+}
