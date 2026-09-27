@@ -1,15 +1,7 @@
 import { SDK_VERSION } from "@vormir/mavio";
-import type {
-  MavioClient,
-  MediaResult,
-  PresetId,
-} from "@vormir/mavio";
-import type {
-  MavioClient as BrowserClient,
-} from "@vormir/mavio/browser";
-import type {
-  MavioClient as NodeClient,
-} from "@vormir/mavio/node";
+import type { MavioClient, MediaResult, PresetId } from "@vormir/mavio";
+import type { MavioClient as BrowserClient } from "@vormir/mavio/browser";
+import type { MavioClient as NodeClient } from "@vormir/mavio/node";
 
 declare const client: MavioClient;
 

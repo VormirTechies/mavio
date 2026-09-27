@@ -10,9 +10,7 @@ const npmCli = process.env.npm_execpath;
 
 assert.ok(npmCli, "Run this script through npm run test:package.");
 
-const consumerDir = mkdtempSync(
-  path.join(tmpdir(), "mavio-package-"),
-);
+const consumerDir = mkdtempSync(path.join(tmpdir(), "mavio-package-"));
 
 function npm(args, cwd = root) {
   return execFileSync(process.execPath, [npmCli, ...args], {
@@ -87,27 +85,16 @@ const consumerCode = `
   console.log("Packaged imports passed");
 `;
 
-execFileSync(
-  process.execPath,
-  ["--input-type=module", "-e", consumerCode],
-  {
-    cwd: consumerDir,
-    stdio: "inherit",
-    windowsHide: true,
-  },
-);
+execFileSync(process.execPath, ["--input-type=module", "-e", consumerCode], {
+  cwd: consumerDir,
+  stdio: "inherit",
+  windowsHide: true,
+});
 
-execFileSync(
-  process.execPath,
-  [
-    path.join(root, "scripts/check-browser-bundle.mjs"),
-    consumerDir,
-  ],
-  {
-    cwd: root,
-    stdio: "inherit",
-    windowsHide: true,
-  },
-);
+execFileSync(process.execPath, [path.join(root, "scripts/check-browser-bundle.mjs"), consumerDir], {
+  cwd: root,
+  stdio: "inherit",
+  windowsHide: true,
+});
 
 console.log("Package verification passed");

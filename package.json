@@ -10,10 +10,16 @@
     "node": "^22.0.0 || ^24.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@types/node": "22.20.4",
     "esbuild": "0.28.2",
+    "eslint": "10.11.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.12.0",
     "playwright": "1.63.0",
-    "typescript": "7.0.2"
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1"
   },
   "scripts": {
     "build": "npm run build --workspace=@vormir/mavio",
@@ -21,6 +27,9 @@
     "test:types": "npm run test:types --workspace=@vormir/mavio",
     "test": "npm run test --workspace=@vormir/mavio",
     "test:package": "npm run build && node scripts/check-package.mjs",
-    "check": "npm run build && npm run typecheck && npm run test:types && npm test && npm run test:package"
+    "lint": "eslint packages scripts eslint.config.mjs --max-warnings=0",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "check": "npm run lint && npm run format:check && npm run build && npm run typecheck && npm run test:types && npm test && npm run test:package"
   }
 }

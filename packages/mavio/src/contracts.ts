@@ -1,8 +1,15 @@
 /** M0 contract baseline approved by owner 2026-09-25. M0 design and bounded type checks complete. No runtime implementation or npm publication. */
 export type Runtime = "browser" | "node";
-export type OperationName = "convert" | "compress" | "trim" | "resize" | "extractAudio" | "thumbnail" | "metadata";
+export type OperationName =
+  "convert" | "compress" | "trim" | "resize" | "extractAudio" | "thumbnail" | "metadata";
 export type MediaFormat = "mp4" | "webm" | "mp3" | "wav" | "jpeg" | "png";
-export type PresetId = "video-balanced-v1" | "video-small-v1" | "audio-balanced-v1" | "audio-pcm-v1" | "jpeg-balanced-v1" | "png-lossless-v1";
+export type PresetId =
+  | "video-balanced-v1"
+  | "video-small-v1"
+  | "audio-balanced-v1"
+  | "audio-pcm-v1"
+  | "jpeg-balanced-v1"
+  | "png-lossless-v1";
 export type MediaInput =
   | { kind: "blob"; blob: Blob }
   | { kind: "bytes"; bytes: Uint8Array; name?: string }
@@ -13,11 +20,24 @@ export type MediaOutput =
   | { kind: "bytes"; bytes: Uint8Array }
   | { kind: "path"; path: string };
 export type OutputFor<T extends OutputTarget> = Extract<MediaOutput, { kind: T["kind"] }>;
-export interface TrimOptions { start: number; end: number }
-export interface ResizeOptions { width: number; height: number }
-export interface ConvertOptions { format: MediaFormat; preset: PresetId }
-export interface CompressOptions { preset: PresetId }
-export interface ExtractAudioOptions { streamIndex?: number }
+export interface TrimOptions {
+  start: number;
+  end: number;
+}
+export interface ResizeOptions {
+  width: number;
+  height: number;
+}
+export interface ConvertOptions {
+  format: MediaFormat;
+  preset: PresetId;
+}
+export interface CompressOptions {
+  preset: PresetId;
+}
+export interface ExtractAudioOptions {
+  streamIndex?: number;
+}
 export type Transformation =
   | { type: "trim"; options: TrimOptions }
   | { type: "resize"; options: ResizeOptions }
@@ -42,7 +62,8 @@ export interface MediaMetadata {
   bitrateBitsPerSecond?: number;
   streams: readonly MediaStream[];
 }
-export type JobStage = "queued" | "preparing" | "running" | "finalizing" | "completed" | "cancelled" | "failed";
+export type JobStage =
+  "queued" | "preparing" | "running" | "finalizing" | "completed" | "cancelled" | "failed";
 export interface ProgressEvent {
   jobId: string;
   stage: JobStage;
@@ -53,7 +74,22 @@ export interface ExecutionOptions {
   signal?: AbortSignal;
   onProgress?: (event: Readonly<ProgressEvent>) => void;
 }
-export type ErrorCode = "INVALID_INPUT" | "INVALID_OPTIONS" | "INVALID_MEDIA" | "UNSUPPORTED_RUNTIME" | "UNSUPPORTED_CAPABILITY" | "ENGINE_UNAVAILABLE" | "ENGINE_INIT_FAILED" | "EXECUTION_FAILED" | "OUTPUT_EXISTS" | "IO_ERROR" | "RESOURCE_LIMIT" | "QUEUE_FULL" | "CANCELLED" | "DISPOSED" | "CLEANUP_FAILED";
+export type ErrorCode =
+  | "INVALID_INPUT"
+  | "INVALID_OPTIONS"
+  | "INVALID_MEDIA"
+  | "UNSUPPORTED_RUNTIME"
+  | "UNSUPPORTED_CAPABILITY"
+  | "ENGINE_UNAVAILABLE"
+  | "ENGINE_INIT_FAILED"
+  | "EXECUTION_FAILED"
+  | "OUTPUT_EXISTS"
+  | "IO_ERROR"
+  | "RESOURCE_LIMIT"
+  | "QUEUE_FULL"
+  | "CANCELLED"
+  | "DISPOSED"
+  | "CLEANUP_FAILED";
 export interface MavioError extends Error {
   readonly code: ErrorCode;
   readonly stage: JobStage;
@@ -64,7 +100,10 @@ export interface MavioError extends Error {
   readonly cleanupIssues?: readonly string[];
   readonly cause?: unknown;
 }
-export interface ExportOptions<T extends OutputTarget> { format?: MediaFormat; output: T }
+export interface ExportOptions<T extends OutputTarget> {
+  format?: MediaFormat;
+  output: T;
+}
 export interface ThumbnailOptions<T extends OutputTarget> {
   at: number;
   format: "jpeg" | "png";
@@ -89,11 +128,21 @@ export interface Pipeline {
   convert(options: ConvertOptions): Pipeline;
   compress(options: CompressOptions): Pipeline;
   extractAudio(options?: ExtractAudioOptions): Pipeline;
-  export<T extends OutputTarget>(options: ExportOptions<T>, execution?: ExecutionOptions): Promise<MediaResult<T>>;
-  thumbnail<T extends OutputTarget>(options: ThumbnailOptions<T>, execution?: ExecutionOptions): Promise<MediaResult<T>>;
+  export<T extends OutputTarget>(
+    options: ExportOptions<T>,
+    execution?: ExecutionOptions,
+  ): Promise<MediaResult<T>>;
+  thumbnail<T extends OutputTarget>(
+    options: ThumbnailOptions<T>,
+    execution?: ExecutionOptions,
+  ): Promise<MediaResult<T>>;
   metadata(execution?: ExecutionOptions): Promise<MediaMetadata>;
 }
-export interface CapabilityIssue { code: string; message: string; operation?: OperationName }
+export interface CapabilityIssue {
+  code: string;
+  message: string;
+  operation?: OperationName;
+}
 export type SupportResult =
   | { status: "supported" }
   | { status: "unsupported" | "unknown"; issues: readonly CapabilityIssue[] };
@@ -106,7 +155,12 @@ export interface EngineCapabilities {
   outputKinds: readonly OutputTarget["kind"][];
   readableContainers: readonly string[];
   decoders: readonly string[];
-  encodings: readonly { container: MediaFormat; videoCodec?: string; audioCodec?: string; preset: PresetId }[];
+  encodings: readonly {
+    container: MediaFormat;
+    videoCodec?: string;
+    audioCodec?: string;
+    preset: PresetId;
+  }[];
   limits: { maxInputBytes?: number; maxWidth?: number; maxHeight?: number };
 }
 export type TerminalOperation =
@@ -122,7 +176,10 @@ export interface ProcessingPlan {
 export interface EngineContext {
   jobId: string;
   signal: AbortSignal;
-  reportProgress: (event: { stage: "preparing" | "running" | "finalizing"; percent?: number }) => void;
+  reportProgress: (event: {
+    stage: "preparing" | "running" | "finalizing";
+    percent?: number;
+  }) => void;
 }
 export interface ExecutionEngineContext extends EngineContext {
   /** Call once before publication. False denies publication; true defers later aborts. */
@@ -136,7 +193,14 @@ export interface EngineAdapter {
   capabilities(): Promise<EngineCapabilities>;
   probe(input: MediaInput, context: EngineContext): Promise<MediaMetadata>;
   supports(plan: ProcessingPlan, source: MediaMetadata): Promise<SupportResult>;
-  execute(plan: ProcessingPlan, context: ExecutionEngineContext): Promise<{ output: MediaOutput; metadata: MediaMetadata; warnings?: readonly CleanupWarning[] }>;
+  execute(
+    plan: ProcessingPlan,
+    context: ExecutionEngineContext,
+  ): Promise<{
+    output: MediaOutput;
+    metadata: MediaMetadata;
+    warnings?: readonly CleanupWarning[];
+  }>;
   dispose(): Promise<void>;
 }
 export interface NativeEngineOptions {

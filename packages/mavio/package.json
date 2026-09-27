@@ -5,7 +5,11 @@
   "license": "MIT",
   "private": true,
   "type": "module",
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "browser": {
