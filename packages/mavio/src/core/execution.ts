@@ -2,7 +2,6 @@ import type {
   EngineAdapter,
   EngineCapabilities,
   ExecutionEngineContext,
-  MediaOutput,
   MediaResult,
   MavioError,
   OutputFor,
@@ -10,8 +9,13 @@ import type {
   ProcessingPlan,
 } from "../contracts.js";
 import type { EngineSession } from "./engine-session.js";
-import { createMavioError, getErrorCode } from "./errors.js";
+import { createMavioError, getErrorCode, preserveFailure } from "./errors.js";
 import { validatePlanCapabilities, validateSource } from "./preflight.js";
+import {
+  captureExecutionResult,
+  captureMetadata,
+  captureSupportResult,
+} from "./adapter-response.js";
 
 export async function executeWithEngine<T extends OutputTarget>(
   engine: EngineAdapter,
@@ -23,6 +27,7 @@ export async function executeWithEngine<T extends OutputTarget>(
   let live = true;
   let touched = false;
   let publicationGranted = false;
+  let commitRequested = false;
   let stage: "preparing" | "running" | "finalizing" = "preparing";
 
   function checkAbort(): void {
@@ -31,9 +36,13 @@ export async function executeWithEngine<T extends OutputTarget>(
     }
   }
 
-  function protocol(reason: string): never {
+  function protocol(violation: string): never {
     throw createMavioError("EXECUTION_FAILED", "Engine returned an invalid execution result.", {
-      details: { reason },
+      details: {
+        reason: "ENGINE_CONTRACT_VIOLATION",
+        response: "execution",
+        violation,
+      },
     });
   }
 
@@ -42,7 +51,7 @@ export async function executeWithEngine<T extends OutputTarget>(
     validatePlanCapabilities(plan, inventory);
 
     touched = true;
-    const source = structuredClone(
+    const source = captureMetadata(
       await engine.probe(plan.input, {
         jobId: context.jobId,
         signal: context.signal,
@@ -57,7 +66,7 @@ export async function executeWithEngine<T extends OutputTarget>(
     checkAbort();
     validateSource(plan, source);
 
-    const support = await engine.supports(plan, source);
+    const support = captureSupportResult(await engine.supports(plan, source));
     checkAbort();
 
     if (support.status !== "supported") {
@@ -76,7 +85,7 @@ export async function executeWithEngine<T extends OutputTarget>(
     context.reportProgress({ stage });
     checkAbort();
 
-    const result = await engine.execute(plan, {
+    const rawResult = await engine.execute(plan, {
       jobId: context.jobId,
       signal: context.signal,
 
@@ -91,9 +100,12 @@ export async function executeWithEngine<T extends OutputTarget>(
       },
 
       beginCommit: () => {
-        if (!live || publicationGranted || context.signal.aborted) {
+        if (!live || commitRequested || context.signal.aborted) {
           return false;
         }
+
+        // Reserve the attempt before an observer can call back into this method.
+        commitRequested = true;
 
         stage = "finalizing";
         context.reportProgress({ stage });
@@ -103,61 +115,28 @@ export async function executeWithEngine<T extends OutputTarget>(
       },
     });
 
-    checkAbort();
-
-    if (!publicationGranted) protocol("COMMIT_GATE_REQUIRED");
-
-    if (result.output.kind !== plan.output.kind) {
-      protocol("OUTPUT_KIND_MISMATCH");
+    if (!publicationGranted) {
+      checkAbort();
+      protocol("COMMIT_GATE_REQUIRED");
     }
 
-    let output: MediaOutput;
-
-    switch (result.output.kind) {
-      case "bytes":
-        if (!(result.output.bytes instanceof Uint8Array) || result.output.bytes.byteLength === 0) {
-          protocol("INVALID_OUTPUT_BYTES");
-        }
-
-        // Copy out of engine-owned storage before any later disposal.
-        output = {
-          kind: "bytes",
-          bytes: new Uint8Array(result.output.bytes),
-        };
-        break;
-
-      case "blob":
-        if (!(result.output.blob instanceof Blob) || result.output.blob.size === 0) {
-          protocol("INVALID_OUTPUT_BLOB");
-        }
-
-        output = { kind: "blob", blob: result.output.blob };
-        break;
-
-      case "path":
-        if (plan.output.kind !== "path" || result.output.path !== plan.output.path) {
-          protocol("OUTPUT_PATH_MISMATCH");
-        }
-
-        output = { kind: "path", path: result.output.path };
-        break;
-
-      default:
-        return protocol("INVALID_OUTPUT_KIND");
-    }
+    const result = captureExecutionResult(rawResult, plan.output);
 
     return {
       jobId: context.jobId,
-      output: output as OutputFor<T>,
-      metadata: structuredClone(result.metadata),
+      output: result.output as OutputFor<T>,
+      metadata: result.metadata,
       engine: {
         id: engine.id,
         version: inventory.engineVersion,
       },
-      ...(result.warnings === undefined ? {} : { warnings: structuredClone(result.warnings) }),
+      ...(result.warnings === undefined ? {} : { warnings: result.warnings }),
     };
   } catch (cause) {
     live = false;
+
+    // Choose the outcome before cleanup can trigger another abort.
+    const code = context.signal.aborted ? "CANCELLED" : (getErrorCode(cause) ?? "EXECUTION_FAILED");
 
     const primary = cause instanceof Error ? (cause as Partial<MavioError>) : undefined;
     const cleanupIssues = [...(primary?.cleanupIssues ?? [])];
@@ -170,17 +149,16 @@ export async function executeWithEngine<T extends OutputTarget>(
       }
     }
 
-    throw createMavioError(
-      context.signal.aborted ? "CANCELLED" : (getErrorCode(cause) ?? "EXECUTION_FAILED"),
-      primary?.message ?? "Media execution failed.",
-      {
+    throw preserveFailure(
+      createMavioError(code, primary?.message ?? "Media execution failed.", {
         stage,
         jobId: context.jobId,
         engineId: engine.id,
+        operation: primary?.operation,
         details: primary?.details,
         cleanupIssues: cleanupIssues.length === 0 ? undefined : cleanupIssues,
         cause,
-      },
+      }),
     );
   } finally {
     live = false;

@@ -247,10 +247,15 @@ test("missing publication permission and mismatched outputs are rejected", async
 
     await assert.rejects(video().export({ output: { kind: "bytes" } }), (error) => {
       assert.equal(error.code, "EXECUTION_FAILED");
-      assert.equal(
-        error.details.reason,
-        mismatch ? "OUTPUT_KIND_MISMATCH" : "COMMIT_GATE_REQUIRED",
-      );
+      assert.equal(error.details.reason, "ENGINE_CONTRACT_VIOLATION");
+      assert.equal(error.details.response, "execution");
+
+      if (mismatch) {
+        assert.equal(error.details.field, "$.output.kind");
+      } else {
+        assert.equal(error.details.violation, "COMMIT_GATE_REQUIRED");
+      }
+
       return true;
     });
 
@@ -299,4 +304,178 @@ test("gate acquisition does not turn a publication failure into success", async 
   await video().export({ output: { kind: "bytes" } });
   assert.equal(executions, 2);
   await client.dispose();
+});
+
+test("trim preflight preserves its stage, operation, and transformation index", async () => {
+  const { client, calls, video } = fixture();
+  const events = [];
+
+  try {
+    await assert.rejects(
+      video()
+        .trim({ start: 0, end: 11 })
+        .export({ output: { kind: "bytes" } }, { onProgress: (event) => events.push(event) }),
+      (error) => {
+        assert.equal(error.code, "INVALID_OPTIONS");
+        assert.equal(error.stage, "preparing");
+        assert.equal(error.operation, "trim");
+        assert.equal(error.details.reason, "OUT_OF_RANGE");
+
+        // convert is transformation 0; trim is transformation 1.
+        assert.equal(error.details.operationIndex, 1);
+        return true;
+      },
+    );
+
+    assert.deepEqual(
+      events.map((event) => event.stage),
+      ["queued", "preparing", "failed"],
+    );
+    assert.equal(calls.includes("supports"), false);
+    assert.equal(calls.includes("execute"), false);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("reentrant commit calls cannot steal the original publication gate", async () => {
+  let retained;
+  let nestedGrant;
+  const events = [];
+
+  const { client, video } = fixture({
+    async execute(_plan, context, result) {
+      retained = context;
+
+      assert.equal(context.beginCommit(), true);
+      assert.equal(nestedGrant, false);
+      assert.equal(context.beginCommit(), false);
+
+      return result();
+    },
+  });
+
+  try {
+    await video().export(
+      { output: { kind: "bytes" } },
+      {
+        onProgress: (event) => {
+          events.push(event);
+
+          if (event.stage === "finalizing") {
+            nestedGrant = retained.beginCommit();
+          }
+        },
+      },
+    );
+
+    assert.equal(events.at(-1).stage, "completed");
+    assert.equal(events.filter((event) => event.stage === "finalizing").length, 1);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("retained execution callbacks cannot advance or commit a later job", async () => {
+  let previous;
+  let executions = 0;
+  const firstEvents = [];
+  const secondEvents = [];
+
+  const { client, video } = fixture({
+    async execute(_plan, context, result) {
+      executions += 1;
+
+      if (executions === 1) {
+        previous = context;
+      } else {
+        previous.reportProgress({ stage: "finalizing", percent: 99 });
+        assert.equal(previous.beginCommit(), false);
+
+        assert.deepEqual(
+          secondEvents.map((event) => event.stage),
+          ["queued", "preparing", "running"],
+        );
+      }
+
+      assert.equal(context.beginCommit(), true);
+      return result();
+    },
+  });
+
+  try {
+    const pipeline = video();
+
+    await pipeline.export(
+      { output: { kind: "bytes" } },
+      { onProgress: (event) => firstEvents.push(event) },
+    );
+
+    const firstCount = firstEvents.length;
+
+    await pipeline.export(
+      { output: { kind: "bytes" } },
+      { onProgress: (event) => secondEvents.push(event) },
+    );
+
+    assert.equal(firstEvents.length, firstCount);
+    assert.notEqual(firstEvents[0].jobId, secondEvents[0].jobId);
+    assert.equal(secondEvents.at(-1).stage, "completed");
+
+    await client.dispose();
+
+    assert.equal(previous.beginCommit(), false);
+    previous.reportProgress({ stage: "running", percent: 50 });
+    assert.equal(firstEvents.length, firstCount);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("adapters cannot rewrite reusable pipeline descriptors or options", async () => {
+  const plans = [];
+
+  const { client, video } = fixture({
+    async execute(plan, context, result) {
+      plans.push(plan);
+
+      for (const value of [
+        plan,
+        plan.input,
+        plan.output,
+        plan.terminal,
+        plan.transformations,
+        ...plan.transformations,
+        ...plan.transformations.map((item) => item.options),
+      ]) {
+        assert.ok(Object.isFrozen(value));
+      }
+
+      assert.equal(Reflect.set(plan.input, "kind", "path"), false);
+      assert.equal(Reflect.set(plan.output, "kind", "path"), false);
+      assert.equal(Reflect.set(plan.terminal, "format", "wav"), false);
+      assert.equal(Reflect.set(plan.transformations[0].options, "preset", "audio-pcm-v1"), false);
+      assert.equal(Reflect.set(plan.transformations[1].options, "end", 999), false);
+
+      assert.equal(context.beginCommit(), true);
+      return result();
+    },
+  });
+
+  try {
+    const pipeline = video().trim({ start: 0, end: 1 });
+
+    await pipeline.export({ output: { kind: "bytes" } });
+    await pipeline.export({ output: { kind: "bytes" } });
+
+    assert.equal(plans.length, 2);
+
+    for (const plan of plans) {
+      assert.equal(plan.terminal.format, "mp4");
+      assert.equal(plan.transformations[0].options.preset, "video-balanced-v1");
+      assert.equal(plan.transformations[1].options.end, 1);
+    }
+  } finally {
+    await client.dispose();
+  }
 });

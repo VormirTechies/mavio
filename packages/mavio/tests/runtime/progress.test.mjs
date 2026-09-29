@@ -131,3 +131,34 @@ test("reentrant cancellation stops further stage delivery", () => {
   );
   assert.equal(events.at(-1).percent, undefined);
 });
+
+test("reentrant progress cannot lower a percentage during stage advancement", () => {
+  const events = [];
+  let tracker;
+
+  tracker = createProgress({
+    jobId: "reentrant-percent",
+    now: () => 1000,
+    onProgress: (event) => {
+      events.push(event);
+
+      if (event.stage === "preparing") {
+        tracker.report("running", 80);
+      }
+    },
+  });
+
+  tracker.report("finalizing", 20);
+  tracker.report("completed");
+
+  assert.deepEqual(
+    events.map((event) => [event.stage, event.percent]),
+    [
+      ["queued", undefined],
+      ["preparing", undefined],
+      ["running", 80],
+      ["finalizing", 80],
+      ["completed", 100],
+    ],
+  );
+});

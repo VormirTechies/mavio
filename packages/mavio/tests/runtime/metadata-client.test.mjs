@@ -20,7 +20,7 @@ function fixture(overrides = {}) {
 
   const engine = {
     id: "metadata-mock",
-    runtime: "node",
+    runtime: overrides.runtime ?? "node",
 
     async initialize() {
       calls.push("initialize");
@@ -31,7 +31,7 @@ function fixture(overrides = {}) {
       return {
         engineId: "metadata-mock",
         engineVersion: "test",
-        runtime: "node",
+        runtime: overrides.runtime ?? "node",
         operations: ["metadata"],
         inputKinds: overrides.inputKinds ?? ["bytes"],
         outputKinds: ["bytes"],
@@ -271,4 +271,151 @@ test("cleanup failure preserves the probe error and prevents unsafe reuse", asyn
   assert.equal(calls.filter((call) => call === "probe").length, 1);
 
   await assert.rejects(client.dispose(), { code: "CLEANUP_FAILED" });
+});
+
+test("metadata forwards captured byte and Blob inputs to the adapter", async () => {
+  const inputs = [
+    { kind: "bytes", bytes: new Uint8Array([1, 2]), name: "sample.mp4" },
+    { kind: "blob", blob: new Blob(["sample"]) },
+  ];
+
+  for (const input of inputs) {
+    let received;
+
+    const { client } = fixture({
+      runtime: input.kind === "blob" ? "browser" : "node",
+      inputKinds: [input.kind],
+
+      async probe(value) {
+        received = value;
+        return { streams: [] };
+      },
+    });
+
+    try {
+      await client.from(input).metadata();
+
+      assert.ok(received);
+      assert.equal(received.kind, input.kind);
+      assert.ok(Object.isFrozen(received));
+
+      if (input.kind === "bytes") {
+        assert.equal(received.bytes, input.bytes);
+        assert.equal(received.name, input.name);
+      } else {
+        assert.equal(received.blob, input.blob);
+      }
+    } finally {
+      await client.dispose();
+    }
+  }
+});
+
+test("unsupported metadata stays in preparing and never reports running", async () => {
+  const { client, input, calls } = fixture({ inputKinds: ["blob"] });
+  const events = [];
+
+  try {
+    await assert.rejects(
+      client.from(input).metadata({
+        onProgress: (event) => events.push(event),
+      }),
+      {
+        code: "UNSUPPORTED_CAPABILITY",
+        stage: "preparing",
+        operation: "metadata",
+      },
+    );
+
+    assert.deepEqual(
+      events.map((event) => event.stage),
+      ["queued", "preparing", "failed"],
+    );
+    assert.equal(calls.includes("probe"), false);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("probe callbacks cannot announce terminal states before a probe failure", async () => {
+  const events = [];
+  const { client, input } = fixture({
+    async probe(_input, context) {
+      for (const stage of ["finalizing", "completed", "failed", "cancelled"]) {
+        context.reportProgress({ stage, percent: 100 });
+      }
+
+      throw createMavioError("INVALID_MEDIA", "Probe failed.");
+    },
+  });
+
+  try {
+    await assert.rejects(
+      client.from(input).metadata({
+        onProgress: (event) => events.push(event),
+      }),
+      { code: "INVALID_MEDIA", stage: "running" },
+    );
+
+    assert.deepEqual(
+      events.map((event) => event.stage),
+      ["queued", "preparing", "running", "failed"],
+    );
+
+    assert.equal(
+      events.some((event) => event.percent === 100),
+      false,
+    );
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("retained probe callbacks cannot affect later jobs or disposed clients", async () => {
+  let previous;
+  let probes = 0;
+  const firstEvents = [];
+  const secondEvents = [];
+
+  const { client, input } = fixture({
+    async probe(_input, context) {
+      probes += 1;
+
+      if (probes === 1) {
+        previous = context;
+      } else {
+        previous.reportProgress({ stage: "finalizing", percent: 99 });
+        previous.reportProgress({ stage: "completed", percent: 100 });
+      }
+
+      return { streams: [] };
+    },
+  });
+
+  try {
+    await client.from(input).metadata({
+      onProgress: (event) => firstEvents.push(event),
+    });
+
+    const firstCount = firstEvents.length;
+
+    await client.from(input).metadata({
+      onProgress: (event) => secondEvents.push(event),
+    });
+
+    assert.equal(firstEvents.length, firstCount);
+    assert.notEqual(firstEvents[0].jobId, secondEvents[0].jobId);
+
+    assert.deepEqual(
+      secondEvents.map((event) => event.stage),
+      ["queued", "preparing", "running", "finalizing", "completed"],
+    );
+
+    await client.dispose();
+
+    previous.reportProgress({ stage: "running", percent: 50 });
+    assert.equal(firstEvents.length, firstCount);
+  } finally {
+    await client.dispose();
+  }
 });

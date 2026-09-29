@@ -1,4 +1,4 @@
-/** M0 contract baseline approved by owner 2026-09-25. M0 design and bounded type checks complete. No runtime implementation or npm publication. */
+/** Public contracts based on the approved M0 baseline. M2 implements core orchestration; default engine adapters remain pending. */
 export type Runtime = "browser" | "node";
 export type OperationName =
   "convert" | "compress" | "trim" | "resize" | "extractAudio" | "thumbnail" | "metadata";
@@ -232,7 +232,6 @@ export interface MavioClient {
   dispose(): Promise<void>;
 }
 
-// Blob and AbortSignal use standard platform declarations in this draft.
-// M1 must prove Node consumer declarations without requiring DOM library types,
-// using runtime-specific type entry points or minimal structural platform types.
-// Broad unions deliberately require runtime validation of codec/plan combinations.
+// Blob and AbortSignal use standard platform declarations.
+// Consumer type checks cover browser and Node usage.
+// Runtime validation enforces supported input/output and plan combinations.

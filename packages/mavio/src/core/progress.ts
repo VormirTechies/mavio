@@ -30,7 +30,10 @@ export function createProgress(options: ProgressOptions) {
     current = stage;
     terminal = stage === "completed" || stage === "failed" || stage === "cancelled";
 
-    if (percent !== undefined) lastPercent = percent;
+    // An observer may have advanced progress since this value was calculated.
+    if (percent !== undefined && (lastPercent === undefined || percent >= lastPercent)) {
+      lastPercent = percent;
+    }
     lastDelivery = now();
 
     const event: Readonly<ProgressEvent> = Object.freeze({

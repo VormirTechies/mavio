@@ -1,25 +1,49 @@
 # Mavio
 
-A universal JavaScript multimedia SDK with a simple API across browser and Node.js runtimes.
+A JavaScript multimedia SDK for browser and Node.js runtimes.
 
 ## Status
 
-**M0 / v0.0.1: discovery and contracts complete.** The approved design and bounded engine experiments are recorded in [the M0 release notes](docs/m0/RELEASE-NOTES.md). This is a specification milestone; the SDK is not implemented or published to npm yet.
+**v0.0.3 — M2 core implementation.**
 
-The planned package is `@vormir/mavio`. Its core describes media intent while pluggable engines perform execution. The initial engines are native FFmpeg for Node and ffmpeg.wasm for browsers. Framework adapters follow v0.1 core stability.
+The core supports immutable pipelines, validation, serialized jobs, cancellation, progress, disposal, and execution through explicitly supplied engine adapters. The runtime suite contains 161 tests, including two integrated mock-adapter acceptance flows.
+
+Native FFmpeg and browser ffmpeg.wasm adapters are not implemented yet. Omitting the engine or selecting `engine: "auto"` currently throws `ENGINE_UNAVAILABLE`. The SDK remains private and unpublished.
+
+Mock-adapter tests verify core orchestration. They do not establish real-media encoding accuracy, filesystem publication safety, or production browser compatibility.
+
+## Workspace
+
+- `packages/mavio`: SDK, contracts, core implementation, and tests.
+- `apps/docs`: documentation application placeholder.
+- `apps/playground`: playground application placeholder.
+- `testing/fixtures`: fixture conventions.
+
+## Verification
+
+Run `npm run check` from the repository root.
+
+The check covers linting, formatting, compilation, consumer types, runtime tests, package installation, browser bundling, and a Chromium smoke test using a mock adapter.
+
+CI is configured for Ubuntu and Windows with Node.js 22 and 24.
 
 ## Documentation
 
-- [M0 overview](docs/m0/README.md)
-- [Public API and contracts](docs/m0/api.md)
+- [Approved M0 baseline](docs/m0/README.md)
+- [API contract](docs/m0/api.md)
 - [Preset definitions](docs/m0/presets.md)
-- [Engine initialization](docs/m0/initialization.md)
+- [Engine initialization contract](docs/m0/initialization.md)
 - [Edge-case decisions](docs/m0/edge-cases.md)
+- [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
 
-## Next
+The M0 documents preserve the approved design and historical feasibility evidence. Their examples include behavior assigned to later milestones.
 
-M1 / v0.0.2 establishes the SDK/docs/playground monorepo, build, tests and CI. Implementation and broader compatibility verification follow the [milestone plan](docs/m0/README.md).
+## Next milestones
+
+- M3: native FFmpeg/FFprobe adapter, metadata, and one trim path.
+- M4: browser adapter, worker/assets integration, metadata, and one trim path.
+- M5: complete real-media operation coverage and shared conformance tests.
 
 ## License
 

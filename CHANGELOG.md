@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.0.3] — M2 core
+
+- Added public Node and browser client factories with explicit adapter ownership and lazy initialization.
+- Implemented immutable pipelines, preset/composition validation, source preflight, and runtime input/output restrictions.
+- Added serialized scheduling, queue limits, cancellation, initialization deadlines, disposal, and retry after successful cleanup.
+- Implemented publication gating, ordered progress, observer isolation, and protection against late or reentrant callbacks.
+- Preserved primary failures through cleanup and retained valid cleanup warnings on successful results.
+- Added adapter-response validation, independent output snapshots, and Node path resolution.
+- Expanded the runtime suite to 161 tests, including browser Blob-to-video and Node path-to-audio mock-adapter acceptance flows.
+
+### Scope and limitations
+
+- An explicit engine adapter is required. Default and automatic engines remain pending.
+- Native FFmpeg integration belongs to M3; browser ffmpeg.wasm integration belongs to M4.
+- Mock tests verify orchestration, not actual media processing or filesystem publication.
+- Complete real-media operation conformance remains assigned to M5.
+- Documentation and playground applications remain placeholders.
+- The SDK remains private and unpublished.
+
 ## [0.0.2] — M1 foundation
 
 - Established the SDK workspace and private docs/playground workspace packages.

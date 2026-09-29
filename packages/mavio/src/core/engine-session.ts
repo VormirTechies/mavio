@@ -1,6 +1,7 @@
-import type { EngineAdapter, EngineCapabilities, EngineContext } from "../contracts.js";
-import { createMavioError } from "./errors.js";
+import type { EngineAdapter, EngineCapabilities, EngineContext, MavioError } from "../contracts.js";
+import { createMavioError, preserveFailure } from "./errors.js";
 import { initializeEngine, validateInitTimeout } from "./initialization.js";
+import { captureCapabilities } from "./adapter-response.js";
 
 /**
  * Owned by one client.
@@ -56,9 +57,11 @@ export class EngineSession {
     try {
       const capabilities = await initializeEngine(this.engine, context, this.initTimeoutMs);
 
-      this.capabilities = structuredClone(capabilities);
+      this.capabilities = captureCapabilities(capabilities, this.engine);
       return structuredClone(this.capabilities);
     } catch (cause) {
+      const primary = cause instanceof Error ? (cause as Partial<MavioError>) : undefined;
+
       const cancelled = cause instanceof Error && "code" in cause && cause.code === "CANCELLED";
 
       const unavailable =
@@ -83,17 +86,19 @@ export class EngineSession {
         cleanupIssues = ["Engine cleanup after initialization failure failed."];
       }
 
-      throw createMavioError(
-        cancelled ? "CANCELLED" : unavailable ? "ENGINE_UNAVAILABLE" : "ENGINE_INIT_FAILED",
-        cancelled ? "Engine initialization was cancelled." : "Engine initialization failed.",
-        {
-          stage: "preparing",
-          jobId: context.jobId,
-          engineId: this.engine.id,
-          cause,
-          cleanupIssues,
-          details: timedOut ? { reason: "TIMEOUT" } : undefined,
-        },
+      throw preserveFailure(
+        createMavioError(
+          cancelled ? "CANCELLED" : unavailable ? "ENGINE_UNAVAILABLE" : "ENGINE_INIT_FAILED",
+          cancelled ? "Engine initialization was cancelled." : "Engine initialization failed.",
+          {
+            stage: "preparing",
+            jobId: context.jobId,
+            engineId: this.engine.id,
+            cause,
+            cleanupIssues,
+            details: timedOut ? { reason: "TIMEOUT" } : primary?.details,
+          },
+        ),
       );
     }
   }

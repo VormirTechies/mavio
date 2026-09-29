@@ -14,12 +14,13 @@ import type {
   ProcessingPlan,
 } from "../contracts.js";
 import { EngineSession } from "./engine-session.js";
-import { createMavioError, getErrorCode } from "./errors.js";
+import { createMavioError, getErrorCode, preserveFailure } from "./errors.js";
 import { executeWithEngine } from "./execution.js";
 import { createPipeline, type PipelineExecutor } from "./pipeline.js";
 import { allocateJobId, createProgress } from "./progress.js";
 import { SerialQueue } from "./queue.js";
 import { resolveMediaInput, resolveProcessingPlan, type RuntimeContext } from "./runtime.js";
+import { captureMetadata } from "./adapter-response.js";
 
 type ClientOptions = Pick<MavioOptions, "maxQueuedJobs" | "initTimeoutMs">;
 
@@ -100,8 +101,6 @@ export function createCapabilityClient(
             reportProgress: () => tracker.report("preparing"),
           });
 
-          tracker.report("running");
-
           if (jobSignal.aborted) {
             throw createMavioError("CANCELLED", "Request was cancelled.");
           }
@@ -163,7 +162,7 @@ export function createCapabilityClient(
         stage: progress.stage ?? "queued",
         jobId,
         engineId,
-        operation,
+        operation: primary?.operation ?? operation,
         details: primary?.details,
         cleanupIssues: primary?.cleanupIssues ?? inner?.cleanupIssues,
         cause,
@@ -175,17 +174,16 @@ export function createCapabilityClient(
   }
 
   function capabilities(execution?: ExecutionOptions): Promise<EngineCapabilities> {
-    return request(async (_context, inventory) => inventory, execution);
+    return request(async (context, inventory) => {
+      context.reportProgress({ stage: "running" });
+      return inventory;
+    }, execution);
   }
 
   async function probe(input: MediaInput, execution?: ExecutionOptions): Promise<MediaMetadata> {
     beforeSubmit(execution);
 
-    let resolvedInput: MediaInput;
-
-    if (input.kind === "path") {
-      resolvedInput = resolveMediaInput(input, environment);
-    }
+    const resolvedInput = resolveMediaInput(input, environment);
 
     return request(
       async (context, inventory) => {
@@ -212,8 +210,11 @@ export function createCapabilityClient(
           const metadata = await engine.probe(resolvedInput, {
             jobId: context.jobId,
             signal: context.signal,
-            reportProgress: (event) => {
-              if (probing) context.reportProgress(event);
+            reportProgress: () => {
+              // Probe callbacks cannot finalize or complete the job.
+              if (probing) {
+                context.reportProgress({ stage: "running" });
+              }
             },
           });
 
@@ -222,31 +223,31 @@ export function createCapabilityClient(
           }
 
           // Returned metadata must not retain mutable engine-owned objects.
-          return structuredClone(metadata);
+          return captureMetadata(metadata);
         } catch (cause) {
           probing = false;
+
+          const code = context.signal.aborted
+            ? "CANCELLED"
+            : (getErrorCode(cause) ?? "EXECUTION_FAILED");
+
+          const primary = cause instanceof Error ? (cause as Partial<MavioError>) : undefined;
+          const cleanupIssues = [...(primary?.cleanupIssues ?? [])];
 
           try {
             await session.reset();
           } catch {
-            const primary = cause instanceof Error ? (cause as Partial<MavioError>) : undefined;
-
-            throw createMavioError(
-              context.signal.aborted ? "CANCELLED" : (primary?.code ?? "EXECUTION_FAILED"),
-              primary?.message ?? "Metadata probe failed.",
-              {
-                operation: "metadata",
-                cause,
-                details: primary?.details,
-                cleanupIssues: [
-                  ...(primary?.cleanupIssues ?? []),
-                  "Engine cleanup after metadata probing failed.",
-                ],
-              },
-            );
+            cleanupIssues.push("Engine cleanup after metadata probing failed.");
           }
 
-          throw cause;
+          throw preserveFailure(
+            createMavioError(code, primary?.message ?? "Metadata probe failed.", {
+              operation: "metadata",
+              cause,
+              details: primary?.details,
+              cleanupIssues: cleanupIssues.length === 0 ? undefined : cleanupIssues,
+            }),
+          );
         } finally {
           probing = false;
         }

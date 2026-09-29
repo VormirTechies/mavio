@@ -7,7 +7,7 @@ import { createCapabilityClient } from "../../dist/core/capability-client.js";
 import { BROWSER_RUNTIME } from "../../dist/core/runtime.js";
 import { createNodeRuntime } from "../../dist/runtime/node.js";
 
-function fixture(runtime = createNodeRuntime()) {
+function fixture(runtime = createNodeRuntime(), options = {}) {
   const calls = [];
   const inputs = [];
   const plans = [];
@@ -18,6 +18,7 @@ function fixture(runtime = createNodeRuntime()) {
 
     async initialize() {
       calls.push("initialize");
+      await options.initialize?.();
     },
 
     async capabilities() {
@@ -69,7 +70,7 @@ function fixture(runtime = createNodeRuntime()) {
   };
 
   return {
-    client: createCapabilityClient(engine, {}, runtime),
+    client: createCapabilityClient(engine, { maxQueuedJobs: options.maxQueuedJobs }, runtime),
     calls,
     inputs,
     plans,
@@ -210,5 +211,193 @@ test("drive-relative syntax follows the declared platform policy", () => {
     assert.throws(() => runtime.resolvePath("C:"), /Drive-relative/);
   } else {
     assert.equal(runtime.resolvePath("C:clip.mp4"), resolve(process.cwd(), "C:clip.mp4"));
+  }
+});
+
+function preAdmission(code) {
+  return (error) => {
+    assert.equal(error.code, code);
+    assert.equal(error.stage, "queued");
+    assert.equal(error.jobId, undefined);
+    return true;
+  };
+}
+
+test("Node Blob inputs fail before admission for metadata and export", async () => {
+  const { client, calls } = fixture();
+  const input = { kind: "blob", blob: new Blob(["input"]) };
+  const events = [];
+  const execution = { onProgress: (event) => events.push(event) };
+
+  try {
+    const pipeline = client.from(input);
+    assert.deepEqual(calls, []);
+
+    await assert.rejects(pipeline.metadata(execution), preAdmission("UNSUPPORTED_CAPABILITY"));
+
+    await assert.rejects(
+      video(client, input).export({ output: { kind: "bytes" } }, execution),
+      preAdmission("UNSUPPORTED_CAPABILITY"),
+    );
+
+    assert.deepEqual(calls, []);
+    assert.deepEqual(events, []);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("Node Blob outputs fail before admission for export and thumbnail", async () => {
+  const { client, calls } = fixture();
+  const events = [];
+  const execution = { onProgress: (event) => events.push(event) };
+
+  try {
+    await assert.rejects(
+      video(client).export({ output: { kind: "blob" } }, execution),
+      preAdmission("UNSUPPORTED_CAPABILITY"),
+    );
+
+    await assert.rejects(
+      client.from({ kind: "bytes", bytes: new Uint8Array([1]) }).thumbnail(
+        {
+          at: 0,
+          format: "jpeg",
+          preset: "jpeg-balanced-v1",
+          output: { kind: "blob" },
+        },
+        execution,
+      ),
+      preAdmission("UNSUPPORTED_CAPABILITY"),
+    );
+
+    assert.deepEqual(calls, []);
+    assert.deepEqual(events, []);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("disposal and pre-aborted signals take precedence over runtime compatibility", async () => {
+  const { client, calls } = fixture();
+  const pipeline = video(client);
+  const controller = new AbortController();
+  const events = [];
+
+  controller.abort();
+
+  const execution = {
+    signal: controller.signal,
+    onProgress: (event) => events.push(event),
+  };
+
+  try {
+    await assert.rejects(
+      pipeline.export({ output: { kind: "blob" } }, execution),
+      preAdmission("CANCELLED"),
+    );
+
+    await client.dispose();
+
+    await assert.rejects(
+      pipeline.export({ output: { kind: "blob" } }, execution),
+      preAdmission("DISPOSED"),
+    );
+
+    assert.deepEqual(calls, []);
+    assert.deepEqual(events, []);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("terminal validation and static conflicts precede runtime compatibility", async () => {
+  const { client, calls } = fixture();
+  const input = { kind: "blob", blob: new Blob(["input"]) };
+  const events = [];
+  const execution = { onProgress: (event) => events.push(event) };
+
+  try {
+    await assert.rejects(
+      video(client, input).export({ output: { kind: "invalid" } }, execution),
+      preAdmission("INVALID_OPTIONS"),
+    );
+
+    await assert.rejects(
+      client.from(input).trim({ start: 0, end: 1 }).metadata(execution),
+      preAdmission("INVALID_OPTIONS"),
+    );
+
+    assert.deepEqual(calls, []);
+    assert.deepEqual(events, []);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("runtime incompatibility takes precedence over a full queue", async () => {
+  for (const runtime of [createNodeRuntime(), BROWSER_RUNTIME]) {
+    let release;
+    let started;
+
+    const gate = new Promise((resolveGate) => {
+      release = resolveGate;
+    });
+
+    const entered = new Promise((resolveEntered) => {
+      started = resolveEntered;
+    });
+
+    const { client, calls } = fixture(runtime, {
+      maxQueuedJobs: 0,
+      async initialize() {
+        started();
+        await gate;
+      },
+    });
+
+    const active = client.capabilities();
+
+    try {
+      await entered;
+
+      const events = [];
+      const execution = { onProgress: (event) => events.push(event) };
+      const output =
+        runtime.runtime === "node" ? { kind: "blob" } : { kind: "path", path: "output.mp4" };
+
+      await assert.rejects(
+        video(client).export({ output }, execution),
+        preAdmission("UNSUPPORTED_CAPABILITY"),
+      );
+
+      // A runtime-compatible submission reaches the capacity check.
+      await assert.rejects(
+        video(client).export({ output: { kind: "bytes" } }, execution),
+        preAdmission("QUEUE_FULL"),
+      );
+
+      assert.deepEqual(events, []);
+      assert.deepEqual(calls, ["initialize"]);
+    } finally {
+      release();
+      await active;
+      await client.dispose();
+    }
+  }
+});
+
+test("Node Buffer input remains accepted without replacing caller storage", async () => {
+  const { client, inputs } = fixture();
+  const bytes = Buffer.from([1, 2]);
+
+  try {
+    await client.from({ kind: "bytes", bytes }).metadata();
+
+    assert.equal(inputs[0].kind, "bytes");
+    assert.equal(inputs[0].bytes, bytes);
+    assert.deepEqual([...bytes], [1, 2]);
+  } finally {
+    await client.dispose();
   }
 });

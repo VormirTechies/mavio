@@ -55,3 +55,18 @@ export function getErrorCode(value: unknown): ErrorCode | undefined {
 
   return undefined;
 }
+
+const preservedFailures = new WeakSet<object>();
+
+/**
+ * Marks an outcome chosen before asynchronous cleanup.
+ * Later cancellation must not replace this outcome.
+ */
+export function preserveFailure(error: MavioError): MavioError {
+  preservedFailures.add(error);
+  return error;
+}
+
+export function isPreservedFailure(value: unknown): boolean {
+  return value !== null && typeof value === "object" && preservedFailures.has(value);
+}

@@ -48,6 +48,8 @@ function resolvePath(path: string, environment: RuntimeContext, role: "input" | 
 }
 
 export function resolveMediaInput(input: MediaInput, environment: RuntimeContext): MediaInput {
+  validateRuntimeKind(input.kind, environment, "input");
+
   if (input.kind !== "path") return input;
 
   return Object.freeze({
@@ -61,6 +63,8 @@ export function resolveProcessingPlan(
   environment: RuntimeContext,
 ): ProcessingPlan {
   const input = resolveMediaInput(plan.input, environment);
+  validateRuntimeKind(plan.output.kind, environment, "output");
+
   const output: OutputTarget =
     plan.output.kind === "path"
       ? Object.freeze({
@@ -70,4 +74,25 @@ export function resolveProcessingPlan(
       : plan.output;
 
   return Object.freeze({ ...plan, input, output });
+}
+
+function validateRuntimeKind(
+  kind: MediaInput["kind"] | OutputTarget["kind"],
+  environment: RuntimeContext,
+  role: "input" | "output",
+): void {
+  if (environment.runtime === "node" && kind === "blob") {
+    throw createMavioError(
+      "UNSUPPORTED_CAPABILITY",
+      "Blob input and output are outside the initial Node contract. Use bytes or a path.",
+      {
+        details: {
+          reason: "UNSUPPORTED_IO_KIND",
+          runtime: environment.runtime,
+          kind,
+          role,
+        },
+      },
+    );
+  }
 }

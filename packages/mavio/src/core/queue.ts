@@ -1,4 +1,4 @@
-import { createMavioError } from "./errors.js";
+import { createMavioError, isPreservedFailure } from "./errors.js";
 
 interface QueueEntry {
   start(): void;
@@ -138,7 +138,7 @@ export class SerialQueue {
                 resolve(result);
               }
             } catch (cause) {
-              if (cancelled) {
+              if (cancelled && !isPreservedFailure(cause)) {
                 reject(
                   createMavioError("CANCELLED", "Active task was cancelled.", {
                     stage: "running",
