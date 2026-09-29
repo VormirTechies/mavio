@@ -48,6 +48,8 @@ No installation is performed by Mavio. Applications/operators own binary install
 
 The Windows experiment covers explicit overrides, controlled PATH discovery, no fallback on a bad override, relative-override rejection, empty search path, timeout, pre-abort, active abort and retry. It does not prove Unix execute permissions, symlink behavior, hostile binaries, release-specific capability inventories or version-pair compatibility beyond the prior media fixture.
 
+Media input and output paths resolve against the directory captured at client creation. On Windows, drive-relative forms such as C:clip.mp4 are rejected; use an absolute path or an ordinary relative path.
+
 ## Browser loading
 
 The application supplies both coreURL and wasmURL. There is no hidden unpkg/jsDelivr default. In a browser, missing required assets are INVALID_OPTIONS before any engine request. URLs are nonempty strings, resolved against the document base URL at client creation. The initial contract supports same-origin HTTP(S) assets only; cross-origin/blob/data assets need a separate explicit design and are rejected in this baseline. Media remains local: downloading engine code is not uploading source media.

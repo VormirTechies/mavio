@@ -16,7 +16,7 @@ assert.ok(
 
 const result = await build({
   stdin: {
-    contents: 'export { SDK_VERSION } from "@vormir/mavio";',
+    contents: 'export { SDK_VERSION, createMavio } from "@vormir/mavio";',
     resolveDir,
     sourcefile: "consumer.js",
     loader: "js",
@@ -71,6 +71,73 @@ try {
 
     try {
       const sdk = await import(url);
+      const calls = [];
+
+      const engine = {
+        id: "browser-package-smoke",
+        runtime: "browser",
+
+        async initialize() {
+          calls.push("initialize");
+        },
+
+        async capabilities() {
+          calls.push("capabilities");
+
+          return {
+            engineId: "browser-package-smoke",
+            engineVersion: "test",
+            runtime: "browser",
+            operations: ["metadata"],
+            inputKinds: ["bytes"],
+            outputKinds: ["bytes"],
+            readableContainers: [],
+            decoders: [],
+            encodings: [],
+            limits: {},
+          };
+        },
+
+        async probe() {
+          calls.push("probe");
+          return { durationSeconds: 2, streams: [] };
+        },
+
+        async supports() {
+          return { status: "supported" };
+        },
+
+        async execute() {
+          throw new Error("Unexpected execution.");
+        },
+
+        async dispose() {
+          calls.push("dispose");
+        },
+      };
+
+      const client = sdk.createMavio({ engine });
+
+      try {
+        if (calls.length !== 0) {
+          throw new Error("Factory initialized the engine eagerly.");
+        }
+
+        const metadata = await client
+          .from({ kind: "bytes", bytes: new Uint8Array([1]) })
+          .metadata();
+
+        if (metadata.durationSeconds !== 2) {
+          throw new Error("Browser metadata result did not match.");
+        }
+      } finally {
+        await client.dispose();
+      }
+
+      if (calls.join(",") !== "initialize,capabilities,probe,dispose") {
+        throw new Error(`Unexpected browser lifecycle: ${calls.join(",")}`);
+      }
+
       return sdk.SDK_VERSION;
     } finally {
       URL.revokeObjectURL(url);
