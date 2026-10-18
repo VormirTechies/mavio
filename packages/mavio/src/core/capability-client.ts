@@ -14,7 +14,7 @@ import type {
   ProcessingPlan,
 } from "../contracts.js";
 import { EngineSession } from "./engine-session.js";
-import { createMavioError, getErrorCode, preserveFailure } from "./errors.js";
+import { createMavioError, getErrorCode, isPreservedFailure, preserveFailure } from "./errors.js";
 import { executeWithEngine } from "./execution.js";
 import { createPipeline, type PipelineExecutor } from "./pipeline.js";
 import { allocateJobId, createProgress } from "./progress.js";
@@ -227,9 +227,10 @@ export function createCapabilityClient(
         } catch (cause) {
           probing = false;
 
-          const code = context.signal.aborted
-            ? "CANCELLED"
-            : (getErrorCode(cause) ?? "EXECUTION_FAILED");
+          const code =
+            context.signal.aborted && !isPreservedFailure(cause)
+              ? "CANCELLED"
+              : (getErrorCode(cause) ?? "EXECUTION_FAILED");
 
           const primary = cause instanceof Error ? (cause as Partial<MavioError>) : undefined;
           const cleanupIssues = [...(primary?.cleanupIssues ?? [])];

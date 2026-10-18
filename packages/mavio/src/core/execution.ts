@@ -9,7 +9,7 @@ import type {
   ProcessingPlan,
 } from "../contracts.js";
 import type { EngineSession } from "./engine-session.js";
-import { createMavioError, getErrorCode, preserveFailure } from "./errors.js";
+import { createMavioError, getErrorCode, isPreservedFailure, preserveFailure } from "./errors.js";
 import { validatePlanCapabilities, validateSource } from "./preflight.js";
 import {
   captureExecutionResult,
@@ -136,8 +136,10 @@ export async function executeWithEngine<T extends OutputTarget>(
     live = false;
 
     // Choose the outcome before cleanup can trigger another abort.
-    const code = context.signal.aborted ? "CANCELLED" : (getErrorCode(cause) ?? "EXECUTION_FAILED");
-
+    const code =
+      context.signal.aborted && !isPreservedFailure(cause)
+        ? "CANCELLED"
+        : (getErrorCode(cause) ?? "EXECUTION_FAILED");
     const primary = cause instanceof Error ? (cause as Partial<MavioError>) : undefined;
     const cleanupIssues = [...(primary?.cleanupIssues ?? [])];
 

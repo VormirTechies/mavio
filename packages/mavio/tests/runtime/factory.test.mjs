@@ -182,14 +182,72 @@ test("an adapter remains owned after its client is disposed", async () => {
   });
 });
 
-test("default engines report the explicit M2 implementation limitation", () => {
-  for (const create of [createRoot, createNode, createBrowser]) {
+test("the default browser engine remains unavailable", () => {
+  for (const options of [undefined, {}, { engine: "auto" }]) {
+    assert.throws(() => createBrowser(options), {
+      code: "ENGINE_UNAVAILABLE",
+      stage: "queued",
+      details: { reason: "DEFAULT_ENGINE_NOT_IMPLEMENTED" },
+    });
+  }
+});
+
+test("Node and root entry points construct default clients lazily", async () => {
+  for (const create of [createRoot, createNode]) {
     for (const options of [undefined, {}, { engine: "auto" }]) {
-      assert.throws(() => create(options), {
-        code: "ENGINE_UNAVAILABLE",
-        stage: "queued",
-        details: { reason: "DEFAULT_ENGINE_NOT_IMPLEMENTED" },
-      });
+      const client = create(options);
+
+      client.from({ kind: "path", path: "not-opened.mp4" });
+
+      await client.dispose();
+      await client.dispose();
     }
+  }
+});
+
+test("default native options are validated synchronously", () => {
+  for (const native of [
+    null,
+    [],
+    { ffmpegPath: "relative-ffmpeg" },
+    { ffprobePath: "relative-ffprobe" },
+    { ffmpegPath: 42 },
+  ]) {
+    assert.throws(() => createNode({ native }), {
+      code: "INVALID_OPTIONS",
+    });
+  }
+});
+
+test("the default Node engine rejects browser configuration", () => {
+  assert.throws(
+    () =>
+      createNode({
+        browser: {
+          assets: {
+            coreURL: "/core.js",
+            wasmURL: "/core.wasm",
+          },
+        },
+      }),
+    { code: "INVALID_OPTIONS" },
+  );
+});
+
+test("pre-aborted default-engine jobs do not require installed binaries", async () => {
+  const client = createNode({
+    native: {
+      ffmpegPath: path.resolve("not-used", "ffmpeg.exe"),
+      ffprobePath: path.resolve("not-used", "ffprobe.exe"),
+    },
+  });
+
+  const controller = new AbortController();
+  controller.abort();
+
+  try {
+    await assert.rejects(client.capabilities({ signal: controller.signal }), { code: "CANCELLED" });
+  } finally {
+    await client.dispose();
   }
 });

@@ -39,13 +39,15 @@ function validateAdapter(value: unknown): asserts value is EngineAdapter {
 
 export function createFactory(
   runtimeProvider?: () => RuntimeContext,
+  defaultEngineProvider?: (options: MavioOptions) => EngineAdapter,
 ): (options?: MavioOptions) => MavioClient {
   return function createMavio(options: MavioOptions = {}): MavioClient {
     if (options === null || typeof options !== "object" || Array.isArray(options)) {
       throw createMavioError("INVALID_OPTIONS", "Mavio options must be an object.");
     }
 
-    const { engine, native, browser } = options;
+    const { native, browser } = options;
+    let { engine } = options;
     const initTimeoutMs = options.initTimeoutMs === undefined ? 30_000 : options.initTimeoutMs;
     const maxQueuedJobs = options.maxQueuedJobs === undefined ? 16 : options.maxQueuedJobs;
 
@@ -67,21 +69,25 @@ export function createFactory(
     }
 
     if (engine === undefined || engine === "auto") {
-      throw createMavioError(
-        "ENGINE_UNAVAILABLE",
-        "Default engines are not implemented yet. Supply an EngineAdapter.",
-        { details: { reason: "DEFAULT_ENGINE_NOT_IMPLEMENTED" } },
-      );
+      if (defaultEngineProvider === undefined) {
+        throw createMavioError(
+          "ENGINE_UNAVAILABLE",
+          "The default engine is not implemented for this entry point.",
+          { details: { reason: "DEFAULT_ENGINE_NOT_IMPLEMENTED" } },
+        );
+      }
+
+      engine = defaultEngineProvider(options);
+    } else {
+      if (native !== undefined || browser !== undefined) {
+        throw createMavioError(
+          "INVALID_OPTIONS",
+          "An explicit engine adapter owns its configuration; omit native and browser options.",
+        );
+      }
     }
 
     validateAdapter(engine);
-
-    if (native !== undefined || browser !== undefined) {
-      throw createMavioError(
-        "INVALID_OPTIONS",
-        "An explicit engine adapter owns its configuration; omit native and browser options.",
-      );
-    }
 
     if (ownedEngines.has(engine)) {
       throw createMavioError(
