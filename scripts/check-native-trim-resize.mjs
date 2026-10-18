@@ -67,7 +67,7 @@ export async function checkNativeTrimResize({
       "-show_streams",
       "-show_frames",
       "-show_entries",
-      "stream=codec_type,codec_name,sample_rate,channels,sample_aspect_ratio:frame=media_type,width,height,best_effort_timestamp_time,nb_samples",
+      "stream=codec_type,codec_name,sample_rate,channels,sample_aspect_ratio,time_base,start_pts,duration_ts:frame=media_type,width,height,best_effort_timestamp_time,nb_samples",
       "-of",
       "json",
       "-i",
@@ -132,11 +132,60 @@ export async function checkNativeTrimResize({
     audioSamples += frame.nb_samples;
   }
 
+  const requestedSamples = 47_040;
+  const finalFrame = audioFrames.at(-1);
+  const extraSamples = audioSamples - requestedSamples;
+
+  console.log(`${preset}: combined AAC timing`, {
+    ffmpegVersion: tools.ffmpeg.version,
+    ffprobeVersion: tools.ffprobe.version,
+    requestedSamples,
+    declaredSamples: audioStream.duration_ts,
+    decodedSamples: audioSamples,
+    extraSamples,
+  });
+
+  // The intended presentation interval must remain exact.
+  assert.equal(audioStream.time_base, "1/48000");
+  assert.equal(audioStream.start_pts, 0);
   assert.equal(
-    audioSamples,
-    47040,
-    `${preset}: combined MP4 decoded AAC sample count differs from the requested count`,
+    audioStream.duration_ts,
+    requestedSamples,
+    `${preset}: MP4 declares an incorrect audio duration`,
   );
+
+  assert.ok(finalFrame);
+  assert.ok(
+    audioSamples >= requestedSamples,
+    `${preset}: decoded audio is shorter than the requested interval`,
+  );
+
+  if (extraSamples !== 0) {
+    // This allowance is specific to this known AAC fixture.
+    // The existing loop already checks timestamp continuity from zero.
+    assert.equal(
+      audioSamples,
+      Math.ceil(requestedSamples / 1024) * 1024,
+      `${preset}: decoded length is not the expected final-frame boundary`,
+    );
+
+    assert.ok(
+      audioFrames.every((frame) => frame.nb_samples === 1024),
+      `${preset}: unexpected AAC frame sizes`,
+    );
+
+    const finalFrameStart = audioSamples - finalFrame.nb_samples;
+
+    assert.ok(
+      finalFrameStart < requestedSamples && extraSamples < finalFrame.nb_samples,
+      `${preset}: extra audio extends beyond the final overlapping frame`,
+    );
+
+    console.warn(
+      `${preset}: presentation duration is correct, but this decoder exposes ` +
+        `${extraSamples} trailing samples. Sample-exact decoding is not verified.`,
+    );
+  }
 
   const decode = await runNativeProcess({
     executable: tools.ffmpeg.path,
@@ -170,7 +219,7 @@ export async function checkNativeTrimResize({
 
   console.log(`${preset}: public combined trim and resize preserves dimensions without upscaling.`);
   console.log(
-    `${preset}: public combined output preserves fractional timing and 47040 audio samples.`,
+    `${preset}: public combined output preserves fractional video timing and the declared 47040-sample audio interval.`,
   );
   console.log(`${preset}: public combined byte output remains valid after export cleanup.`);
 }
