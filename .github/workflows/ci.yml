@@ -78,3 +78,82 @@ jobs:
 
       - name: Verify native media processing
         run: npm run check:native:all -- /usr/bin/ffmpeg /usr/bin/ffprobe
+
+  native-platforms:
+    name: Native ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, macos-15]
+        node: ["22", "24"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install native tools on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install ffmpeg --yes --no-progress
+          if ($LASTEXITCODE -ne 0) {
+            throw "FFmpeg installation failed with exit code $LASTEXITCODE"
+          }
+
+      - name: Install native tools on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: brew install ffmpeg
+
+      - name: Verify native processing on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ffmpegPath = (Get-Command ffmpeg.exe -CommandType Application -ErrorAction Stop).Source
+          $ffprobePath = (Get-Command ffprobe.exe -CommandType Application -ErrorAction Stop).Source
+
+          Write-Host "FFmpeg path: $ffmpegPath"
+          Write-Host "FFprobe path: $ffprobePath"
+
+          & $ffmpegPath -version
+          if ($LASTEXITCODE -ne 0) {
+            throw "FFmpeg version check failed"
+          }
+
+          & $ffprobePath -version
+          if ($LASTEXITCODE -ne 0) {
+            throw "FFprobe version check failed"
+          }
+
+          npm run check:native:all -- "$ffmpegPath" "$ffprobePath"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Native acceptance checks failed"
+          }
+
+      - name: Verify native processing on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          ffmpegPrefix="$(brew --prefix ffmpeg)"
+          ffmpegPath="$ffmpegPrefix/bin/ffmpeg"
+          ffprobePath="$ffmpegPrefix/bin/ffprobe"
+
+          echo "FFmpeg path: $ffmpegPath"
+          echo "FFprobe path: $ffprobePath"
+
+          "$ffmpegPath" -version
+          "$ffprobePath" -version
+
+          npm run check:native:all -- "$ffmpegPath" "$ffprobePath"
