@@ -145,6 +145,14 @@ export function captureCapabilities(
       choice(encoding.preset, `${field}.preset`, Object.keys(presetFormats));
       optionalText(encoding, "videoCodec", field);
       optionalText(encoding, "audioCodec", field);
+
+      if (encoding.audioPadding !== undefined) {
+        choice(encoding.audioPadding, `${field}.audioPadding`, ["decoder-dependent"]);
+
+        if (typeof encoding.audioCodec !== "string" || encoding.audioCodec.trim() === "") {
+          invalid(`${field}.audioCodec`);
+        }
+      }
     }
 
     const limits = record(data.limits, "$.limits");

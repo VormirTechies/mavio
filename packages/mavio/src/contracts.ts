@@ -160,6 +160,12 @@ export interface EngineCapabilities {
     videoCodec?: string;
     audioCodec?: string;
     preset: PresetId;
+    /**
+     * Decoded audio sample counts may include codec padding, depending on
+     * the consuming decoder. This does not relax source-selection rules.
+     * Omission means unspecified, not padding-free.
+     */
+    audioPadding?: "decoder-dependent";
   }[];
   limits: { maxInputBytes?: number; maxWidth?: number; maxHeight?: number };
 }

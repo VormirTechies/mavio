@@ -452,12 +452,14 @@ export function createNativeEngine(
                 videoCodec: "h264",
                 audioCodec: "aac",
                 preset: "video-balanced-v1" as const,
+                audioPadding: "decoder-dependent" as const,
               },
               {
                 container: "mp4" as const,
                 videoCodec: "h264",
                 audioCodec: "aac",
                 preset: "video-small-v1" as const,
+                audioPadding: "decoder-dependent" as const,
               },
             ]
           : []),

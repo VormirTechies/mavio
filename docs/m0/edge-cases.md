@@ -10,6 +10,14 @@ For a terminal submission, evaluate: disposed client, already-aborted signal, ma
 
 Malformed input shape/empty path/empty input bytes or Blob is INVALID_INPUT. Invalid numbers, unknown preset IDs, conflicting settings or unsupported pipeline composition are INVALID_OPTIONS. A recognized but unsupported runtime input/output kind or missing engine feature is UNSUPPORTED_CAPABILITY. Unreadable/deleted source is IO_ERROR; a readable but corrupt or unrecognized file is INVALID_MEDIA. Include a stable reason and, where relevant, operationIndex in error details; operation remains the operation name. Do not infer format from a path extension.
 
+Native MP4 encodings that include AAC expose
+`audioPadding: "decoder-dependent"` in their encoding capabilities.
+This explicitly disclaims a universal sample-exact decoded-output guarantee.
+A supported processing plan still follows the documented source-selection
+rules; support does not imply that every consuming decoder removes trailing
+codec padding. Omission of `audioPadding` means unspecified behavior, not
+a padding-free guarantee. No sample-exact AAC export mode is currently exposed.
+
 ## 2. Plan composition and formats
 
 Trim, resize and extractAudio describe logical media transformations in order. Convert and compress are final encoding declarations; their location in a chain does not introduce intermediate lossy encodes. Multiple trims/resizes are allowed and use the preceding logical result. A second convert, compress or extractAudio is INVALID_OPTIONS even if identical. Convert and compress together must select the same preset. Export format, when supplied, must equal convert's format. A format must be explicit in convert or export; a preset must be explicit in convert or compress.

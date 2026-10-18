@@ -119,6 +119,19 @@ async function main() {
       },
     });
 
+    const nativeCapabilities = await client.capabilities({
+      signal: controller.signal,
+    });
+
+    for (const preset of ["video-balanced-v1", "video-small-v1"]) {
+      const encoding = nativeCapabilities.encodings.find((item) => item.preset === preset);
+
+      assert.ok(encoding, `Missing native preset: ${preset}`);
+      assert.equal(encoding.audioPadding, "decoder-dependent");
+    }
+
+    console.log("Public native capabilities disclose decoder-dependent AAC padding.");
+
     metadata = await client
       .from({ kind: "path", path: mediaPath })
       .metadata({ signal: controller.signal });

@@ -122,6 +122,15 @@ test("public native byte export advertises its route and cleans up before return
 
   try {
     const capabilities = await client.capabilities();
+
+    for (const preset of ["video-balanced-v1", "video-small-v1"]) {
+      const encoding = capabilities.encodings.find((item) => item.preset === preset);
+
+      assert.ok(encoding);
+      assert.equal(encoding.audioCodec, "aac");
+      assert.equal(encoding.audioPadding, "decoder-dependent");
+    }
+
     assert.deepEqual(capabilities.operations, ["metadata", "convert", "compress"]);
     assert.deepEqual(capabilities.outputKinds, ["bytes", "path"]);
 

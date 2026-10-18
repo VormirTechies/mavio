@@ -463,3 +463,56 @@ test("valid cleanup warnings remain successful after a late abort", async () => 
     await client.dispose();
   }
 });
+
+test("audio padding capabilities survive capture without sharing mutable state", () => {
+  const original = capabilities();
+  original.encodings[0].audioCodec = "aac";
+  original.encodings[0].audioPadding = "decoder-dependent";
+
+  const result = captureCapabilities(original, adapter());
+
+  delete original.encodings[0].audioPadding;
+
+  assert.equal(result.encodings[0].audioPadding, "decoder-dependent");
+});
+
+test("omitted audio padding remains unspecified", () => {
+  const result = captureCapabilities(capabilities(), adapter());
+
+  assert.equal(result.encodings[0].audioPadding, undefined);
+});
+
+test("invalid audio padding capability values are rejected", () => {
+  for (const value of ["sample-exact", "", true, null, {}]) {
+    const original = capabilities();
+    original.encodings[0].audioCodec = "aac";
+    original.encodings[0].audioPadding = value;
+
+    assert.throws(
+      () => captureCapabilities(original, adapter()),
+      (error) => {
+        assert.equal(error.code, "ENGINE_INIT_FAILED");
+        assert.equal(error.details.reason, "ENGINE_CONTRACT_VIOLATION");
+        assert.equal(error.details.field, "$.encodings[0].audioPadding");
+        return true;
+      },
+    );
+  }
+});
+
+test("audio padding declarations require an audio codec", () => {
+  for (const audioCodec of [undefined, ""]) {
+    const original = capabilities();
+    original.encodings[0].audioCodec = audioCodec;
+    original.encodings[0].audioPadding = "decoder-dependent";
+
+    assert.throws(
+      () => captureCapabilities(original, adapter()),
+      (error) => {
+        assert.equal(error.code, "ENGINE_INIT_FAILED");
+        assert.equal(error.details.field, "$.encodings[0].audioCodec");
+        return true;
+      },
+    );
+  }
+});
