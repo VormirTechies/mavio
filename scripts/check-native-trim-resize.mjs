@@ -132,7 +132,11 @@ export async function checkNativeTrimResize({
     audioSamples += frame.nb_samples;
   }
 
-  assert.equal(audioSamples, 47040);
+  assert.equal(
+    audioSamples,
+    47040,
+    `${preset}: combined MP4 decoded AAC sample count differs from the requested count`,
+  );
 
   const decode = await runNativeProcess({
     executable: tools.ffmpeg.path,

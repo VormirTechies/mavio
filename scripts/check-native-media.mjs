@@ -979,6 +979,18 @@ async function main() {
 
     const requestedSamples = 47_040;
 
+    console.log("Fractional AAC diagnostic:", {
+      ffmpegVersion: tools.ffmpeg.version,
+      ffprobeVersion: tools.ffprobe.version,
+      requestedSamples,
+      declaredSamples: audioStream.duration_ts,
+      timeBase: audioStream.time_base,
+      startPts: audioStream.start_pts,
+      decodedSamples: Array.isArray(fractionalAudio.frames)
+        ? fractionalAudio.frames.reduce((total, frame) => total + Number(frame.nb_samples), 0)
+        : undefined,
+    });
+
     // With a 1/48000 time base, duration ticks equal audio samples.
     assert.equal(audioStream.duration_ts, requestedSamples);
 
@@ -1627,7 +1639,7 @@ try {
   await main();
 } catch (error) {
   console.error("Native media check failed.");
-  console.error(error instanceof Error ? error.message : String(error));
+  console.error(error);
 
   if (error?.code) console.error(`Code: ${error.code}`);
   if (error?.reason) console.error(`Reason: ${error.reason}`);
