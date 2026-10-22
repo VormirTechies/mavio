@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, realpath } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
@@ -55,8 +55,10 @@ async function main() {
 
   if (consumerDirectory) {
     assert.equal(
-      sdkEntry,
-      join(consumerDirectory, "node_modules", "@vormir", "mavio", "dist", "browser.js"),
+      await realpath(sdkEntry),
+      await realpath(
+        join(consumerDirectory, "node_modules", "@vormir", "mavio", "dist", "browser.js"),
+      ),
       "Packaged verification must load the installed browser entry.",
     );
 
