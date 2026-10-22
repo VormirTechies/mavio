@@ -97,4 +97,32 @@ execFileSync(process.execPath, [path.join(root, "scripts/check-browser-bundle.mj
   windowsHide: true,
 });
 
+if (process.env.MAVIO_PACKAGE_BROWSER === "1") {
+  // The browser application supplies the separately hosted core assets.
+  npm(
+    [
+      "install",
+      "--save-dev",
+      "--save-exact",
+      "@ffmpeg/core@0.12.10",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+    ],
+    consumerDir,
+  );
+
+  execFileSync(process.execPath, [path.join(root, "scripts/check-browser-verified.mjs")], {
+    cwd: root,
+    env: {
+      ...process.env,
+      MAVIO_BROWSER_CONSUMER_DIR: consumerDir,
+    },
+    stdio: "inherit",
+    windowsHide: true,
+  });
+
+  console.log("Installed-package public browser route verification passed.");
+}
+
 console.log("Package verification passed");

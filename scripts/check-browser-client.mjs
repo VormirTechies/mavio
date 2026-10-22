@@ -2,13 +2,24 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 import { chromium } from "playwright";
 
-const sdkRequire = createRequire(new URL("../packages/mavio/package.json", import.meta.url));
-const rootRequire = createRequire(new URL("../package.json", import.meta.url));
+const consumerDirectory = process.env.MAVIO_BROWSER_CONSUMER_DIR
+  ? resolve(process.env.MAVIO_BROWSER_CONSUMER_DIR)
+  : undefined;
+
+const sdkRequire = createRequire(
+  consumerDirectory
+    ? join(consumerDirectory, "package.json")
+    : new URL("../packages/mavio/package.json", import.meta.url),
+);
+
+const rootRequire = consumerDirectory
+  ? sdkRequire
+  : createRequire(new URL("../package.json", import.meta.url));
 
 function withWorkerErrorStacks(source) {
   const marker = "data: e.toString(),";
@@ -38,8 +49,22 @@ function withWorkerErrorStacks(source) {
 }
 
 async function main() {
+  const sdkEntry = consumerDirectory
+    ? sdkRequire.resolve("@vormir/mavio/browser")
+    : fileURLToPath(new URL("../packages/mavio/dist/browser.js", import.meta.url));
+
+  if (consumerDirectory) {
+    assert.equal(
+      sdkEntry,
+      join(consumerDirectory, "node_modules", "@vormir", "mavio", "dist", "browser.js"),
+      "Packaged verification must load the installed browser entry.",
+    );
+
+    console.log(`Installed browser SDK: ${sdkEntry}`);
+  }
+
   const bundle = await build({
-    entryPoints: [fileURLToPath(new URL("../packages/mavio/dist/browser.js", import.meta.url))],
+    entryPoints: [sdkEntry],
     bundle: true,
     platform: "browser",
     format: "esm",

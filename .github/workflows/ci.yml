@@ -110,8 +110,10 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
 
-      - name: Verify implemented browser routes
-        run: npm run check:browser:verified
+      - name: Verify installed-package browser routes
+        env:
+          MAVIO_PACKAGE_BROWSER: "1"
+        run: npm run test:package
 
   native-platforms:
     name: Native ${{ matrix.os }} / Node ${{ matrix.node }}
