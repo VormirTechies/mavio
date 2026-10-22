@@ -2,15 +2,12 @@
 
 ## Status
 
-M4 remains incomplete.
+Both remaining engineering gates pass locally using generated, corrected
+browser assets: the long-sequence WASM memory regression and public MP4 video
+trim acceptance. The verified suite now includes both checks.
 
-The verified browser route suite and installed-package checks passed
-across all six browser CI configurations. Two acceptance gates remain:
-
-1. Long-sequence WASM allocator regression.
-2. Public MP4 video trim acceptance.
-
-Passing the verified suite does not close these gates.
+M4 release acceptance still requires a fresh CI matrix for these changes.
+The earlier sixteen passing jobs cover the previous baseline, not these edits.
 
 ## Validated engine packages
 
@@ -23,10 +20,17 @@ Passing the verified suite does not close these gates.
 The asset check verifies the pinned wrapper modules and core assets.
 It does not independently prove initialization or media execution.
 
+The accepted configuration adds Mavio's stack-restoration correction to the
+core JavaScript and leaves the WASM unchanged. Generate and host assets using
+the packaged `mavio-browser-assets` command; see
+[Browser engine assets](browser-engine-assets.md). The unmodified upstream
+JavaScript remains affected and is not the accepted configuration.
+
 ## CI compatibility matrix
 
-The installed-package verified browser suite passed in Playwright
-Chromium on these configurations:
+The previous installed-package baseline passed in Playwright Chromium on these
+configurations. This matrix must rerun with the new regression, public MP4 trim,
+and packaged asset-generation checks:
 
 | Runner       | Node 22 | Node 24 |
 | ------------ | ------- | ------- |
@@ -60,8 +64,21 @@ Exact Node and Chromium versions are recorded in each CI run.
 - Source content remains unchanged.
 - Returned bytes remain valid after worker termination.
 
-Internal preparation results do not establish public MP4 video trim
-acceptance. That gate remains pending.
+### Public MP4 video trim
+
+- Both MP4 presets, with and without AAC audio, are exercised.
+- Sixteen public trims cover byte and Blob output. Byte input uses fractional
+  trims; Blob input uses consecutive trims.
+- Fractional trims retain three frames at 0.041667, 0.125, and 0.208333 seconds.
+- Consecutive trims retain two frames at 0 and 0.083333 seconds.
+- Audio presentation starts at zero and lasts exactly 0.25 or 0.125 seconds.
+- The pinned AAC decoder's final-frame padding is checked separately from
+  presentation duration (12,288 or 6,144 decoded samples).
+- Empty video selections reject; the same client recovers for each matrix case.
+- Caller bytes and Blob content remain unchanged.
+- Thirty-three retained public MP4 outputs decode after client disposal.
+- Preparation cleanup, overwrite protection, and worker termination remain
+  checked in the combined long-sequence smoke.
 
 ### Public audio exports
 
@@ -118,6 +135,10 @@ The extended package check:
 6. Installs the pinned core package as consumer-hosted browser assets.
 7. Runs the verified browser route suite.
 
+The installed package's asset CLI is invoked through npm, and its generated
+files are used for the public route checks. The package must include the asset
+generator, and its manifest must identify the stack-restoration correction.
+
 Public route checks use the installed SDK. Internal preparation smoke
 tests still use repository test helpers.
 
@@ -159,26 +180,56 @@ $env:MAVIO_BROWSER_CHANNEL = "chrome"
 
 CI uses Playwright Chromium.
 
-## Open acceptance gates
+## Acceptance evidence, 2026-10-23
 
-### Long-sequence WASM allocator regression
+The final local command passed on Windows x64, Node v24.22.1, and
+Chrome 156.0.8078.47:
 
-A combined sequence previously produced a WASM memory-access trap.
-Focused passing checks do not establish that this regression is resolved.
+```powershell
+$env:MAVIO_BROWSER_CHANNEL = "chrome"
+$env:MAVIO_PACKAGE_BROWSER = "1"
+npm run check
+```
 
-Closure requires a reproducible regression check, a validated correction,
-and successful execution of the previously failing sequence.
+Results: lint, formatting, build, type checks, 877 SDK tests, six helper tests,
+packed imports and browser bundling, the installed asset CLI, and all eight
+installed-package browser checks passed. The asset manifest records corrected
+JavaScript SHA-256
+`c3f8f02416f82a9d18eb549d7e44725405b95f002b503bcfed02acba449ac79b`
+and unchanged WASM SHA-256
+`9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7`.
+
+The local full log is
+`C:\Users\vicky\AppData\Local\Temp\mavio-m4-final-check.log`.
+This is local evidence; no updated remote CI result is claimed.
+
+### Long-sequence WASM stack regression
+
+The complete recorded sequence reproduces a memory-access trap at call 612
+with the unmodified core. The pinned binding catches native aborts without
+restoring the shadow stack. Saving/restoring the stack around both native
+FFmpeg and FFprobe entry points corrects the recorded regression.
+
+The permanent fixture is `testing/fixtures/browser/long-sequence.json.gz`.
+`node.exe scripts/check-browser-regression.mjs` requires the control to reproduce
+and two corrected full-trace runs to decode successfully. Both corrected runs
+must match the fixed fresh-worker PCM reference byte-for-byte (6,144 samples).
+Every original filesystem and command call is retained in original order.
+
+This check passed locally in Chrome 156.0.8078.47 on Windows x64 with
+Node v24.22.1. It does not establish safety for unmodified assets or arbitrary
+future core builds. Hash checks reject unsupported core builds.
 
 ### Public MP4 video trim acceptance
 
-Public browser MP4 video trim remains gated.
-
-Closure requires validation through the public API, including fractional
-and consecutive trims, empty selections, audio/video timing, output
-decoding, cleanup, input preservation, and recovery.
+The adapter's provisional public-video-trim restriction has been replaced by
+feature checks. The combined acceptance route passes through the public API,
+with the timing, decoding, preservation, and recovery checks listed above.
+The installed SDK and generated assets are tested together.
 
 ## Completion rule
 
-M4 reaches 100% only after both open gates close and the final validation
-record reflects passing evidence. The verified browser suite is a
-checkpoint, not complete M4 acceptance.
+The two engineering gates have passing local checks for the corrected asset
+configuration. M4 release acceptance reaches 100% after the updated CI matrix
+passes and this record includes that fresh evidence. Previous CI results must
+not be reused as evidence for these edits.

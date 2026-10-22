@@ -225,6 +225,36 @@ function recordWorkerCalls(worker) {
     // Exclude cleanup attempted after the original trap.
     const sequence = entries.slice(0, trapIndex + 1);
 
+    function encodeTraceValue(value) {
+      if (value instanceof Uint8Array) {
+        return {
+          __mavioTraceType: "Uint8Array",
+          bytes: Array.from(value),
+        };
+      }
+
+      if (Array.isArray(value)) {
+        return value.map(encodeTraceValue);
+      }
+
+      if (value !== null && typeof value === "object") {
+        return Object.fromEntries(
+          Object.entries(value).map(([key, item]) => [key, encodeTraceValue(item)]),
+        );
+      }
+
+      return value;
+    }
+
+    await globalThis.__mavioSaveRegression(
+      JSON.stringify({
+        schemaVersion: 1,
+        wrapperVersion: "0.12.15",
+        coreVersion: "0.12.10",
+        entries: encodeTraceValue(sequence),
+      }),
+    );
+
     const audioAnalysisIndices = [];
 
     for (const [index, entry] of sequence.entries()) {
@@ -242,7 +272,31 @@ function recordWorkerCalls(worker) {
       }
     }
 
+    // Diagnostic experiment: omit successful checksum-only calls
+    // from the replay. The original failing sequence stays unchanged.
+    const checksumIndices = [];
+
+    for (const [index, entry] of sequence.entries()) {
+      const args = entry.args[0];
+
+      if (
+        entry.status === "fulfilled" &&
+        entry.method === "exec" &&
+        Array.isArray(args) &&
+        args.includes("framemd5") &&
+        args.at(-1) === "pipe:1"
+      ) {
+        checksumIndices.push(index);
+      }
+    }
+
     const omittedIndices = new Set();
+
+    for (const index of checksumIndices.slice(0, 3)) {
+      console.log(
+        `[trim-debug] Candidate call ${index + 1}: ` + JSON.stringify(sequence[index].args),
+      );
+    }
 
     const audioIsolation = await inspectRecordedAudio(origin, sequence);
 
@@ -294,7 +348,21 @@ function recordWorkerCalls(worker) {
         let result;
 
         try {
-          result = await replayWorker[entry.method](...structuredClone(entry.args));
+          const replayArgs = structuredClone(entry.args);
+          const command = replayArgs[0];
+
+          if (
+            entry.method === "exec" &&
+            Array.isArray(command) &&
+            command.includes("framemd5") &&
+            !command.includes("-filter_threads")
+          ) {
+            command.unshift("-filter_threads", "1");
+
+            console.log(`[trim-debug] Single filter thread applied at call ${index + 1}.`);
+          }
+
+          result = await replayWorker[entry.method](...replayArgs);
         } catch (error) {
           if (deadlineReached) {
             return `Replay TIMED OUT during ${phase}.`;
@@ -552,9 +620,52 @@ export async function runBrowserMp4Smoke(origin) {
     }
 
     await worker.deleteFile(reportPath);
+
+    if (hasAudio) {
+      // AAC decoders can return a padded final frame; presentation timing must
+      // still describe exactly the requested interval after the MP4 edit list.
+      const selectedSamples = expectedTimes.length === 3 ? 12_000 : 6_000;
+      const pcm = await worker.readFile(`${workspace.directory}/${label}.pcm`);
+      check(
+        pcm instanceof Uint8Array &&
+          pcm.byteLength / 2 === Math.ceil(selectedSamples / 1024) * 1024,
+        "Trimmed AAC decoded sample count differs from the pinned decoder padding contract.",
+      );
+      const audioCode = await worker.ffprobe([
+        "-v",
+        "error",
+        "-select_streams",
+        "a:0",
+        "-show_streams",
+        "-show_entries",
+        "stream=start_time,duration,sample_rate,channels",
+        "-of",
+        "json",
+        stagedPath,
+        "-o",
+        reportPath,
+      ]);
+      check(audioCode === 0 || audioCode === -1, "Trimmed audio timing probe failed.");
+      const audioText = await worker.readFile(reportPath, "utf8");
+      check(typeof audioText === "string", "Missing audio timing report.");
+      const audioReport = JSON.parse(audioText);
+      check(
+        audioReport.error === undefined && audioReport.streams?.length === 1,
+        "Unexpected audio timing report.",
+      );
+      const timing = audioReport.streams[0];
+      check(
+        Math.abs(Number(timing.start_time)) <= 0.000001 &&
+          Math.abs(Number(timing.duration) - selectedSamples / 48000) <= 0.000001 &&
+          Number(timing.sample_rate) === 48000 &&
+          timing.channels === 1,
+        "Trimmed audio presentation timing differs from the selected source interval.",
+      );
+      await worker.deleteFile(reportPath);
+    }
   }
 
-  async function savePublicResult(result, hasAudio) {
+  async function savePublicResult(result, hasAudio, expectedTimes) {
     check(result.engine.id === "browser-ffmpeg", "Public export used an unexpected engine.");
 
     check(
@@ -586,6 +697,7 @@ export async function runBrowserMp4Smoke(origin) {
       snapshot: bytes.slice(),
       blob,
       hasAudio,
+      expectedTimes,
     });
   }
 
@@ -1223,7 +1335,48 @@ export async function runBrowserMp4Smoke(origin) {
         }
 
         let publicExports = 0;
+        let publicTrims = 0;
 
+        for (const trimCase of trimmedCases) {
+          for (const kind of ["bytes", "blob"]) {
+            smokePhase = `${caseLabel}: public ${trimCase.label}-to-${kind} trim`;
+            let pipeline = publicClient.from(trimCase.input);
+            for (const operation of trimCase.transformations) {
+              pipeline = pipeline.trim(operation.options);
+            }
+            const result = await pipeline
+              .convert({ format: "mp4", preset })
+              .export({ output: { kind } });
+            check(result.output.kind === kind, "Public trim returned the wrong output kind.");
+            await savePublicResult(result, hasAudio, trimCase.expectedTimes);
+            equalBytes(sourceBytes, sourceSnapshot, "Public trim changed caller bytes.");
+            if (trimCase.input.kind === "blob") {
+              equalBytes(
+                new Uint8Array(await trimCase.input.blob.arrayBuffer()),
+                sourceSnapshot,
+                "Public trim changed caller Blob content.",
+              );
+            }
+            publicTrims += 1;
+          }
+        }
+
+        smokePhase = `${caseLabel}: public empty-video trim rejection`;
+        let publicEmptyTrimRejected = false;
+        try {
+          await publicClient
+            .from({ kind: "bytes", bytes: sourceBytes })
+            .trim({ start: 0.01, end: 0.02 })
+            .convert({ format: "mp4", preset })
+            .export({ output: { kind: "bytes" } });
+        } catch (error) {
+          if (error.code !== "INVALID_OPTIONS" || error.details?.reason !== "RANGE_TOO_SHORT")
+            throw error;
+          publicEmptyTrimRejected = true;
+        }
+        check(publicEmptyTrimRejected, "Public empty-video trim must reject.");
+
+        // These exports also prove same-client recovery after the empty trim.
         for (const { input } of preparedInputCases) {
           for (const kind of ["bytes", "blob"]) {
             smokePhase = `${caseLabel}: public ${input.kind}-to-${kind} export`;
@@ -1289,6 +1442,8 @@ export async function runBrowserMp4Smoke(origin) {
           decodedAudioSamples,
           preparedInputs,
           publicExports,
+          publicTrims,
+          publicEmptyTrimRejected,
           trimVideoFrames: trimSelection.videoFrames,
           trimAudioSamples: trimSelection.audioSamples ?? 0,
           consecutiveTrimVideoFrames: consecutiveSelection.videoFrames,
@@ -1305,7 +1460,7 @@ export async function runBrowserMp4Smoke(origin) {
       }
     }
 
-    check(publicReturned.length === 16, "Expected sixteen public exports.");
+    check(publicReturned.length === 32, "Expected sixteen exports and sixteen public trims.");
 
     check(recoverySource !== undefined, "Recovery source is missing.");
 
@@ -1363,7 +1518,10 @@ export async function runBrowserMp4Smoke(origin) {
     await publicClient.dispose();
     publicClient = undefined;
 
-    check(publicReturned.length === 17, "Expected sixteen matrix outputs and one recovery output.");
+    check(
+      publicReturned.length === 33,
+      "Expected thirty-two matrix outputs and one recovery output.",
+    );
 
     const verificationWorkspace = await createBrowserWorkspace(worker, context.jobId);
 
@@ -1384,11 +1542,12 @@ export async function runBrowserMp4Smoke(origin) {
         );
       }
 
-      await verifyPrepared(
+      await (entry.expectedTimes === undefined ? verifyPrepared : verifyTrimmed)(
         entry.prepared,
         verificationWorkspace,
         `public-${index}`,
         entry.hasAudio,
+        entry.expectedTimes,
       );
     }
 

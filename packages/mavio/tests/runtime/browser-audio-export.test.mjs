@@ -472,7 +472,7 @@ test("public audio trim preserves explicit extraction selection", async () => {
   }
 });
 
-test("advertising audio trim does not enable public video trim", async () => {
+test("advertising audio trim does not enable MP4 without the video encoder", async () => {
   const { engine } = trimFixture();
 
   const context = {
@@ -505,7 +505,7 @@ test("advertising audio trim does not enable public video trim", async () => {
 
     assert.equal(support.status, "unsupported");
     assert.equal(support.issues[0].code, "UNSUPPORTED_CAPABILITY");
-    assert.match(support.issues[0].message, /Public browser video trim is pending validation/);
+    assert.match(support.issues[0].message, /lacks the required video trim features/);
   } finally {
     await engine.dispose();
   }

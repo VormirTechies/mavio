@@ -10,6 +10,15 @@ const checks = [
     script: "check-browser-engine-assets.mjs",
   },
   {
+    name: "Long-sequence stack regression (control and corrected)",
+    script: "check-browser-regression.mjs",
+  },
+  {
+    name: "Public MP4 trim, exports and recovery",
+    script: "check-browser-client.mjs",
+    mode: "mp4-public",
+  },
+  {
     name: "MP4 resize preparation",
     script: "check-browser-client.mjs",
     mode: "resize",
@@ -117,12 +126,12 @@ async function main() {
 
   console.table([
     {
-      gate: "Long-sequence WASM allocator regression",
-      status: "open",
+      gate: "Long-sequence WASM stack regression",
+      status: "passed with corrected core assets",
     },
     {
       gate: "Public MP4 video trim acceptance",
-      status: "pending",
+      status: "passed",
     },
     {
       gate: "Installed-package public browser routes",
@@ -130,13 +139,13 @@ async function main() {
     },
     {
       gate: "Final browser validation documentation",
-      status: "pending",
+      status: "see docs/m4-browser-validation.md",
     },
   ]);
 
-  console.log("Cross-platform compatibility is established by the complete CI matrix.");
+  console.log("Cross-platform release acceptance requires a fresh complete CI matrix.");
 
-  console.log("M4 acceptance remains incomplete until its remaining gates close.");
+  console.log("Browser acceptance requires generated core assets; upstream core remains affected.");
 }
 
 try {

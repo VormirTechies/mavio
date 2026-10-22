@@ -46,6 +46,7 @@ for (const required of [
   "dist/node.js",
   "dist/node.d.ts",
   "dist/contracts.d.ts",
+  "scripts/browser-assets.mjs",
 ]) {
   assert.ok(files.has(required), `Missing package file: ${required}`);
 }
@@ -112,11 +113,23 @@ if (process.env.MAVIO_PACKAGE_BROWSER === "1") {
     consumerDir,
   );
 
+  const assetDirectory = path.join(consumerDir, "browser-assets");
+  const generated = JSON.parse(
+    npm(["exec", "--no", "--", "mavio-browser-assets", assetDirectory], consumerDir),
+  );
+  assert.equal(generated.correction, "restore-stack-after-native-entry-v1");
+  assert.equal(
+    generated.files["ffmpeg-core.wasm"],
+    "9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7",
+  );
+  console.log(`Installed asset CLI passed: ${assetDirectory}`);
+
   execFileSync(process.execPath, [path.join(root, "scripts/check-browser-verified.mjs")], {
     cwd: root,
     env: {
       ...process.env,
       MAVIO_BROWSER_CONSUMER_DIR: consumerDir,
+      MAVIO_BROWSER_ASSET_DIR: assetDirectory,
     },
     stdio: "inherit",
     windowsHide: true,

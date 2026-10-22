@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { readFile, readdir, realpath } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, realpath, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { build } from "esbuild";
 import { chromium } from "playwright";
+import { tmpdir } from "node:os";
 
 const consumerDirectory = process.env.MAVIO_BROWSER_CONSUMER_DIR
   ? resolve(process.env.MAVIO_BROWSER_CONSUMER_DIR)
@@ -16,10 +17,6 @@ const sdkRequire = createRequire(
     ? join(consumerDirectory, "package.json")
     : new URL("../packages/mavio/package.json", import.meta.url),
 );
-
-const rootRequire = consumerDirectory
-  ? sdkRequire
-  : createRequire(new URL("../package.json", import.meta.url));
 
 function withWorkerErrorStacks(source) {
   const marker = "data: e.toString(),";
@@ -52,6 +49,19 @@ async function main() {
   const sdkEntry = consumerDirectory
     ? sdkRequire.resolve("@vormir/mavio/browser")
     : fileURLToPath(new URL("../packages/mavio/dist/browser.js", import.meta.url));
+  // Use the asset correction shipped in the SDK being tested, including packs.
+  const { prepareBrowserAssets } = await import(
+    pathToFileURL(join(dirname(sdkEntry), "../scripts/browser-assets.mjs")).href
+  );
+  const preparedAssetDirectory = process.env.MAVIO_BROWSER_ASSET_DIR
+    ? resolve(process.env.MAVIO_BROWSER_ASSET_DIR)
+    : join(await mkdtemp(join(tmpdir(), "mavio-browser-assets-")), "engine");
+  if (!process.env.MAVIO_BROWSER_ASSET_DIR) {
+    await prepareBrowserAssets(
+      preparedAssetDirectory,
+      consumerDirectory ?? fileURLToPath(new URL("../", import.meta.url)),
+    );
+  }
 
   if (consumerDirectory) {
     assert.equal(
@@ -136,8 +146,8 @@ async function main() {
 
   assert.equal(cancellationBundle.outputFiles.length, 1);
 
-  const wrapperDirectory = dirname(sdkRequire.resolve("@ffmpeg/ffmpeg/worker"));
-  const coreDirectory = join(dirname(dirname(rootRequire.resolve("@ffmpeg/core"))), "esm");
+  const wrapperDirectory = join(preparedAssetDirectory, "wrapper");
+  const coreDirectory = preparedAssetDirectory;
 
   const assets = new Map([
     [
@@ -209,9 +219,10 @@ async function main() {
   console.log("Diagnostic worker stack reporting enabled; installed assets unchanged.");
 
   for (const name of ["ffmpeg-core.js", "ffmpeg-core.wasm"]) {
+    const original = await readFile(join(coreDirectory, name));
     assets.set(`/core/${name}`, {
       type: name.endsWith(".wasm") ? "application/wasm" : "text/javascript; charset=utf-8",
-      body: await readFile(join(coreDirectory, name)),
+      body: original,
     });
   }
 
@@ -296,6 +307,12 @@ async function main() {
     console.log(`Browser host: Node ${process.version}, ` + `${process.platform}/${process.arch}`);
 
     const page = await browser.newPage();
+
+    await page.exposeFunction("__mavioSaveRegression", async (json) => {
+      const destination = join(tmpdir(), "mavio-browser-regression.json");
+      await writeFile(destination, json, "utf8");
+      console.log(`[trim-debug] Regression trace saved: ${destination}`);
+    });
 
     page.on("console", (message) => {
       const text = message.text();
@@ -675,7 +692,7 @@ async function main() {
         console.log("Cancelled encoding rejects without publishing output.");
         console.log("The same client reloads its worker and completes recovery.");
         console.log("Recovery PCM decodes after disposal and exactly preserves source samples.");
-        console.log("The deferred allocator regression remains open.");
+        console.log("The complete suite checks the stack regression separately.");
 
         return;
       }
@@ -733,7 +750,7 @@ async function main() {
         console.log(
           "Public thumbnail trim, sequential resize and caller-content preservation passed.",
         );
-        console.log("Public video trim and the deferred allocator regression remain pending.");
+        console.log("The complete suite checks MP4 trim and the stack regression separately.");
 
         return;
       }
@@ -776,7 +793,7 @@ async function main() {
         console.log("Resized JPEG and PNG pixels match their independent references.");
         console.log("Thumbnail outputs decode and compare after worker termination.");
         console.log(
-          "Public thumbnail integration and the deferred allocator regression remain pending.",
+          "The complete suite checks public thumbnails and the stack regression separately.",
         );
 
         return;
@@ -815,7 +832,7 @@ async function main() {
         console.log("Browser JPEG and PNG preparation passed for byte and Blob inputs.");
         console.log("All four thumbnails decode in Chromium after worker termination.");
         console.log("Browser thumbnail preparation preserves caller content and cleans staging.");
-        console.log("Public thumbnails and frame-selection/resize acceptance remain pending.");
+        console.log("The complete suite checks public thumbnails and frame selection separately.");
 
         return;
       }
@@ -869,7 +886,7 @@ async function main() {
         console.log("Empty public audio trim rejects; same-client recovery decodes.");
         console.log("Public trimmed PCM exactly matches the requested 6000 source samples.");
         console.log("All ten public trimmed outputs decode after client disposal.");
-        console.log("Public video trim and the deferred allocator regression remain pending.");
+        console.log("The complete suite checks MP4 trim and the stack regression separately.");
 
         return;
       }
@@ -916,7 +933,7 @@ async function main() {
         console.log("Trimmed PCM WAV exactly matches the requested 6000 source samples.");
         console.log("Browser audio trim preparation preserves caller content and cleans staging.");
         console.log(
-          "Public audio trim integration remains pending; the deferred allocator regression remains open.",
+          "The complete suite checks public audio trim and the stack regression separately.",
         );
 
         return;
@@ -948,7 +965,7 @@ async function main() {
         console.log("Browser empty-audio trim rejects; same-worker analysis recovers.");
         console.log("Browser audio trim analysis preserves source content and cleans staging.");
         console.log(
-          "Audio trim encoding remains pending; the deferred allocator regression remains open.",
+          "The complete suite checks public audio trim and the stack regression separately.",
         );
 
         return;
@@ -1026,7 +1043,7 @@ async function main() {
         console.log("Public PCM exports exactly preserve the source samples.");
         console.log("Public audio exports preserve caller bytes and Blob content.");
         console.log(
-          "Focused public audio check passed; the deferred allocator regression remains open.",
+          "Focused public audio check passed; the complete suite checks the stack regression separately.",
         );
 
         console.log("Public browser default and explicit audio selection passed.");
@@ -1075,7 +1092,7 @@ async function main() {
         console.log("PCM WAV output exactly preserves the source samples.");
         console.log("Browser audio staging cleanup and caller input preservation passed.");
         console.log(
-          "Focused audio check passed; public audio integration and the deferred allocator regression remain pending.",
+          "Focused audio check passed; the complete suite checks public audio and the stack regression separately.",
         );
 
         return;
@@ -1137,7 +1154,7 @@ async function main() {
         console.log("Browser resized video and audio decoding passed.");
         console.log("Browser resize staging cleanup and byte ownership passed.");
         console.log(
-          "Focused resize check passed; the long-sequence allocator regression remains deferred.",
+          "Focused resize check passed; the complete suite checks the stack regression separately.",
         );
 
         return;
@@ -1152,7 +1169,7 @@ async function main() {
 
       await expectWorkers(0);
 
-      assert.equal(workerCreations, creationsBeforeMp4 + 3);
+      assert.equal(workerCreations, creationsBeforeMp4 + 7);
       assert.equal(mp4Results.length, 4);
 
       for (const row of mp4Results) {
@@ -1162,6 +1179,8 @@ async function main() {
         assert.equal(row.consecutiveTrimAudioSamples, row.audio ? 6_000 : 0);
         assert.equal(row.emptyTrimRejected, true);
         assert.equal(row.trimmedPreparations, 2);
+        assert.equal(row.publicTrims, 4);
+        assert.equal(row.publicEmptyTrimRejected, true);
       }
 
       assert.ok(
@@ -1194,7 +1213,10 @@ async function main() {
 
       console.log("All sixteen public browser MP4 export combinations passed.");
       console.log("Public browser export rejects invalid media and recovers.");
-      console.log("All seventeen public MP4 outputs decode after client disposal.");
+      console.log("All thirty-three public MP4 outputs decode after client disposal.");
+      console.log(
+        "Sixteen public fractional/consecutive MP4 trims passed; empty trims reject and recover.",
+      );
       console.log("Public browser MP4 exports preserve caller input content.");
 
       console.log("Browser fractional trim analysis selects three video frames.");
@@ -1212,7 +1234,7 @@ async function main() {
       assert.deepEqual(pageErrors, []);
 
       console.log("All public browser lifecycle checks passed.");
-      console.log("Browser trim, resize and real-media cancellation remain pending.");
+      console.log("Public MP4 trim and the corrected long-sequence smoke passed.");
     }
 
     await Promise.race([

@@ -18,6 +18,7 @@ function fixture(options = {}) {
   const receivedPlans = [];
 
   const source = {
+    formatStartTimeSeconds: 0,
     metadata: {
       container: "mov,mp4,m4a,3gp,3g2,mj2",
       durationSeconds: 1,
@@ -85,9 +86,11 @@ function fixture(options = {}) {
 
       async inventory() {
         return {
-          encoders: options.disabled ? [] : ["libx264", "aac"],
+          encoders: options.disabled
+            ? []
+            : ["libx264", "aac", ...(options.trim ? ["rawvideo"] : [])],
           decoders: ["h264"],
-          muxers: ["mp4"],
+          muxers: ["mp4", ...(options.trim ? ["framemd5"] : [])],
           demuxers: ["mov", "mp4"],
           filters: options.filters ?? [],
         };
@@ -195,6 +198,33 @@ test("missing MP4 encoder leaves browser capabilities metadata-only", async () =
     assert.deepEqual(capabilities.operations, ["metadata"]);
     assert.deepEqual(capabilities.outputKinds, []);
     assert.deepEqual(capabilities.encodings, []);
+  } finally {
+    await client.dispose();
+  }
+});
+
+test("public MP4 trim checks required features and forwards consecutive trim plans", async () => {
+  const { client, receivedPlans } = fixture({ trim: true, filters: ["trim", "settb", "setpts"] });
+  try {
+    assert.equal((await client.capabilities()).operations.includes("trim"), true);
+    for (const preset of ["video-balanced-v1", "video-small-v1"]) {
+      await client
+        .from({ kind: "bytes", bytes: new Uint8Array([1, 2, 3]) })
+        .trim({ start: 0.125, end: 0.5 })
+        .trim({ start: 0.125, end: 0.25 })
+        .convert({ format: "mp4", preset })
+        .export({ output: { kind: "blob" } });
+    }
+    assert.equal(receivedPlans.length, 2);
+    for (const received of receivedPlans) {
+      assert.deepEqual(
+        received.transformations.filter((op) => op.type === "trim").map((op) => op.options),
+        [
+          { start: 0.125, end: 0.5 },
+          { start: 0.125, end: 0.25 },
+        ],
+      );
+    }
   } finally {
     await client.dispose();
   }

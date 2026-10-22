@@ -26,7 +26,7 @@
     "build": "npm run build --workspace=@vormir/mavio",
     "typecheck": "npm run typecheck --workspace=@vormir/mavio",
     "test:types": "npm run test:types --workspace=@vormir/mavio",
-    "test": "npm run test --workspace=@vormir/mavio",
+    "test": "npm run test --workspace=@vormir/mavio && node --test scripts/minimize-browser-regression.test.mjs scripts/browser-core.test.mjs",
     "test:package": "npm run build && node scripts/check-package.mjs",
     "lint": "eslint packages scripts eslint.config.mjs --max-warnings=0",
     "format": "prettier . --write",
@@ -38,6 +38,7 @@
     "check:native:thumbnail": "npm run build && node scripts/check-native-thumbnail.mjs",
     "check:native:all": "npm run build && node scripts/check-native-all.mjs",
     "check:browser:assets": "node scripts/check-browser-engine-assets.mjs",
+    "check:browser:regression": "node scripts/check-browser-regression.mjs",
     "check:browser:engine": "npm run check:browser:assets && node scripts/check-browser-engine.mjs",
     "check:browser:client": "npm run build && npm run check:browser:assets && node scripts/check-browser-client.mjs",
     "check:browser:verified": "npm run build && node scripts/check-browser-verified.mjs"

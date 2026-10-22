@@ -19,7 +19,12 @@ export default defineConfig(
     extends: [js.configs.recommended, tseslint.configs.recommended],
   },
   {
-    files: ["scripts/**/*.{js,mjs}", "**/tests/runtime/**/*.mjs", "*.mjs"],
+    files: [
+      "scripts/**/*.{js,mjs}",
+      "packages/**/scripts/**/*.mjs",
+      "**/tests/runtime/**/*.mjs",
+      "*.mjs",
+    ],
     extends: [js.configs.recommended],
     languageOptions: {
       globals: globals.node,

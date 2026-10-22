@@ -80,6 +80,16 @@ export function createBrowserEngine(
     );
   }
 
+  function videoTrimAvailable(available: BrowserInventory): boolean {
+    return (
+      available.muxers.includes("mp4") &&
+      available.encoders.includes("libx264") &&
+      available.muxers.includes("framemd5") &&
+      available.encoders.includes("rawvideo") &&
+      ["trim", "settb", "setpts"].every((filter) => available.filters.includes(filter))
+    );
+  }
+
   function checkPlan(plan: ProcessingPlan): void {
     if (unsafe || worker === undefined || !worker.loaded || inventory === undefined) {
       unavailable();
@@ -121,19 +131,22 @@ export function createBrowserEngine(
     }
 
     if (plan.transformations.some((operation) => operation.type === "trim")) {
-      if (!isAudioPlan(plan)) {
+      const videoAudioAnalysisMissing =
+        lastProbe.metadata.streams.some((stream) => stream.kind === "audio") &&
+        (!inventory.encoders.includes("pcm_f32le") || !inventory.muxers.includes("f32le"));
+
+      if (!isAudioPlan(plan) && (!videoTrimAvailable(inventory) || videoAudioAnalysisMissing)) {
         throw createMavioError(
           "UNSUPPORTED_CAPABILITY",
-          "Public browser video trim is pending validation.",
+          "The browser core lacks the required video trim features.",
           {
             stage: "preparing",
             operation: "trim",
-            details: { reason: "BROWSER_VIDEO_TRIM_PENDING" },
+            details: { reason: "BROWSER_VIDEO_TRIM_UNAVAILABLE" },
           },
         );
       }
-
-      if (!audioTrimAvailable(inventory)) {
+      if (isAudioPlan(plan) && !audioTrimAvailable(inventory)) {
         throw createMavioError(
           "UNSUPPORTED_CAPABILITY",
           "The browser core lacks the required audio trim features.",
@@ -331,7 +344,9 @@ export function createBrowserEngine(
           ...(exportEnabled ? (["convert", "compress"] as const) : []),
           ...(resizeEnabled ? (["resize"] as const) : []),
           ...(audioEnabled ? (["extractAudio"] as const) : []),
-          ...(audioTrimAvailable(inventory) || thumbnailsEnabled ? (["trim"] as const) : []),
+          ...(audioTrimAvailable(inventory) || videoTrimAvailable(inventory) || thumbnailsEnabled
+            ? (["trim"] as const)
+            : []),
           ...(thumbnailsEnabled ? (["thumbnail"] as const) : []),
         ],
         inputKinds: ["bytes", "blob"],

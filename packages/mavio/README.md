@@ -4,7 +4,8 @@ JavaScript multimedia SDK for browser and Node.js runtimes.
 
 ## Current implementation
 
-Version 0.0.3 implements the core against injected engine adapters. The package remains private and has not been published to npm.
+Version 0.0.3 implements the core contracts plus native and browser engine
+adapters. The package remains private and has not been published to npm.
 
 Public entry points:
 
@@ -22,7 +23,36 @@ Client creation performs configuration validation without initializing the engin
 
 Each adapter instance belongs to one client and cannot be reassigned after disposal. Create a fresh adapter instance for another client.
 
-Default native and browser adapters are pending. Calling `createMavio()` or selecting `engine: "auto"` currently throws `ENGINE_UNAVAILABLE`.
+The browser adapter accepts `createMavio({ browser: { assets } })`. Generate the
+accepted browser assets using the packaged command:
+
+```sh
+npm install --save-dev --save-exact @ffmpeg/core@0.12.10
+npx --no-install mavio-browser-assets public/mavio-engine
+```
+
+The parent directory must exist and the output directory must be new. Host the
+generated files on the application's origin and pass these URLs:
+
+```js
+const client = createMavio({
+  browser: {
+    assets: {
+      coreURL: "/mavio-engine/ffmpeg-core.js",
+      wasmURL: "/mavio-engine/ffmpeg-core.wasm",
+      classWorkerURL: "/mavio-engine/wrapper/worker.js",
+    },
+  },
+});
+```
+
+The generated JavaScript includes Mavio's stack-restoration correction for the
+pinned core. The WASM is unchanged. The unmodified upstream JavaScript remains
+affected by a long-sequence memory trap and is not the accepted configuration.
+Generation verifies source hashes and records output hashes in `manifest.json`.
+
+Native adapter configuration requires explicit executable paths. Client creation
+without an engine or runtime-specific configuration throws `ENGINE_UNAVAILABLE`.
 
 ## Core behavior
 
@@ -49,9 +79,11 @@ Callers must keep input bytes unchanged until their jobs settle. Adapters must n
 
 ## Validation scope
 
-Core behavior is exercised with mock adapters. A Chromium package smoke test also exercises the browser factory and metadata lifecycle with a mock adapter.
-
-Real encoding, frame/sample accuracy, native no-clobber publication, worker termination, and broader browser compatibility require later engine integration tests.
+Core contracts are exercised with mock adapters. Real browser acceptance checks
+exercise metadata, MP4 exports and trims, audio exports and trims, thumbnails,
+cancellation, cleanup, and recovery through installed-package public APIs.
+Acceptance applies to generated assets and the tested Chromium configurations;
+other browser families require separate verification.
 
 ## License
 
