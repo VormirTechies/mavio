@@ -72,7 +72,7 @@ export async function prepareBrowserAssets(destination, consumerDirectory = proc
 if (
   process.argv[1] &&
   (await realpath(resolve(process.argv[1])).catch(() => undefined)) ===
-    fileURLToPath(import.meta.url)
+    (await realpath(fileURLToPath(import.meta.url)))
 ) {
   if (process.argv.length !== 3) {
     console.error(

@@ -64,6 +64,8 @@ passed. At that checkpoint both M4 acceptance gates remained open.
 The original trace is now retained as
 `testing/fixtures/browser/long-sequence.json.gz`; both replay and minimizer accept
 gzip traces. The permanent paired regression check is
-`node.exe scripts/check-browser-regression.mjs`. It reproduces with the unmodified
-core and requires two corrected replays to match the reference. See
+`node.exe scripts/check-browser-regression.mjs`. It measures the original binding's
+stack loss with bounded commands and requires two corrected full replays to
+match the reference. The original crash replay remains available separately;
+renderer crashes remain inconclusive. See
 [Browser engine assets](browser-engine-assets.md) for the packaged correction.

@@ -56,10 +56,18 @@ Emscripten documents the need to restore the shadow stack when catching an
 exception in JavaScript and continuing to use the module:
 [C++ Exceptions Support](https://emscripten.org/docs/porting/exceptions.html#handling-c-exceptions-from-javascript).
 
-The permanent regression fixture contains all 612 original calls. Its control
-run uses unmodified assets and must reproduce the original memory trap at call 612. Two corrected runs must reach that same call successfully and produce
+The permanent regression fixture contains all 612 original calls. A bounded
+control runs `-version` through each original native entry point and measures
+its stack loss, then verifies zero loss with the correction. Instrumentation
+reads the stack pointer without changing the binding bodies or stack position.
+Two corrected full-trace runs must reach call 612 successfully and produce
 PCM byte-equal to a fresh-worker reference of 6,144 mono samples. No recorded
-calls are omitted or reordered.
+calls are omitted or reordered in either corrected replay.
+
+The unmodified full trace remains available through
+`scripts/replay-browser-regression.mjs`. On some CI hosts, executing its exhausted
+stack crashes the renderer instead of producing a catchable WASM trap. Such a
+run remains `INCONCLUSIVE` and is never accepted as reproduction evidence.
 
 ```powershell
 $env:MAVIO_BROWSER_CHANNEL = "chrome"

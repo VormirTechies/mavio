@@ -211,14 +211,40 @@ restoring the shadow stack. Saving/restoring the stack around both native
 FFmpeg and FFprobe entry points corrects the recorded regression.
 
 The permanent fixture is `testing/fixtures/browser/long-sequence.json.gz`.
-`node.exe scripts/check-browser-regression.mjs` requires the control to reproduce
-and two corrected full-trace runs to decode successfully. Both corrected runs
+`node.exe scripts/check-browser-regression.mjs` measures stack loss with bounded
+original-core commands, verifies zero loss with the correction, and requires
+two corrected full-trace runs to decode successfully. Both corrected runs
 must match the fixed fresh-worker PCM reference byte-for-byte (6,144 samples).
 Every original filesystem and command call is retained in original order.
 
 This check passed locally in Chrome 156.0.8078.47 on Windows x64 with
 Node v24.22.1. It does not establish safety for unmodified assets or arbitrary
 future core builds. Hash checks reject unsupported core builds.
+
+### CI harness corrections
+
+Run 39848841441 failed four browser jobs on Ubuntu and Windows (Node 22 and 24).
+Both macOS browser jobs passed. Ubuntu reached original call 612, then crashed
+the renderer instead of returning a catchable trap. The crash remained
+`INCONCLUSIVE`; requiring that particular symptom blocked the corrected replays.
+The bounded stack control now checks the underlying defect without deliberately
+exhausting the stack. Full corrected trace acceptance remains mandatory twice.
+
+Windows failed earlier: the asset CLI's entry-point check canonicalized argv but
+compared it with a noncanonical module URL containing a `RUNNER~1` path alias.
+Both paths are now canonicalized. A filesystem-alias regression test verifies
+that the CLI executes even when its module URL preserves an alias.
+
+Local Playwright Chromium 153.0.8010.12 measured 768 bytes of stack loss for
+FFmpeg and 2,128 bytes for FFprobe with the original binding, and zero loss for
+both corrected bindings. Both corrected 612-call replays passed. Updated remote
+CI results remain required for these harness changes.
+
+The full check also passed locally with `MAVIO_BROWSER_CHANNEL` empty and
+`MAVIO_PACKAGE_BROWSER=1`, using Playwright's pinned headless Chromium
+153.0.8010.12: 877 SDK tests, eight helper tests, and all eight installed-package
+browser checks. The local log is
+`C:\Users\vicky\AppData\Local\Temp\mavio-ci-harness-check.log`.
 
 ### Public MP4 video trim acceptance
 

@@ -7,11 +7,13 @@ import { dirname, join } from "node:path";
 import { chromium } from "playwright";
 import { patchBrowserCore } from "../packages/mavio/scripts/browser-assets.mjs";
 import { gunzipSync } from "node:zlib";
+import { instrumentCoreStack } from "./browser-stack-control.mjs";
 
 const sdkRequire = createRequire(new URL("../packages/mavio/package.json", import.meta.url));
 const rootRequire = createRequire(new URL("../package.json", import.meta.url));
 
 async function main() {
+  const stackControl = process.env.MAVIO_REPLAY_STACK_CONTROL === "1";
   const tracePath = process.argv[2] ?? join(tmpdir(), "mavio-browser-regression.json");
 
   const traceBytes = await readFile(tracePath);
@@ -87,6 +89,7 @@ async function main() {
     if (name === "ffmpeg-core.js" && process.env.MAVIO_REPLAY_STACK_RESTORE === "1") {
       body = patchBrowserCore(body);
     }
+    if (name === "ffmpeg-core.js" && stackControl) body = instrumentCoreStack(body);
     assets.set(`/core/${name}`, {
       type: name.endsWith(".wasm") ? "application/wasm" : "text/javascript",
       body,
@@ -137,9 +140,20 @@ async function main() {
     console.log(`Recorded calls: ${trace.entries.length}`);
 
     const page = await browser.newPage();
+    let lastReportedOriginalCallId = null;
+    let lastReportedReplayPosition = null;
+    let browserCrashed = false;
+    page.on("crash", () => {
+      browserCrashed = true;
+    });
 
     page.on("console", (message) => {
       if (message.text().startsWith("[replay]")) {
+        const progress = /original call (\d+); replay (\d+)\//.exec(message.text());
+        if (progress) {
+          lastReportedOriginalCallId = Number(progress[1]);
+          lastReportedReplayPosition = Number(progress[2]);
+        }
         console.log(message.text());
       }
     });
@@ -148,8 +162,30 @@ async function main() {
 
     const result = await Promise.race([
       page.evaluate(
-        async ({ origin, trace, retainedCallIds, targetOriginalCallId }) => {
+        async ({ origin, trace, retainedCallIds, targetOriginalCallId, stackControl }) => {
           const { FFmpeg } = await import(`${origin}/wrapper/index.js`);
+
+          if (stackControl) {
+            const worker = new FFmpeg();
+            const observations = [];
+            worker.on("log", ({ message }) => {
+              if (message.startsWith("MAVIO_STACK_STATE ")) {
+                observations.push(JSON.parse(message.slice("MAVIO_STACK_STATE ".length)));
+              }
+            });
+            try {
+              await worker.load({
+                classWorkerURL: `${origin}/wrapper/worker.js`,
+                coreURL: `${origin}/core/ffmpeg-core.js`,
+                wasmURL: `${origin}/core/ffmpeg-core.wasm`,
+              });
+              await worker.exec(["-version"]);
+              await worker.ffprobe(["-version"]);
+              return { mode: "STACK_CONTROL", observations };
+            } finally {
+              worker.terminate();
+            }
+          }
 
           function check(condition, message) {
             if (!condition) throw new Error(message);
@@ -381,7 +417,7 @@ async function main() {
             worker.terminate();
           }
         },
-        { origin, trace, retainedCallIds, targetOriginalCallId },
+        { origin, trace, retainedCallIds, targetOriginalCallId, stackControl },
       ),
       new Promise((_, reject) => {
         deadline = setTimeout(
@@ -395,10 +431,18 @@ async function main() {
       atOriginalCallId: null,
       replayPosition: null,
       retainedCallCount: retainedCallIds.length,
+      lastReportedOriginalCallId,
+      lastReportedReplayPosition,
+      browserCrashed,
       reason: error instanceof Error ? error.message : String(error),
     }));
 
     console.table(result);
+
+    if (result.mode === "STACK_CONTROL") {
+      console.log(`MAVIO_STACK_CONTROL_RESULT ${JSON.stringify(result)}`);
+      return;
+    }
 
     // The minimizer must parse this exact prefix and inspect outcome.
     // Process exit status alone is not a reproduction oracle.
