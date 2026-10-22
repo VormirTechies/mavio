@@ -93,6 +93,26 @@ export async function runBrowserCancellationSmoke(origin) {
         targetedExecutions += 1;
 
         if (targetedExecutions === 1) {
+          const inputIndex = args.indexOf("-i");
+
+          check(inputIndex >= 0, "Cancellation fixture encoding must contain an input.");
+
+          // Pace only this smoke-test request so fast runners have a
+          // reliable opportunity to observe active encoding and cancel.
+          sendArgs[0] = {
+            ...message,
+            data: {
+              ...message.data,
+              args: [
+                "-stats_period",
+                "0.05",
+                ...args.slice(0, inputIndex),
+                "-re",
+                ...args.slice(inputIndex),
+              ],
+            },
+          };
+
           observedWorker = this;
           const requestId = message.id;
 
@@ -129,7 +149,7 @@ export async function runBrowserCancellationSmoke(origin) {
         }
       }
 
-      // Observe only: preserve the request and its transfer list.
+      // Preserve the original transfer list when forwarding the request.
       return originalPostMessage.apply(this, sendArgs);
     }
 
