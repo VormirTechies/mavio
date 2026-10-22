@@ -1,8 +1,8 @@
 import type { EngineContext } from "../../contracts.js";
 import { createMavioError } from "../../core/errors.js";
-import { parseNativeCodecList } from "./codec-list.js";
+import { parseNativeCodecList } from "../shared/codec-list.js";
 import type { NativeConfiguration } from "./config.js";
-import { parseNativeFilterList, parseNativeFormatList } from "./feature-lists.js";
+import { parseNativeFilterList, parseNativeFormatList } from "../shared/feature-lists.js";
 import type { PreparedNativeTools } from "./prepare.js";
 import { NativeProcessError, runNativeProcess } from "./process.js";
 

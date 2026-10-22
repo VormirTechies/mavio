@@ -3,7 +3,7 @@ import test from "node:test";
 import {
   parseNativeFilterList,
   parseNativeFormatList,
-} from "../../dist/engines/native/feature-lists.js";
+} from "../../dist/engines/shared/feature-lists.js";
 
 test("older format tables expand aliases and return immutable unique names", () => {
   const result = parseNativeFormatList(

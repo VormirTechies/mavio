@@ -182,12 +182,11 @@ test("an adapter remains owned after its client is disposed", async () => {
   });
 });
 
-test("the default browser engine remains unavailable", () => {
+test("the default browser engine requires explicit asset configuration", () => {
   for (const options of [undefined, {}, { engine: "auto" }]) {
     assert.throws(() => createBrowser(options), {
-      code: "ENGINE_UNAVAILABLE",
+      code: "INVALID_OPTIONS",
       stage: "queued",
-      details: { reason: "DEFAULT_ENGINE_NOT_IMPLEMENTED" },
     });
   }
 });

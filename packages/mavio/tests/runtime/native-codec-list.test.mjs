@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseNativeCodecList } from "../../dist/engines/native/codec-list.js";
+import { parseNativeCodecList } from "../../dist/engines/shared/codec-list.js";
 
 function table(heading, rows = [], newline = "\n") {
   return [heading, " ------", ...rows, ""].join(newline);
