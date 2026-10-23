@@ -4,46 +4,77 @@ A JavaScript multimedia SDK for browser and Node.js runtimes.
 
 ## Status
 
-**v0.0.3 — M2 core implementation.**
+**v0.0.3 — private and unpublished.**
 
-The core supports immutable pipelines, validation, serialized jobs, cancellation, progress, disposal, and execution through explicitly supplied engine adapters. The runtime suite contains 161 tests, including two integrated mock-adapter acceptance flows.
+Implemented components include core orchestration, a native FFmpeg/FFprobe
+adapter, and a browser ffmpeg.wasm adapter.
 
-Native FFmpeg and browser ffmpeg.wasm adapters are not implemented yet. Omitting the engine or selecting `engine: "auto"` currently throws `ENGINE_UNAVAILABLE`. The SDK remains private and unpublished.
+The public API supports metadata, conversion, trimming, resizing, audio
+extraction, thumbnails, and preset-based compression within documented profiles.
 
-Mock-adapter tests verify core orchestration. They do not establish real-media encoding accuracy, filesystem publication safety, or production browser compatibility.
+M5 acceptance and documentation work is in progress. Local acceptance covers
+tested scenarios. Fresh cross-platform CI evidence remains outstanding.
 
 ## Workspace
 
-- `packages/mavio`: SDK, contracts, core implementation, and tests.
+- `packages/mavio`: SDK, contracts, adapters, and tests.
 - `apps/docs`: documentation application placeholder.
 - `apps/playground`: playground application placeholder.
 - `testing/fixtures`: fixture conventions.
 
+## Getting started
+
+Use `@vormir/mavio/node` for Node and `@vormir/mavio/browser` for browsers.
+The root entry selects the implementation through package export conditions.
+
+Node requires separately installed FFmpeg and FFprobe. Mavio discovers them
+on the captured PATH or accepts explicit absolute binary paths.
+
+Browsers require application-hosted generated engine assets.
+See the [package README](packages/mavio/README.md) for setup.
+
+Initialization is lazy. Always await `client.dispose()` after use.
+
 ## Verification
 
-Run `npm run check` from the repository root.
+Run from the repository root:
 
-The check covers linting, formatting, compilation, consumer types, runtime tests, package installation, browser bundling, and a Chromium smoke test using a mock adapter.
+```sh
+npm run check
+npm run check:native:all
+npm run check:browser:verified
+```
 
-CI is configured for Ubuntu and Windows with Node.js 22 and 24.
+Real native and installed-package Browser acceptance are separate from
+the main static, unit, type, and package-consumer checks.
+Native acceptance requires FFmpeg and FFprobe.
+
+Passing mock-adapter tests does not establish real-engine behavior.
+See the [M5 acceptance matrix](docs/m5-acceptance-matrix.md) for evidence,
+tested profiles, and outstanding verification.
 
 ## Documentation
 
+- [Package setup](packages/mavio/README.md)
+- [M5 acceptance matrix](docs/m5-acceptance-matrix.md)
 - [Approved M0 baseline](docs/m0/README.md)
-- [API contract](docs/m0/api.md)
+- [Historical API contract](docs/m0/api.md)
 - [Preset definitions](docs/m0/presets.md)
-- [Engine initialization contract](docs/m0/initialization.md)
+- [Historical initialization contract](docs/m0/initialization.md)
 - [Edge-case decisions](docs/m0/edge-cases.md)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
 
-The M0 documents preserve the approved design and historical feasibility evidence. Their examples include behavior assigned to later milestones.
+M0 documents preserve the approved design and historical feasibility evidence.
+Current default entry points reject configuration for the other runtime;
+do not supply both `native` and `browser` options.
 
-## Next milestones
+## Remaining milestone work
 
-- M3: native FFmpeg/FFprobe adapter, metadata, and one trim path.
-- M4: browser adapter, worker/assets integration, metadata, and one trim path.
-- M5: complete real-media operation coverage and shared conformance tests.
+- M4: close outstanding release gates, including fresh cross-platform CI evidence.
+- M5: finish recipe verification and consolidate acceptance evidence.
+
+[Public API recipes](docs/m5-recipes.md)
 
 ## License
 

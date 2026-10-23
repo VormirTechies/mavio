@@ -17,11 +17,25 @@ Each entry exposes `createMavio`, `SDK_VERSION`, and public contract types. The 
 
 ## Engine requirement
 
-Call `createMavio({ engine })` with a complete `EngineAdapter` matching the selected runtime.
+The Node and browser entry points provide their runtime-specific default
+adapters. A custom adapter is optional.
 
-Client creation performs configuration validation without initializing the engine. Initialization occurs on the first accepted job or capability request.
+For Node, use `createMavio()` when FFmpeg and FFprobe are available on PATH.
+Alternatively, supply absolute executable paths through
+`createMavio({ native: { ffmpegPath, ffprobePath } })`.
 
-Each adapter instance belongs to one client and cannot be reassigned after disposal. Create a fresh adapter instance for another client.
+For browsers, supply the generated application-hosted assets through
+`createMavio({ browser: { assets } })`.
+
+To use a custom adapter, pass `createMavio({ engine })` with a complete
+`EngineAdapter` matching the selected runtime. Do not combine an explicit
+adapter with `native` or `browser` configuration.
+
+Client creation validates configuration. Engine initialization occurs on the
+first accepted job or capability request.
+
+Each adapter instance belongs to one client and cannot be reassigned after
+disposal. Create a fresh adapter instance for another client.
 
 The browser adapter accepts `createMavio({ browser: { assets } })`. Generate the
 accepted browser assets using the packaged command:
@@ -51,8 +65,10 @@ pinned core. The WASM is unchanged. The unmodified upstream JavaScript remains
 affected by a long-sequence memory trap and is not the accepted configuration.
 Generation verifies source hashes and records output hashes in `manifest.json`.
 
-Native adapter configuration requires explicit executable paths. Client creation
-without an engine or runtime-specific configuration throws `ENGINE_UNAVAILABLE`.
+Native tools must be installed separately. Omitting executable paths enables
+discovery on the captured PATH; explicit paths must be absolute.
+
+Always await `client.dispose()` when the client is no longer needed.
 
 ## Core behavior
 
@@ -84,6 +100,8 @@ exercise metadata, MP4 exports and trims, audio exports and trims, thumbnails,
 cancellation, cleanup, and recovery through installed-package public APIs.
 Acceptance applies to generated assets and the tested Chromium configurations;
 other browser families require separate verification.
+
+[Public API recipes](../../docs/m5-recipes.md)
 
 ## License
 

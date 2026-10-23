@@ -39,17 +39,22 @@ function source({ video = {}, audio = {}, withAudio = true, extraStreams = [] } 
 }
 
 function rejectsProfile(input, reason, streamIndex) {
-  assert.throws(
-    () => validateBalancedMp4Source(input),
-    (error) => {
-      assert.equal(error.code, "UNSUPPORTED_CAPABILITY");
-      assert.equal(error.stage, "preparing");
-      assert.equal(error.details.reason, reason);
-      assert.equal(error.details.streamIndex, streamIndex);
-      assert.equal(error.details.preset, "video-balanced-v1");
-      return true;
-    },
-  );
+  const snapshot = structuredClone(input);
+
+  for (const preset of ["video-balanced-v1", "video-small-v1"]) {
+    assert.throws(
+      () => validateBalancedMp4Source(input, preset),
+      (error) => {
+        assert.equal(error.code, "UNSUPPORTED_CAPABILITY");
+        assert.equal(error.stage, "preparing");
+        assert.equal(error.details.reason, reason);
+        assert.equal(error.details.streamIndex, streamIndex);
+        assert.equal(error.details.preset, preset);
+        return true;
+      },
+    );
+    assert.deepEqual(input, snapshot);
+  }
 }
 
 test("MP4 source validation accepts the initial explicit video and audio profiles", () => {

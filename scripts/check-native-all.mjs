@@ -8,6 +8,8 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const checks = [
   ["Tool discovery", "check-native-tools.mjs"],
   ["Video processing", "check-native-media.mjs"],
+  ["Video compression", "check-native-compression.mjs"],
+  ["Preset quality", "check-native-preset-quality.mjs"],
   ["Audio processing", "check-native-audio.mjs"],
   ["Thumbnail processing", "check-native-thumbnail.mjs"],
 ];

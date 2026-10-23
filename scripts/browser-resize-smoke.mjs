@@ -1,4 +1,5 @@
 import { FFmpeg } from "/wrapper/index.js";
+import { createMavio } from "/mavio.mjs";
 import { discoverBrowserInventory } from "../packages/mavio/dist/engines/browser/inventory.js";
 import { createBrowserWorkspace } from "../packages/mavio/dist/engines/browser/workspace.js";
 import { prepareBrowserMp4Bytes } from "../packages/mavio/dist/engines/browser/mp4-bytes.js";
@@ -16,13 +17,177 @@ function equalBytes(actual, expected, message) {
   );
 }
 
-export async function runBrowserResizeSmoke(origin) {
+function measureLumaQuality(reference, actual, width, height, frames, preset) {
+  const pixels = width * height;
+  const frameBytes = (pixels * 3) / 2;
+  check(
+    reference instanceof Uint8Array && actual instanceof Uint8Array,
+    "Expected raw source and output video.",
+  );
+  check(
+    reference.length === frameBytes * frames && actual.length === reference.length,
+    "Quality comparison requires matching dimensions and frame counts.",
+  );
+
+  let squaredError = 0;
+  for (let frame = 0; frame < frames; frame++) {
+    const offset = frame * frameBytes;
+    for (let pixel = 0; pixel < pixels; pixel++) {
+      const difference = reference[offset + pixel] - actual[offset + pixel];
+      squaredError += difference * difference;
+    }
+  }
+
+  const mse = squaredError / (pixels * frames);
+  const psnr = mse === 0 ? Infinity : 10 * Math.log10((255 * 255) / mse);
+  check(psnr === Infinity || Number.isFinite(psnr), "Invalid luma PSNR.");
+  const minimumQuality = {
+    "video-balanced-v1": 38,
+    "video-small-v1": 34,
+  }[preset];
+  check(minimumQuality !== undefined, "Unknown quality-gate preset.");
+  check(
+    psnr >= minimumQuality,
+    "Luma quality regression for " +
+      preset +
+      ": measured " +
+      psnr +
+      " dB; minimum " +
+      minimumQuality +
+      " dB.",
+  );
+
+  return {
+    minimumLumaPSNRdB: minimumQuality,
+    lumaMSE: Number(mse.toFixed(6)),
+    lumaPSNRdB: psnr === Infinity ? "identical" : Number(psnr.toFixed(4)),
+  };
+}
+
+async function preparePublicResizeCases(origin, sourceBytes, cases, preset, operation = "convert") {
+  const client = createMavio({
+    initTimeoutMs: 60_000,
+    browser: {
+      assets: {
+        coreURL: new URL("/core/ffmpeg-core.js", origin).href,
+        wasmURL: new URL("/core/ffmpeg-core.wasm", origin).href,
+        classWorkerURL: new URL("/wrapper/worker.js", origin).href,
+      },
+    },
+  });
+
+  const outputs = [];
+
+  try {
+    for (const item of cases) {
+      for (const inputKind of ["bytes", "blob"]) {
+        for (const outputKind of ["bytes", "blob"]) {
+          const input =
+            inputKind === "bytes"
+              ? { kind: "bytes", bytes: sourceBytes }
+              : {
+                  kind: "blob",
+                  blob: new Blob([sourceBytes], { type: "video/mp4" }),
+                };
+
+          let pipeline = client.from(input);
+
+          for (const operation of item.transformations) {
+            if (operation.type === "resize") {
+              pipeline = pipeline.resize(operation.options);
+            } else if (operation.type === "trim") {
+              pipeline = pipeline.trim(operation.options);
+            } else {
+              throw new Error("Unexpected public resize transformation.");
+            }
+          }
+
+          const encoded =
+            operation === "compress"
+              ? pipeline.compress({ preset })
+              : pipeline.convert({ format: "mp4", preset });
+
+          const result = await encoded.export({
+            format: "mp4",
+            output: { kind: outputKind },
+          });
+
+          check(result.output.kind === outputKind, "Public output kind differs.");
+          check(result.engine.id === "browser-ffmpeg", "Unexpected public engine.");
+
+          if (outputKind === "blob") {
+            check(result.output.blob.type === "video/mp4", "Unexpected Blob MIME type.");
+          }
+
+          outputs.push({
+            ...item,
+            baseCase: item.name,
+            name: item.name + "-" + inputKind + "-" + outputKind,
+            blobInput: inputKind === "blob",
+            inputKind,
+            outputKind,
+            input,
+            result,
+          });
+        }
+      }
+    }
+  } finally {
+    await client.dispose();
+  }
+
+  // Read output storage after disposal; the caller independently decodes it.
+  const sourceSnapshot = sourceBytes.slice();
+
+  for (const item of outputs) {
+    if (item.input.kind === "blob") {
+      equalBytes(
+        new Uint8Array(await item.input.blob.arrayBuffer()),
+        sourceSnapshot,
+        "Public resize changed caller Blob content.",
+      );
+    }
+
+    const bytes =
+      item.result.output.kind === "bytes"
+        ? item.result.output.bytes
+        : new Uint8Array(await item.result.output.blob.arrayBuffer());
+
+    check(bytes instanceof Uint8Array && bytes.byteLength > 0, "Missing public resize bytes.");
+
+    item.prepared = {
+      bytes,
+      metadata: item.result.metadata,
+    };
+  }
+
+  return outputs;
+}
+
+export async function runBrowserResizeSmoke(
+  origin,
+  {
+    publicAPI = false,
+    compression = false,
+    measureQuality = false,
+    sourceWidth = 320,
+    sourceHeight = 180,
+  } = {},
+) {
+  check(
+    !measureQuality || (publicAPI && compression),
+    "Quality measurement requires public compression.",
+  );
+  check(!compression || publicAPI, "Compression acceptance requires the public API.");
+  const compressionSources = new Map();
   const results = [];
   const retained = [];
 
-  const normalTimes = [0, 0.083333, 0.166667, 0.25, 0.333333, 0.416667];
+  const normalTimes = measureQuality
+    ? Array.from({ length: 12 }, (_, index) => Number((index / 12).toFixed(6)))
+    : [0, 0.083333, 0.166667, 0.25, 0.333333, 0.416667];
 
-  const cases = [
+  const resizeCases = [
     {
       name: "resize",
       transformations: [
@@ -72,8 +237,21 @@ export async function runBrowserResizeSmoke(origin) {
     },
   ];
 
+  const cases = compression
+    ? [
+        {
+          name: "compress",
+          transformations: [],
+          width: sourceWidth,
+          height: sourceHeight,
+          times: normalTimes,
+          blobInput: false,
+        },
+      ]
+    : resizeCases;
+
   for (const preset of ["video-balanced-v1", "video-small-v1"]) {
-    for (const hasAudio of [false, true]) {
+    for (const hasAudio of measureQuality ? [false] : [false, true]) {
       const worker = new FFmpeg();
       const logs = [];
       let phase = "initialization";
@@ -141,7 +319,12 @@ export async function runBrowserResizeSmoke(origin) {
           "-f",
           "lavfi",
           "-i",
-          "testsrc2=size=320x180:rate=12:duration=0.5",
+          "testsrc2=size=" +
+            sourceWidth +
+            "x" +
+            sourceHeight +
+            ":rate=12:duration=" +
+            (measureQuality ? 1 : 0.5),
         ];
 
         if (hasAudio) {
@@ -169,7 +352,7 @@ export async function runBrowserResizeSmoke(origin) {
 
         generation.push(
           "-t",
-          "0.5",
+          measureQuality ? "1" : "0.5",
           "-c:v",
           "libx264",
           "-preset",
@@ -200,8 +383,65 @@ export async function runBrowserResizeSmoke(origin) {
         check(sourceBytes instanceof Uint8Array, "Expected source bytes.");
 
         const sourceSnapshot = sourceBytes.slice();
+        let sourceReference;
 
-        for (const item of cases) {
+        if (measureQuality) {
+          const referencePath = workspace.directory + "/quality-reference.yuv";
+          await exec(
+            [
+              "-hide_banner",
+              "-v",
+              "error",
+              "-xerror",
+              "-i",
+              workspace.inputPath,
+              "-map",
+              "0:v:0",
+              "-an",
+              "-sn",
+              "-dn",
+              "-c:v",
+              "rawvideo",
+              "-pix_fmt",
+              "yuv420p",
+              "-threads:v",
+              "1",
+              "-fps_mode:v",
+              "passthrough",
+              "-f",
+              "rawvideo",
+              referencePath,
+            ],
+            "Quality reference decoding",
+          );
+          sourceReference = await worker.readFile(referencePath);
+        }
+
+        if (compression) {
+          if (compressionSources.has(hasAudio)) {
+            equalBytes(
+              sourceBytes,
+              compressionSources.get(hasAudio),
+              "Compression presets must use identical source bytes.",
+            );
+          } else {
+            compressionSources.set(hasAudio, sourceSnapshot);
+          }
+        }
+
+        const verificationCases = publicAPI
+          ? await preparePublicResizeCases(
+              origin,
+              sourceBytes,
+              cases,
+              preset,
+              compression ? "compress" : "convert",
+            )
+          : cases;
+
+        equalBytes(sourceBytes, sourceSnapshot, "Public resize changed caller bytes.");
+
+        for (const item of verificationCases) {
           phase = `${item.name}: preparation`;
 
           const input = item.blobInput
@@ -216,30 +456,32 @@ export async function runBrowserResizeSmoke(origin) {
 
           const beforeWorkspaces = await workspaceNames();
 
-          const prepared = await prepareBrowserMp4Bytes(
-            worker,
-            {
-              input,
-              transformations: [
-                ...item.transformations,
+          const prepared = publicAPI
+            ? item.prepared
+            : await prepareBrowserMp4Bytes(
+                worker,
                 {
-                  type: "convert",
-                  options: {
+                  input,
+                  transformations: [
+                    ...item.transformations,
+                    {
+                      type: "convert",
+                      options: {
+                        format: "mp4",
+                        preset,
+                      },
+                    },
+                  ],
+                  terminal: {
+                    type: "export",
                     format: "mp4",
                     preset,
                   },
+                  output: { kind: "bytes" },
                 },
-              ],
-              terminal: {
-                type: "export",
-                format: "mp4",
-                preset,
-              },
-              output: { kind: "bytes" },
-            },
-            inventory,
-            context,
-          );
+                inventory,
+                context,
+              );
 
           check(
             JSON.stringify(await workspaceNames()) === JSON.stringify(beforeWorkspaces),
@@ -312,6 +554,16 @@ export async function runBrowserResizeSmoke(origin) {
           );
 
           const video = await worker.readFile(videoPath);
+          const quality = measureQuality
+            ? measureLumaQuality(
+                sourceReference,
+                video,
+                item.width,
+                item.height,
+                item.times.length,
+                preset,
+              )
+            : undefined;
 
           check(
             video instanceof Uint8Array &&
@@ -430,12 +682,23 @@ export async function runBrowserResizeSmoke(origin) {
           results.push({
             preset,
             audio: hasAudio,
-            case: item.name,
+            case: item.baseCase ?? item.name,
+            inputKind: item.blobInput ? "blob" : "bytes",
+            outputKind: item.outputKind ?? "bytes",
+            route: publicAPI ? "public" : "preparation",
             width: item.width,
             height: item.height,
             videoFrames: item.times.length,
             decodedAudioSamples,
             outputBytes: prepared.bytes.byteLength,
+            sourceBytes: sourceBytes.byteLength,
+            operation: compression ? "compress" : "convert",
+            ...(quality
+              ? {
+                  ...quality,
+                  fixture: sourceWidth > sourceHeight ? "landscape-motion" : "portrait-motion",
+                }
+              : {}),
           });
         }
 

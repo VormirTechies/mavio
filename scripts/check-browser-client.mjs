@@ -105,7 +105,7 @@ async function main() {
     platform: "browser",
     format: "esm",
     target: "es2022",
-    external: ["/wrapper/*"],
+    external: ["/mavio.mjs", "/wrapper/*"],
     write: false,
   });
 
@@ -971,6 +971,208 @@ async function main() {
         return;
       }
 
+      if (process.env.MAVIO_BROWSER_SMOKE === "preset-quality-public") {
+        const creationsBeforeQuality = workerCreations;
+
+        const results = await page.evaluate(async (baseURL) => {
+          const { runBrowserResizeSmoke } = await import("/resize-smoke.mjs");
+          const rows = [];
+          for (const [sourceWidth, sourceHeight] of [
+            [320, 180],
+            [180, 320],
+          ]) {
+            rows.push(
+              ...(await runBrowserResizeSmoke(baseURL, {
+                publicAPI: true,
+                compression: true,
+                measureQuality: true,
+                sourceWidth,
+                sourceHeight,
+              })),
+            );
+          }
+          return rows;
+        }, origin);
+
+        await expectWorkers(0);
+        assert.equal(workerCreations, creationsBeforeQuality + 8);
+        assert.equal(results.length, 16);
+
+        for (const fixture of ["landscape-motion", "portrait-motion"]) {
+          for (const preset of ["video-balanced-v1", "video-small-v1"]) {
+            const rows = results.filter((row) => row.fixture === fixture && row.preset === preset);
+            assert.deepEqual(rows.map((row) => row.inputKind + "-" + row.outputKind).sort(), [
+              "blob-blob",
+              "blob-bytes",
+              "bytes-blob",
+              "bytes-bytes",
+            ]);
+
+            for (const row of rows) {
+              assert.equal(row.route, "public");
+              assert.equal(row.operation, "compress");
+              assert.equal(row.audio, false);
+              assert.equal(row.videoFrames, 12);
+              assert.equal(row.width, fixture === "landscape-motion" ? 320 : 180);
+              assert.equal(row.height, fixture === "landscape-motion" ? 180 : 320);
+              assert.equal(row.minimumLumaPSNRdB, preset === "video-balanced-v1" ? 38 : 34);
+              assert.ok(row.lumaPSNRdB === "identical" || row.lumaPSNRdB >= row.minimumLumaPSNRdB);
+              assert.ok(Number.isFinite(row.lumaMSE) && row.lumaMSE >= 0);
+              assert.ok(row.lumaPSNRdB === "identical" || Number.isFinite(row.lumaPSNRdB));
+            }
+          }
+        }
+
+        assert.deepEqual(missing, []);
+        assert.deepEqual(pageErrors, []);
+        console.table(
+          results.map((row) => ({
+            fixture: row.fixture,
+            preset: row.preset,
+            inputKind: row.inputKind,
+            outputKind: row.outputKind,
+            frames: row.videoFrames,
+            outputBytes: row.outputBytes,
+            lumaMSE: row.lumaMSE,
+            lumaPSNRdB: row.lumaPSNRdB,
+            minimumLumaPSNRdB: row.minimumLumaPSNRdB,
+          })),
+        );
+        console.log("All 16 public Browser preset quality gates passed after disposal.");
+        console.log("Metrics measure additional luma encoding error against the decoded source.");
+        return;
+      }
+
+      if (process.env.MAVIO_BROWSER_SMOKE === "compression-public") {
+        const creationsBeforeCompression = workerCreations;
+
+        const results = await page.evaluate(async (baseURL) => {
+          const { runBrowserResizeSmoke } = await import("/resize-smoke.mjs");
+          return runBrowserResizeSmoke(baseURL, { publicAPI: true, compression: true });
+        }, origin);
+
+        await expectWorkers(0);
+        assert.equal(workerCreations, creationsBeforeCompression + 8);
+        assert.equal(results.length, 16);
+
+        for (const audio of [false, true]) {
+          for (const inputKind of ["bytes", "blob"]) {
+            for (const outputKind of ["bytes", "blob"]) {
+              const rows = results.filter(
+                (row) =>
+                  row.audio === audio &&
+                  row.inputKind === inputKind &&
+                  row.outputKind === outputKind,
+              );
+
+              assert.deepEqual(rows.map((row) => row.preset).sort(), [
+                "video-balanced-v1",
+                "video-small-v1",
+              ]);
+
+              const balanced = rows.find((row) => row.preset === "video-balanced-v1");
+              const small = rows.find((row) => row.preset === "video-small-v1");
+              assert.equal(balanced.sourceBytes, small.sourceBytes);
+              assert.ok(
+                small.outputBytes < balanced.outputBytes,
+                "Small preset must be smaller on this controlled fixture.",
+              );
+
+              for (const row of rows) {
+                assert.equal(row.case, "compress");
+                assert.equal(row.operation, "compress");
+                assert.equal(row.route, "public");
+                assert.equal(row.width, 320);
+                assert.equal(row.height, 180);
+                assert.equal(row.videoFrames, 6);
+                assert.ok(
+                  row.outputBytes > 0 && row.outputBytes < row.sourceBytes,
+                  "Expected size reduction on the controlled source fixture.",
+                );
+                if (audio) assert.ok(row.decodedAudioSamples > 0);
+                else assert.equal(row.decodedAudioSamples, 0);
+              }
+            }
+          }
+        }
+
+        assert.deepEqual(missing, []);
+        assert.deepEqual(pageErrors, []);
+        console.table(results);
+        console.log("All 16 public MP4 compression combinations passed.");
+        console.log(
+          "Dimensions, frames, timestamps, audio, source preservation and post-disposal decoding passed.",
+        );
+        console.log("Both presets reduced this fixture; small was smaller than balanced.");
+        console.log(
+          "Fixture-specific size checks do not guarantee smaller output for arbitrary media.",
+        );
+        return;
+      }
+
+      if (process.env.MAVIO_BROWSER_SMOKE === "audio-selection-public") {
+        const creationsBeforeSelection = workerCreations;
+        const results = await page.evaluate(async (baseURL) => {
+          const { runPublicBrowserAudioSelectionSmoke } = await import("/audio-smoke.mjs");
+          return runPublicBrowserAudioSelectionSmoke(baseURL);
+        }, origin);
+
+        await expectWorkers(0);
+        assert.ok(workerCreations > creationsBeforeSelection);
+        assert.equal(results.length, 24);
+
+        for (const preset of ["audio-balanced-v1", "audio-pcm-v1"]) {
+          const rows = results.filter((row) => row.preset === preset);
+          assert.equal(rows.length, 12);
+
+          for (const inputKind of ["bytes", "blob"]) {
+            for (const outputKind of ["bytes", "blob"]) {
+              assert.deepEqual(
+                rows
+                  .filter(
+                    (row) =>
+                      row.inputKind === inputKind &&
+                      row.outputKind === outputKind &&
+                      ["default", "explicit-second"].includes(row.operation),
+                  )
+                  .map((row) => row.operation)
+                  .sort(),
+                ["default", "explicit-second"],
+              );
+            }
+          }
+
+          assert.deepEqual(
+            rows
+              .filter((row) => row.operation.startsWith("recover-"))
+              .map((row) => row.operation)
+              .sort(),
+            [
+              "recover-absent-index",
+              "recover-missing-audio-default",
+              "recover-missing-audio-extraction",
+              "recover-video-index",
+            ],
+          );
+
+          for (const row of rows) {
+            assert.equal(row.selectedIndex, row.operation === "explicit-second" ? 2 : 1);
+            assert.equal(row.sampleRate, row.selectedIndex === 2 ? 44100 : 48000);
+            assert.equal(row.channels, 1);
+            assert.ok(row.decodedSamples > 0);
+            assert.ok(row.outputBytes > 0);
+          }
+        }
+
+        assert.deepEqual(missing, []);
+        assert.deepEqual(pageErrors, []);
+        console.table(results);
+        console.log("Public multi-track selection preserves 48000/44100 Hz mono profiles.");
+        console.log("Video/absent indexes and missing audio reject; same-client recovery passed.");
+        console.log("All 24 outputs decode after disposal; PCM matches the selected source track.");
+        return;
+      }
+
       if (process.env.MAVIO_BROWSER_SMOKE === "audio-public") {
         const creationsBeforePublicAudio = workerCreations;
 
@@ -1098,20 +1300,24 @@ async function main() {
         return;
       }
 
-      if (process.env.MAVIO_BROWSER_SMOKE === "resize") {
+      if (["resize", "resize-public"].includes(process.env.MAVIO_BROWSER_SMOKE)) {
+        const publicResize = process.env.MAVIO_BROWSER_SMOKE === "resize-public";
         const creationsBeforeResize = workerCreations;
 
-        const resizeResults = await page.evaluate(async (baseURL) => {
-          const { runBrowserResizeSmoke } = await import("/resize-smoke.mjs");
+        const resizeResults = await page.evaluate(
+          async ({ baseURL, publicAPI }) => {
+            const { runBrowserResizeSmoke } = await import("/resize-smoke.mjs");
 
-          return runBrowserResizeSmoke(baseURL);
-        }, origin);
+            return runBrowserResizeSmoke(baseURL, { publicAPI });
+          },
+          { baseURL: origin, publicAPI: publicResize },
+        );
 
         await expectWorkers(0);
 
-        assert.equal(workerCreations, creationsBeforeResize + 4);
+        assert.equal(workerCreations, creationsBeforeResize + (publicResize ? 8 : 4));
 
-        assert.equal(resizeResults.length, 12);
+        assert.equal(resizeResults.length, publicResize ? 48 : 12);
 
         for (const preset of ["video-balanced-v1", "video-small-v1"]) {
           for (const audio of [false, true]) {
@@ -1119,11 +1325,26 @@ async function main() {
               (row) => row.preset === preset && row.audio === audio,
             );
 
-            assert.deepEqual(rows.map((row) => row.case).sort(), [
-              "consecutive-resize",
-              "resize",
-              "trim-resize",
-            ]);
+            const expectedCases = ["consecutive-resize", "resize", "trim-resize"];
+
+            assert.deepEqual(
+              rows.map((row) => row.case).sort(),
+              expectedCases.flatMap((name) => Array(publicResize ? 4 : 1).fill(name)).sort(),
+            );
+
+            if (publicResize) {
+              for (const name of expectedCases) {
+                assert.deepEqual(
+                  rows
+                    .filter((row) => row.case === name)
+                    .map((row) => row.inputKind + "-" + row.outputKind)
+                    .sort(),
+                  ["blob-blob", "blob-bytes", "bytes-blob", "bytes-bytes"],
+                );
+              }
+
+              assert.ok(rows.every((row) => row.route === "public"));
+            }
           }
         }
 
@@ -1148,7 +1369,15 @@ async function main() {
 
         console.table(resizeResults);
 
-        console.log("Both browser MP4 presets passed focused resize preparation.");
+        console.log(
+          publicResize
+            ? "All 48 public browser MP4 resize combinations passed."
+            : "Both browser MP4 presets passed focused resize preparation.",
+        );
+
+        if (publicResize) {
+          console.log("Public resize outputs decode after client disposal.");
+        }
         console.log("Consecutive browser resize preserves 158x88 without upscaling.");
         console.log("Browser resize frame counts, timestamps and square pixels passed.");
         console.log("Browser resized video and audio decoding passed.");

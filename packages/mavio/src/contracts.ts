@@ -1,4 +1,4 @@
-/** Public contracts based on the approved M0 baseline. M2 implements core orchestration; default engine adapters remain pending. */
+/** Public contracts based on the approved M0 baseline, with core orchestration and native/browser engine adapters. */
 export type Runtime = "browser" | "node";
 export type OperationName =
   "convert" | "compress" | "trim" | "resize" | "extractAudio" | "thumbnail" | "metadata";

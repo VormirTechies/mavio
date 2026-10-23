@@ -1222,3 +1222,348 @@ export async function runPublicBrowserAudioTrimSmoke(origin) {
 
   return results;
 }
+
+export async function runPublicBrowserAudioSelectionSmoke(origin) {
+  const worker = new FFmpeg();
+  const retained = [];
+  const results = [];
+  let workspace;
+
+  async function decode(path, streamIndex, outputPath) {
+    await checkedExec(worker, [
+      "-hide_banner",
+      "-v",
+      "error",
+      "-xerror",
+      "-i",
+      path,
+      "-map",
+      "0:" + streamIndex,
+      "-vn",
+      "-sn",
+      "-dn",
+      "-c:a",
+      "pcm_s16le",
+      "-threads:a",
+      "1",
+      "-f",
+      "s16le",
+      outputPath,
+    ]);
+    const bytes = await worker.readFile(outputPath);
+    check(
+      bytes instanceof Uint8Array && bytes.length > 0 && bytes.length % 2 === 0,
+      "Expected decoded mono PCM.",
+    );
+    return bytes;
+  }
+
+  try {
+    await load(worker, origin);
+    workspace = await createBrowserWorkspace(worker, "public-audio-selection");
+    const sourcePath = workspace.directory + "/multi.mp4";
+    const silentPath = workspace.directory + "/video-only.mp4";
+
+    await checkedExec(worker, [
+      "-hide_banner",
+      "-v",
+      "error",
+      "-f",
+      "lavfi",
+      "-i",
+      "testsrc2=size=64x36:rate=12:duration=0.5",
+      "-f",
+      "lavfi",
+      "-i",
+      "sine=frequency=440:sample_rate=48000:duration=0.5",
+      "-f",
+      "lavfi",
+      "-i",
+      "sine=frequency=880:sample_rate=44100:duration=0.5",
+      "-map",
+      "0:v:0",
+      "-map",
+      "1:a:0",
+      "-map",
+      "2:a:0",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "ultrafast",
+      "-pix_fmt",
+      "yuv420p",
+      "-threads:v",
+      "1",
+      "-c:a",
+      "aac",
+      "-threads:a",
+      "1",
+      "-f",
+      "mp4",
+      sourcePath,
+    ]);
+
+    await checkedExec(worker, [
+      "-hide_banner",
+      "-v",
+      "error",
+      "-f",
+      "lavfi",
+      "-i",
+      "testsrc2=size=64x36:rate=12:duration=0.5",
+      "-map",
+      "0:v:0",
+      "-an",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "ultrafast",
+      "-pix_fmt",
+      "yuv420p",
+      "-threads:v",
+      "1",
+      "-f",
+      "mp4",
+      silentPath,
+    ]);
+
+    const source = await worker.readFile(sourcePath);
+    const videoOnly = await worker.readFile(silentPath);
+    check(
+      source instanceof Uint8Array && videoOnly instanceof Uint8Array,
+      "Expected generated fixture bytes.",
+    );
+
+    const sourceSnapshot = source.slice();
+    const silentSnapshot = videoOnly.slice();
+    const references = new Map();
+
+    for (const index of [1, 2]) {
+      references.set(
+        index,
+        await decode(sourcePath, index, workspace.directory + "/reference-" + index + ".pcm"),
+      );
+    }
+
+    for (const preset of ["audio-balanced-v1", "audio-pcm-v1"]) {
+      const format = preset === "audio-balanced-v1" ? "mp3" : "wav";
+      const client = createMavio({
+        initTimeoutMs: 60_000,
+        browser: {
+          assets: {
+            coreURL: new URL("/core/ffmpeg-core.js", origin).href,
+            wasmURL: new URL("/core/ffmpeg-core.wasm", origin).href,
+            classWorkerURL: new URL("/wrapper/worker.js", origin).href,
+          },
+        },
+      });
+
+      async function exportAudio(input, streamIndex, outputKind, extract = true) {
+        let pipeline = client.from(input);
+        if (extract) {
+          pipeline =
+            streamIndex === undefined
+              ? pipeline.extractAudio()
+              : pipeline.extractAudio({ streamIndex });
+        }
+        return pipeline.convert({ format, preset }).export({ output: { kind: outputKind } });
+      }
+
+      async function retain(operation, streamIndex, inputKind = "bytes", outputKind = "bytes") {
+        const selectedIndex = streamIndex ?? 1;
+        const sampleRate = selectedIndex === 1 ? 48000 : 44100;
+        const input =
+          inputKind === "bytes"
+            ? { kind: "bytes", bytes: source }
+            : { kind: "blob", blob: new Blob([source], { type: "video/mp4" }) };
+
+        const result = await exportAudio(input, streamIndex, outputKind);
+        const audio = result.metadata.streams[0];
+
+        check(
+          result.engine.id === "browser-ffmpeg" &&
+            result.output.kind === outputKind &&
+            result.metadata.container === format &&
+            result.metadata.streams.length === 1 &&
+            audio.kind === "audio" &&
+            audio.codec === (format === "mp3" ? "mp3" : "pcm_s16le") &&
+            audio.sampleRate === sampleRate &&
+            audio.channels === 1,
+          "Audio selection changed the requested stream profile.",
+        );
+
+        if (outputKind === "blob") {
+          check(
+            result.output.blob.type === (format === "mp3" ? "audio/mpeg" : "audio/wav"),
+            "Unexpected audio Blob MIME type.",
+          );
+        }
+
+        const bytes =
+          result.output.kind === "bytes"
+            ? result.output.bytes
+            : new Uint8Array(await result.output.blob.arrayBuffer());
+
+        check(
+          bytes.length > 0 && result.metadata.sizeBytes === bytes.length,
+          "Unexpected audio output size.",
+        );
+
+        retained.push({
+          preset,
+          operation,
+          inputKind,
+          outputKind,
+          selectedIndex,
+          sampleRate,
+          output: result.output,
+          snapshot: bytes.slice(),
+        });
+
+        equalBytes(source, sourceSnapshot, "Extraction changed caller bytes.");
+        if (input.kind === "blob") {
+          equalBytes(
+            new Uint8Array(await input.blob.arrayBuffer()),
+            sourceSnapshot,
+            "Extraction changed caller Blob content.",
+          );
+        }
+      }
+
+      try {
+        const metadata = await client.from({ kind: "bytes", bytes: source }).metadata();
+        check(
+          metadata.streams.length === 3 &&
+            metadata.streams[0].kind === "video" &&
+            metadata.streams[0].index === 0 &&
+            metadata.streams[1].kind === "audio" &&
+            metadata.streams[1].index === 1 &&
+            metadata.streams[1].sampleRate === 48000 &&
+            metadata.streams[2].kind === "audio" &&
+            metadata.streams[2].index === 2 &&
+            metadata.streams[2].sampleRate === 44100,
+          "Generated fixture stream indexes or sample rates differ.",
+        );
+
+        for (const inputKind of ["bytes", "blob"]) {
+          for (const outputKind of ["bytes", "blob"]) {
+            await retain("default", undefined, inputKind, outputKind);
+            await retain("explicit-second", 2, inputKind, outputKind);
+          }
+        }
+
+        for (const item of [
+          {
+            name: "video-index",
+            bytes: source,
+            index: 0,
+            code: "INVALID_OPTIONS",
+            reason: "INVALID_STREAM_INDEX",
+            extract: true,
+          },
+          {
+            name: "absent-index",
+            bytes: source,
+            index: 99,
+            code: "INVALID_OPTIONS",
+            reason: "INVALID_STREAM_INDEX",
+            extract: true,
+          },
+          {
+            name: "missing-audio-default",
+            bytes: videoOnly,
+            code: "INVALID_MEDIA",
+            reason: "MISSING_AUDIO",
+            extract: false,
+          },
+          {
+            name: "missing-audio-extraction",
+            bytes: videoOnly,
+            code: "INVALID_MEDIA",
+            reason: "MISSING_AUDIO",
+            extract: true,
+          },
+        ]) {
+          let failure;
+          try {
+            await exportAudio(
+              { kind: "bytes", bytes: item.bytes },
+              item.index,
+              "bytes",
+              item.extract,
+            );
+          } catch (error) {
+            failure = error;
+          }
+
+          check(
+            failure?.code === item.code && failure?.details?.reason === item.reason,
+            "Unexpected rejection for " + item.name,
+          );
+          equalBytes(source, sourceSnapshot, "Rejected extraction changed source.");
+          equalBytes(videoOnly, silentSnapshot, "Rejected extraction changed video-only source.");
+
+          await retain("recover-" + item.name, undefined);
+        }
+      } finally {
+        await client.dispose();
+      }
+    }
+
+    // Both public clients are disposed before independent output verification.
+    for (const [index, item] of retained.entries()) {
+      const bytes =
+        item.output.kind === "bytes"
+          ? item.output.bytes
+          : new Uint8Array(await item.output.blob.arrayBuffer());
+      equalBytes(bytes, item.snapshot, "Output changed after client disposal.");
+
+      const path = workspace.directory + "/output-" + index;
+      await worker.writeFile(path, new Uint8Array(bytes));
+      const decoded = await decode(path, 0, path + ".pcm");
+
+      if (item.preset === "audio-pcm-v1") {
+        equalBytes(
+          decoded,
+          references.get(item.selectedIndex),
+          "Extracted PCM differs from the independently decoded selected track.",
+        );
+      }
+
+      results.push({
+        preset: item.preset,
+        operation: item.operation,
+        inputKind: item.inputKind,
+        outputKind: item.outputKind,
+        selectedIndex: item.selectedIndex,
+        sampleRate: item.sampleRate,
+        channels: 1,
+        decodedSamples: decoded.length / 2,
+        outputBytes: bytes.length,
+      });
+    }
+
+    equalBytes(await worker.readFile(sourcePath), sourceSnapshot, "Staged source changed.");
+    equalBytes(source, sourceSnapshot, "Caller source changed.");
+    equalBytes(videoOnly, silentSnapshot, "Caller video-only source changed.");
+  } catch (error) {
+    throw new Error("Public audio selection failed.\n" + describeError(error), { cause: error });
+  } finally {
+    try {
+      if (workspace) await workspace.cleanup();
+      if (worker.loaded) await assertNoWorkspaces(worker);
+    } finally {
+      worker.terminate();
+    }
+  }
+
+  for (const item of retained) {
+    const bytes =
+      item.output.kind === "bytes"
+        ? item.output.bytes
+        : new Uint8Array(await item.output.blob.arrayBuffer());
+    equalBytes(bytes, item.snapshot, "Output changed after verifier termination.");
+  }
+
+  return results;
+}

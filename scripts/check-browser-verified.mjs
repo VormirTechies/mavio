@@ -24,9 +24,29 @@ const checks = [
     mode: "resize",
   },
   {
+    name: "Public MP4 resize and combined trim",
+    script: "check-browser-client.mjs",
+    mode: "resize-public",
+  },
+  {
+    name: "Public MP4 compression and controlled size comparison",
+    script: "check-browser-client.mjs",
+    mode: "compression-public",
+  },
+  {
+    name: "Public preset quality on landscape and portrait fixtures",
+    script: "check-browser-client.mjs",
+    mode: "preset-quality-public",
+  },
+  {
     name: "Public audio exports and recovery",
     script: "check-browser-client.mjs",
     mode: "audio-public",
+  },
+  {
+    name: "Public multi-track audio selection and recovery",
+    script: "check-browser-client.mjs",
+    mode: "audio-selection-public",
   },
   {
     name: "Public audio trim and recovery",
