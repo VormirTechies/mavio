@@ -193,3 +193,41 @@ jobs:
           "$ffprobePath" -version
 
           npm run check:native:all -- "$ffmpegPath" "$ffprobePath"
+
+  m6:
+    name: M6 examples and resources / Node ${{ matrix.node }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22", "24"]
+
+    env:
+      MAVIO_BROWSER_CHANNEL: ""
+      PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT: "120000"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install native tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium --only-shell
+
+      - name: Verify M6 examples and bounded resources
+        run: npm run check:m6 -- /usr/bin/ffmpeg /usr/bin/ffprobe

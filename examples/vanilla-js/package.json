@@ -1,0 +1,17 @@
+{
+  "name": "mavio-example-vanilla-js",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0"
+  },
+  "scripts": {
+    "assets": "mavio-browser-assets public/mavio-engine",
+    "build": "esbuild src/main.js --bundle --format=esm --platform=browser --target=es2022 --outfile=public/app.js",
+    "start": "node ../shared/serve.mjs"
+  },
+  "devDependencies": {
+    "@ffmpeg/core": "0.12.10",
+    "esbuild": "0.28.2"
+  }
+}

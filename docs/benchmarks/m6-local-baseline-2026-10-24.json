@@ -1,0 +1,169 @@
+{
+  "scope": "Bounded local M6 performance baseline; no performance guarantee.",
+  "native": {
+    "recordedAt": "2026-10-23T18:59:03.937Z",
+    "environment": {
+      "node": "v24.22.1",
+      "platform": "win32",
+      "architecture": "x64",
+      "osRelease": "10.0.26300",
+      "cpu": "AMD Ryzen 7 7730U with Radeon Graphics         ",
+      "logicalCpuCount": 16,
+      "totalMemoryBytes": 14877257728,
+      "sdkVersion": "0.0.3",
+      "sdkArchiveIntegrity": "sha512-UDaiX6MkumEj0sCPfRNgUXgw8WCay9o+CWPWOdBhCvJUzKwvuDVmO5IUgu0APXaIlOmopGM3llTHDCEpsoui2w==",
+      "ffmpeg": "ffmpeg version 9.0.2-essentials_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+      "ffprobe": "ffprobe version 9.0.2-essentials_build-www.gyan.dev Copyright (c) 2007-2026 the FFmpeg developers"
+    },
+    "fixture": {
+      "sha256": "49e25d3d769b42b181e75ff94bebe4803e68ee18bb9ac0c0e5a0ef4ec533e815",
+      "sizeBytes": 137928,
+      "durationSeconds": 3,
+      "streams": [
+        {
+          "kind": "video",
+          "codec": "h264",
+          "width": 320,
+          "height": 240,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "colorSpace": "bt709",
+          "colorTransfer": "bt709",
+          "colorPrimaries": "bt709"
+        },
+        {
+          "kind": "audio",
+          "codec": "aac",
+          "frameRate": "0/0",
+          "sampleRate": "48000",
+          "channels": 1
+        }
+      ]
+    },
+    "phases": [
+      {
+        "name": "fresh-client capabilities",
+        "samplesMs": [579.3112000000001, 478.13239999999996, 488.4021],
+        "minimumMs": 478.13239999999996,
+        "medianMs": 488.4021,
+        "maximumMs": 579.3112000000001
+      },
+      {
+        "name": "warm-client capabilities",
+        "samplesMs": [
+          0.14960000000019136, 0.052800000000388536, 0.040500000000065484, 0.06520000000000437,
+          0.06379999999990105
+        ],
+        "minimumMs": 0.040500000000065484,
+        "medianMs": 0.06379999999990105,
+        "maximumMs": 0.14960000000019136
+      },
+      {
+        "name": "warm-client metadata",
+        "samplesMs": [
+          62.4032000000002, 62.64040000000023, 63.30729999999994, 62.227600000000166,
+          73.9711000000002
+        ],
+        "minimumMs": 62.227600000000166,
+        "medianMs": 62.64040000000023,
+        "maximumMs": 73.9711000000002
+      },
+      {
+        "name": "warm-client balanced MP4 byte export",
+        "samplesMs": [489.7471999999998, 387.7031999999999, 410.74279999999953],
+        "minimumMs": 387.7031999999999,
+        "medianMs": 410.74279999999953,
+        "maximumMs": 489.7471999999998
+      }
+    ],
+    "verification": {
+      "decodedExportsAfterDisposal": 3,
+      "sourceUnchanged": true
+    },
+    "limitations": [
+      "Local observations; no performance guarantee or acceptance threshold.",
+      "Fresh client does not mean cold OS caches or a cold machine.",
+      "Warm native exports still launch new FFmpeg processes.",
+      "Export timing excludes subsequent file writing and independent decoding.",
+      "Progress and diagnostics observers are disabled for these timings.",
+      "This benchmark does not measure memory or native child-process RSS."
+    ]
+  },
+  "browser": {
+    "recordedAt": "2026-10-23T19:04:25.588Z",
+    "environment": {
+      "driverNode": "v24.22.1",
+      "platform": "win32",
+      "architecture": "x64",
+      "osRelease": "10.0.26300",
+      "cpu": "AMD Ryzen 7 7730U with Radeon Graphics         ",
+      "logicalCpuCount": 16,
+      "totalMemoryBytes": 14877257728,
+      "chromium": "153.0.8010.12",
+      "sdkVersion": "0.0.3",
+      "sdkArchiveIntegrity": "sha512-UDaiX6MkumEj0sCPfRNgUXgw8WCay9o+CWPWOdBhCvJUzKwvuDVmO5IUgu0APXaIlOmopGM3llTHDCEpsoui2w==",
+      "coreVersion": "0.12.10",
+      "wrapperVersion": "0.12.15",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    "fixture": {
+      "sha256": "49e25d3d769b42b181e75ff94bebe4803e68ee18bb9ac0c0e5a0ef4ec533e815",
+      "sizeBytes": 137928,
+      "durationSeconds": 3,
+      "width": 320,
+      "height": 240,
+      "frameRate": "24/1"
+    },
+    "phases": [
+      {
+        "name": "fresh-client capabilities",
+        "samplesMs": [361.539999961853, 272.4650000333786, 253.0699999332428],
+        "minimumMs": 253.0699999332428,
+        "medianMs": 272.4650000333786,
+        "maximumMs": 361.539999961853
+      },
+      {
+        "name": "warm-client capabilities",
+        "samplesMs": [
+          0.2849999666213989, 0.20000004768371582, 0.1799999475479126, 0.2200000286102295,
+          0.21000003814697266
+        ],
+        "minimumMs": 0.1799999475479126,
+        "medianMs": 0.21000003814697266,
+        "maximumMs": 0.2849999666213989
+      },
+      {
+        "name": "warm-client metadata",
+        "samplesMs": [
+          10.34500002861023, 7.96999990940094, 8.945000052452087, 7.514999985694885,
+          8.110000014305115
+        ],
+        "minimumMs": 7.514999985694885,
+        "medianMs": 8.110000014305115,
+        "maximumMs": 10.34500002861023
+      },
+      {
+        "name": "warm-client balanced MP4 byte export",
+        "samplesMs": [904.8899999856949, 812.1950000524521, 784.5649999380112],
+        "minimumMs": 784.5649999380112,
+        "medianMs": 812.1950000524521,
+        "maximumMs": 904.8899999856949
+      }
+    ],
+    "verification": {
+      "decodedExportsAfterDisposal": 3,
+      "sourceUnchanged": true,
+      "workersCreated": 4,
+      "activeWorkersAfterDisposal": 0
+    },
+    "limitations": [
+      "Local observations; no speed threshold or performance guarantee.",
+      "Fresh client does not guarantee cold browser, OS, or compiled-WASM caches.",
+      "Engine assets are served locally; deployment network latency differs.",
+      "Timing excludes setup bundling, fixture fetch, result transfer, and decoding.",
+      "Progress and diagnostic observers are disabled.",
+      "This benchmark does not measure main-page, worker, WASM, or total process memory.",
+      "Native path input and Browser byte input have different preparation costs."
+    ]
+  }
+}

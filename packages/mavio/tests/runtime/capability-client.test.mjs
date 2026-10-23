@@ -1,3 +1,5 @@
+import { createMavio as m6CreateNodeMavio } from "@vormir/mavio/node";
+import { createMavio as m6CreateBrowserMavio } from "@vormir/mavio/browser";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createCapabilityClient } from "../../dist/core/capability-client.js";
@@ -285,3 +287,92 @@ test(
     await client.dispose();
   },
 );
+
+for (const scenario of [
+  {
+    runtime: "node",
+    code: "ENGINE_UNAVAILABLE",
+    hints: [/FFmpeg/, /FFprobe/, /PATH/],
+  },
+  {
+    runtime: "node",
+    code: "ENGINE_INIT_FAILED",
+    hints: [/permissions/, /compatibility/],
+  },
+  {
+    runtime: "browser",
+    code: "ENGINE_INIT_FAILED",
+    hints: [/same-origin/, /JS.WASM/, /CSP/],
+  },
+  {
+    runtime: "browser",
+    code: "ENGINE_INIT_FAILED",
+    timeout: true,
+    hints: [/timed out/, /initTimeoutMs/],
+  },
+]) {
+  test(
+    `public initialization guidance survives session wrapping: ${scenario.runtime}/${scenario.code}/${scenario.timeout ? "timeout" : "failure"}`,
+    { timeout: 3000 },
+    async () => {
+      const sensitive = "PRIVATE_INSTALLATION_PATH_AND_TOKEN";
+      const failure = Object.assign(new Error(sensitive), {
+        code: scenario.code,
+      });
+
+      const { engine } = mockEngine({
+        async initialize(context) {
+          if (scenario.timeout) {
+            await waitForAbort(context.signal);
+          } else {
+            throw failure;
+          }
+        },
+      });
+
+      engine.runtime = scenario.runtime;
+
+      Object.assign(engine, {
+        async probe() {
+          throw new Error("Unexpected probe.");
+        },
+        async supports() {
+          throw new Error("Unexpected supports.");
+        },
+        async execute() {
+          throw new Error("Unexpected execute.");
+        },
+      });
+
+      const factory = scenario.runtime === "browser" ? m6CreateBrowserMavio : m6CreateNodeMavio;
+
+      const client = factory({
+        engine,
+        initTimeoutMs: scenario.timeout ? 20 : 30_000,
+      });
+
+      try {
+        await assert.rejects(client.capabilities(), (error) => {
+          assert.equal(error.code, scenario.code);
+          assert.equal(error.stage, "preparing");
+          assert.equal(typeof error.jobId, "string");
+          assert.equal(error.message.includes(sensitive), false);
+
+          for (const hint of scenario.hints) {
+            assert.match(error.message, hint);
+          }
+
+          if (scenario.timeout) {
+            assert.equal(error.details.reason, "TIMEOUT");
+          } else {
+            assert.equal(error.cause.cause, failure);
+          }
+
+          return true;
+        });
+      } finally {
+        await client.dispose();
+      }
+    },
+  );
+}

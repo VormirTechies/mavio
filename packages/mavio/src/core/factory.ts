@@ -46,12 +46,16 @@ export function createFactory(
       throw createMavioError("INVALID_OPTIONS", "Mavio options must be an object.");
     }
 
-    const { native, browser } = options;
+    const { native, browser, onDiagnostic } = options;
     let { engine } = options;
     const initTimeoutMs = options.initTimeoutMs === undefined ? 30_000 : options.initTimeoutMs;
     const maxQueuedJobs = options.maxQueuedJobs === undefined ? 16 : options.maxQueuedJobs;
 
     validateInitTimeout(initTimeoutMs);
+
+    if (onDiagnostic !== undefined && typeof onDiagnostic !== "function") {
+      throw createMavioError("INVALID_OPTIONS", "onDiagnostic must be a function.");
+    }
 
     if (
       typeof maxQueuedJobs !== "number" ||
@@ -99,7 +103,7 @@ export function createFactory(
 
     const client = createCapabilityClient(
       engine,
-      { initTimeoutMs, maxQueuedJobs },
+      { initTimeoutMs, maxQueuedJobs, onDiagnostic },
       runtimeProvider(),
     );
 

@@ -1,0 +1,218 @@
+{
+  "recordedAt": "2026-10-23T19:23:47.828Z",
+  "environment": {
+    "node": "v24.22.1",
+    "platform": "win32",
+    "architecture": "x64",
+    "cpu": "AMD Ryzen 7 7730U with Radeon Graphics         ",
+    "sdkVersion": "0.0.3",
+    "sdkArchiveIntegrity": "sha512-IsrUM3Hs6JoPztljNXhM2mwEJJrurgOZMGRfAcUkSac84zC0KZ4quYB9Mu5sMeQ1oBg0PTnyc4JxOLkiERq9uw=="
+  },
+  "fixture": {
+    "sha256": "49e25d3d769b42b181e75ff94bebe4803e68ee18bb9ac0c0e5a0ef4ec533e815",
+    "sizeBytes": 137928
+  },
+  "counts": {
+    "exports": 25,
+    "invalidMedia": 5,
+    "preExecutionCancellation": 5,
+    "recoveryMetadata": 5,
+    "freshClientCycles": 5
+  },
+  "resources": {
+    "processTrackingCalibrationPassed": true,
+    "sdkProcessWrappersCreated": 233,
+    "peakTrackedProcessWrappers": 2,
+    "finalActiveProcessWrappers": 0,
+    "finalSdkTemporaryEntries": 0,
+    "retainedOutputBytesVerifiedAfterDisposal": 292398,
+    "decodedOutputsAfterDisposal": 25,
+    "sourceFileAndBytesUnchanged": true,
+    "invalidInputRejection": {
+      "code": "EXECUTION_FAILED",
+      "reason": "NONZERO_EXIT",
+      "tool": "ffprobe"
+    }
+  },
+  "snapshots": [
+    {
+      "label": "after warmup",
+      "beforeGc": {
+        "rss": 56078336,
+        "heapTotal": 13156352,
+        "heapUsed": 9765320,
+        "external": 3572487,
+        "arrayBuffers": 968112
+      },
+      "afterGc": {
+        "rss": 56176640,
+        "heapTotal": 13156352,
+        "heapUsed": 7669568,
+        "external": 3089417,
+        "arrayBuffers": 485023
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after batch 1",
+      "beforeGc": {
+        "rss": 58081280,
+        "heapTotal": 18661376,
+        "heapUsed": 9667864,
+        "external": 3783016,
+        "arrayBuffers": 1178622
+      },
+      "afterGc": {
+        "rss": 57946112,
+        "heapTotal": 17874944,
+        "heapUsed": 8236824,
+        "external": 3301152,
+        "arrayBuffers": 696758
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after batch 2",
+      "beforeGc": {
+        "rss": 61759488,
+        "heapTotal": 18137088,
+        "heapUsed": 9583944,
+        "external": 3929215,
+        "arrayBuffers": 1324821
+      },
+      "afterGc": {
+        "rss": 61407232,
+        "heapTotal": 18399232,
+        "heapUsed": 8448048,
+        "external": 3301152,
+        "arrayBuffers": 696758
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after batch 3",
+      "beforeGc": {
+        "rss": 61886464,
+        "heapTotal": 18399232,
+        "heapUsed": 9959392,
+        "external": 3848552,
+        "arrayBuffers": 1244158
+      },
+      "afterGc": {
+        "rss": 61366272,
+        "heapTotal": 18399232,
+        "heapUsed": 8501792,
+        "external": 3301152,
+        "arrayBuffers": 696758
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after batch 4",
+      "beforeGc": {
+        "rss": 62189568,
+        "heapTotal": 18661376,
+        "heapUsed": 10036040,
+        "external": 3848552,
+        "arrayBuffers": 1244158
+      },
+      "afterGc": {
+        "rss": 61894656,
+        "heapTotal": 18661376,
+        "heapUsed": 8570520,
+        "external": 3301152,
+        "arrayBuffers": 696758
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after batch 5",
+      "beforeGc": {
+        "rss": 62476288,
+        "heapTotal": 18661376,
+        "heapUsed": 10102824,
+        "external": 3994751,
+        "arrayBuffers": 1390357
+      },
+      "afterGc": {
+        "rss": 62181376,
+        "heapTotal": 18661376,
+        "heapUsed": 8619672,
+        "external": 3447351,
+        "arrayBuffers": 842957
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after primary client disposal",
+      "beforeGc": {
+        "rss": 62181376,
+        "heapTotal": 18661376,
+        "heapUsed": 8635352,
+        "external": 3447351,
+        "arrayBuffers": 842957
+      },
+      "afterGc": {
+        "rss": 61767680,
+        "heapTotal": 18661376,
+        "heapUsed": 8420584,
+        "external": 3447351,
+        "arrayBuffers": 842957
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after five fresh-client cycles",
+      "beforeGc": {
+        "rss": 63504384,
+        "heapTotal": 27312128,
+        "heapUsed": 9843560,
+        "external": 4239212,
+        "arrayBuffers": 1634818
+      },
+      "afterGc": {
+        "rss": 63090688,
+        "heapTotal": 26787840,
+        "heapUsed": 8442184,
+        "external": 3447351,
+        "arrayBuffers": 842957
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    },
+    {
+      "label": "after releasing retained output references",
+      "beforeGc": {
+        "rss": 63090688,
+        "heapTotal": 26787840,
+        "heapUsed": 8450144,
+        "external": 3447351,
+        "arrayBuffers": 842957
+      },
+      "afterGc": {
+        "rss": 62681088,
+        "heapTotal": 26787840,
+        "heapUsed": 8442416,
+        "external": 3301152,
+        "arrayBuffers": 696758
+      },
+      "activeProcessWrappers": 0,
+      "sdkTemporaryEntries": 0
+    }
+  ],
+  "limitations": [
+    "Bounded small-fixture investigation; no universal leak or file-size guarantee.",
+    "Memory samples cover this Node process, not FFmpeg child-process RSS.",
+    "Before/after explicit GC samples are observations, not normal GC scheduling.",
+    "PROCESSWRAP tracking is calibrated but is not a system-wide process inventory.",
+    "Cancellation is admitted pre-execution cancellation, not active encoder interruption.",
+    "Twenty-five output files are deliberately retained in a separate verification directory."
+  ]
+}

@@ -1,0 +1,323 @@
+{
+  "recordedAt": "2026-10-23T19:43:06.696Z",
+  "environment": {
+    "driverNode": "v24.22.1",
+    "platform": "win32",
+    "architecture": "x64",
+    "osRelease": "10.0.26300",
+    "cpu": "AMD Ryzen 7 7730U with Radeon Graphics         ",
+    "logicalCpuCount": 16,
+    "totalMemoryBytes": 14877257728,
+    "chromium": "153.0.8010.12",
+    "sdkVersion": "0.0.3",
+    "sdkArchiveIntegrity": "sha512-IsrUM3Hs6JoPztljNXhM2mwEJJrurgOZMGRfAcUkSac84zC0KZ4quYB9Mu5sMeQ1oBg0PTnyc4JxOLkiERq9uw==",
+    "coreVersion": "0.12.10",
+    "wrapperVersion": "0.12.15"
+  },
+  "fixture": {
+    "sha256": "49e25d3d769b42b181e75ff94bebe4803e68ee18bb9ac0c0e5a0ef4ec533e815",
+    "sizeBytes": 137928,
+    "durationSeconds": 3,
+    "width": 320,
+    "height": 240
+  },
+  "instrumentation": {
+    "originalWorkerSHA256": "feff0ac937ea225e997e1fae997a74f8b8d572423a526da59eb56624b1f3cde7",
+    "instrumentedWorkerSHA256": "d4381a246eca4b14afe9924249b26beb2fe80b117431560242afc5b70a1ab0dd",
+    "originalWorkerUnchanged": true,
+    "purpose": "Read-only workspace enumeration and WASM capacity snapshots."
+  },
+  "checkpoints": [
+    {
+      "checkpoint": "after warmup",
+      "pageHeapBeforeGC": {
+        "usedSize": 2275524,
+        "totalSize": 4718592,
+        "embedderHeapUsedSize": 3030560,
+        "backingStorageSize": 676205
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1118168,
+        "totalSize": 2097152,
+        "embedderHeapUsedSize": 879168,
+        "backingStorageSize": 586689
+      },
+      "workersCreated": 1,
+      "workersTerminated": 0,
+      "activeWorkers": 1,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 33554432,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 1,
+      "workspaceDeletes": 1,
+      "workspaceDirectoriesDestroyedByTermination": 0,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 0
+    },
+    {
+      "checkpoint": "after batch 1",
+      "pageHeapBeforeGC": {
+        "usedSize": 2656808,
+        "totalSize": 5242880,
+        "embedderHeapUsedSize": 2443712,
+        "backingStorageSize": 2129620
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1474276,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 880824,
+        "backingStorageSize": 1313223
+      },
+      "workersCreated": 3,
+      "workersTerminated": 2,
+      "activeWorkers": 1,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 33554432,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 13,
+      "workspaceDeletes": 12,
+      "workspaceDirectoriesDestroyedByTermination": 1,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 1
+    },
+    {
+      "checkpoint": "after batch 2",
+      "pageHeapBeforeGC": {
+        "usedSize": 2668388,
+        "totalSize": 5242880,
+        "embedderHeapUsedSize": 2433464,
+        "backingStorageSize": 2856145
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1565452,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 882280,
+        "backingStorageSize": 2039748
+      },
+      "workersCreated": 5,
+      "workersTerminated": 4,
+      "activeWorkers": 1,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 33554432,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 25,
+      "workspaceDeletes": 23,
+      "workspaceDirectoriesDestroyedByTermination": 2,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 2
+    },
+    {
+      "checkpoint": "after batch 3",
+      "pageHeapBeforeGC": {
+        "usedSize": 2686760,
+        "totalSize": 4980736,
+        "embedderHeapUsedSize": 2423288,
+        "backingStorageSize": 3582670
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1583148,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 880688,
+        "backingStorageSize": 2766273
+      },
+      "workersCreated": 7,
+      "workersTerminated": 6,
+      "activeWorkers": 1,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 33554432,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 37,
+      "workspaceDeletes": 34,
+      "workspaceDirectoriesDestroyedByTermination": 3,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 3
+    },
+    {
+      "checkpoint": "after batch 4",
+      "pageHeapBeforeGC": {
+        "usedSize": 2753352,
+        "totalSize": 4980736,
+        "embedderHeapUsedSize": 2408824,
+        "backingStorageSize": 4309195
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1631060,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 882136,
+        "backingStorageSize": 3492798
+      },
+      "workersCreated": 9,
+      "workersTerminated": 8,
+      "activeWorkers": 1,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 33554432,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 49,
+      "workspaceDeletes": 45,
+      "workspaceDirectoriesDestroyedByTermination": 4,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 4
+    },
+    {
+      "checkpoint": "after batch 5",
+      "pageHeapBeforeGC": {
+        "usedSize": 2757004,
+        "totalSize": 4980736,
+        "embedderHeapUsedSize": 2398968,
+        "backingStorageSize": 5035720
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1645072,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 883552,
+        "backingStorageSize": 4219323
+      },
+      "workersCreated": 11,
+      "workersTerminated": 10,
+      "activeWorkers": 1,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 33554432,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 61,
+      "workspaceDeletes": 56,
+      "workspaceDirectoriesDestroyedByTermination": 5,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 5
+    },
+    {
+      "checkpoint": "after primary client disposal",
+      "pageHeapBeforeGC": {
+        "usedSize": 1747436,
+        "totalSize": 2621440,
+        "embedderHeapUsedSize": 1155920,
+        "backingStorageSize": 4220155
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1574228,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 882176,
+        "backingStorageSize": 4219323
+      },
+      "workersCreated": 11,
+      "workersTerminated": 11,
+      "activeWorkers": 0,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 0,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 61,
+      "workspaceDeletes": 56,
+      "workspaceDirectoriesDestroyedByTermination": 5,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 5
+    },
+    {
+      "checkpoint": "after five fresh-client cycles",
+      "pageHeapBeforeGC": {
+        "usedSize": 3479612,
+        "totalSize": 8126464,
+        "embedderHeapUsedSize": 2340800,
+        "backingStorageSize": 4308693
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1602232,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 884616,
+        "backingStorageSize": 4219323
+      },
+      "workersCreated": 16,
+      "workersTerminated": 16,
+      "activeWorkers": 0,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 0,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 66,
+      "workspaceDeletes": 61,
+      "workspaceDirectoriesDestroyedByTermination": 5,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 5
+    },
+    {
+      "checkpoint": "after releasing retained output references",
+      "pageHeapBeforeGC": {
+        "usedSize": 1641224,
+        "totalSize": 2621440,
+        "embedderHeapUsedSize": 1246784,
+        "backingStorageSize": 4219323
+      },
+      "pageHeapAfterGC": {
+        "usedSize": 1617148,
+        "totalSize": 2359296,
+        "embedderHeapUsedSize": 882240,
+        "backingStorageSize": 586698
+      },
+      "workersCreated": 16,
+      "workersTerminated": 16,
+      "activeWorkers": 0,
+      "peakActiveWorkers": 1,
+      "wasmHeapBytes": 0,
+      "workspaceDirectories": 0,
+      "workspaceEntries": 0,
+      "pendingFilesystemRequests": 0,
+      "trackedWorkspaceDirectories": 0,
+      "workspaceCreates": 66,
+      "workspaceDeletes": 61,
+      "workspaceDirectoriesDestroyedByTermination": 5,
+      "filesystemErrors": 0,
+      "dispatchedCancellations": 5
+    }
+  ],
+  "counts": {
+    "exports": 25,
+    "invalidMedia": 5,
+    "executionDispatchCancellation": 5,
+    "recoveryMetadata": 5,
+    "freshClientCycles": 5
+  },
+  "verification": {
+    "retainedOutputs": 25,
+    "retainedOutputBytes": 3632625,
+    "outputHashesVerifiedAfterDisposal": true,
+    "sourceUnchanged": true,
+    "decodedOutputsAfterDisposal": 25,
+    "finalActiveWorkers": 0,
+    "finalWorkspaceDirectories": 0,
+    "finalWorkspaceEntries": 0,
+    "workspaceCreates": 66,
+    "workspaceDeletes": 61,
+    "workspaceDirectoriesDestroyedByTermination": 5
+  },
+  "limitations": [
+    "Short local investigation; no memory threshold or leak-free guarantee.",
+    "CDP heap measurements cover the page isolate, excluding worker isolates.",
+    "WASM heap bytes measure linear-memory capacity, not live allocation.",
+    "No total browser RSS or worker JavaScript heap measurement.",
+    "Cancellation follows EXEC dispatch; encoding progress is not established.",
+    "The test worker has an additional read-only snapshot message handler.",
+    "Worker tracking observes creation and terminate calls.",
+    "Retained outputs intentionally contribute to page memory until released."
+  ]
+}

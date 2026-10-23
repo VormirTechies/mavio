@@ -109,7 +109,7 @@ export async function initializeBrowserWorker(
       context.signal.aborted ? "CANCELLED" : "ENGINE_INIT_FAILED",
       context.signal.aborted
         ? "Browser engine initialization was cancelled."
-        : "Browser engine initialization failed.",
+        : "Browser engine initialization failed. Verify generated same-origin JS/WASM assets, wrapper worker dependencies, HTTP responses, deployment headers, CSP, and the initialization deadline.",
       {
         stage: "preparing",
         jobId: context.jobId,

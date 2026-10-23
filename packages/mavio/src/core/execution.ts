@@ -72,7 +72,7 @@ export async function executeWithEngine<T extends OutputTarget>(
     if (support.status !== "supported") {
       throw createMavioError(
         "UNSUPPORTED_CAPABILITY",
-        "Engine could not confirm support for this processing plan.",
+        "Engine could not confirm support for this processing plan. Check the source profile and requested operations against the selected engine capabilities and documented presets.",
         {
           details: {
             reason: support.status === "unknown" ? "UNKNOWN_SUPPORT" : "UNSUPPORTED_PLAN",

@@ -12,6 +12,8 @@ export default defineConfig(
       "**/coverage/**",
       "docs/m0/**",
       "testing/fixtures/**",
+      "examples/**/public/app.js",
+      "examples/**/public/mavio-engine/**",
     ],
   },
   {
@@ -21,6 +23,7 @@ export default defineConfig(
   {
     files: [
       "scripts/**/*.{js,mjs}",
+      "examples/{node,shared}/**/*.mjs",
       "packages/**/scripts/**/*.mjs",
       "**/tests/runtime/**/*.mjs",
       "*.mjs",
@@ -28,6 +31,20 @@ export default defineConfig(
     extends: [js.configs.recommended],
     languageOptions: {
       globals: globals.node,
+    },
+  },
+  {
+    files: ["examples/vanilla-js/src/**/*.js"],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  {
+    files: ["examples/vanilla-ts/src/**/*.ts"],
+    extends: [js.configs.recommended, tseslint.configs.recommended],
+    languageOptions: {
+      globals: globals.browser,
     },
   },
   {

@@ -233,3 +233,62 @@ test("workspace disposal waits for an active output read", async () => {
   assert.deepEqual([...bytes], [4, 5]);
   await assert.rejects(access(directory), { code: "ENOENT" });
 });
+
+for (const outcome of ["resolve", "reject"]) {
+  test(`settled-write cleanup waits for pending reads: ${outcome}`, { timeout: 3000 }, async () => {
+    let finishRead;
+    let failRead;
+    let removals = 0;
+    let ownedDirectory;
+    const failure = new Error("Controlled read failure.");
+
+    const workspace = await createNativeWorkspace({
+      read() {
+        return new Promise((resolve, reject) => {
+          finishRead = resolve;
+          failRead = reject;
+        });
+      },
+      async remove(directory) {
+        assert.equal(directory, ownedDirectory);
+        removals++;
+        await rm(directory, { recursive: true, force: true });
+      },
+    });
+
+    ownedDirectory = dirname(workspace.getOutputPath());
+
+    // Ensure the write has settled before starting the controlled read.
+    await workspace.writeInput(new Uint8Array([1]), context());
+
+    const reading = workspace.readOutput(context());
+    const observed = reading.then(
+      (value) => ({ value }),
+      (error) => ({ error }),
+    );
+    const disposal = workspace.dispose();
+    let result;
+
+    try {
+      // Allow disposal's scheduled cleanup to start if it is not waiting.
+      await new Promise((resolve) => setImmediate(resolve));
+      assert.equal(removals, 0, "Cleanup started before the read settled.");
+    } finally {
+      if (outcome === "resolve") finishRead(new Uint8Array([4, 5]));
+      else failRead(failure);
+
+      result = await observed;
+      await disposal;
+    }
+
+    assert.equal(removals, 1);
+    await assert.rejects(access(ownedDirectory), { code: "ENOENT" });
+
+    if (outcome === "resolve") {
+      assert.deepEqual([...result.value], [4, 5]);
+    } else {
+      assert.equal(result.error.code, "IO_ERROR");
+      assert.equal(result.error.cause, failure);
+    }
+  });
+}

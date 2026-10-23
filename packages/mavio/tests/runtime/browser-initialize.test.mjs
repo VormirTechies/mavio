@@ -253,3 +253,28 @@ test("the existing initialization deadline terminates a stalled browser worker",
   assert.equal(worker.terminationCount, 1);
   assert.equal(capabilitiesCalls, 0);
 });
+
+test("initialization guidance excludes sensitive cause text", async () => {
+  const sensitive = "PRIVATE_MEDIA_PATH_AND_ACCESS_TOKEN";
+  const failure = new Error(sensitive);
+  const worker = fakeWorker(() => {
+    throw failure;
+  });
+
+  await assert.rejects(
+    initializeBrowserWorker(configuration, context(), async () => () => worker),
+    (error) => {
+      assert.equal(error.code, "ENGINE_INIT_FAILED");
+      assert.equal(error.cause, failure);
+      assert.match(error.message, /same-origin/);
+      assert.match(error.message, /JS\/WASM/);
+      assert.match(error.message, /worker dependencies/);
+      assert.match(error.message, /CSP/);
+      assert.match(error.message, /deadline/);
+      assert.equal(error.message.includes(sensitive), false);
+      return true;
+    },
+  );
+
+  assert.equal(worker.terminationCount, 1);
+});

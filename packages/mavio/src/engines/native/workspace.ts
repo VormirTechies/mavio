@@ -195,9 +195,11 @@ export async function createNativeWorkspace(
           // Its error belongs to writeInput; cleanup still needs to run.
           if (writing !== undefined) {
             await writing.catch(() => {});
-            // Read errors belong to readOutput; cleanup must still proceed.
-            await Promise.allSettled([...reading]);
           }
+
+          // Reads may remain active after the input write has settled.
+          // Their errors belong to readOutput; cleanup must still proceed.
+          await Promise.allSettled([...reading]);
 
           if (dirname(directory) !== root || !basename(directory).startsWith("mavio-input-")) {
             throw new Error("Unexpected native workspace location.");

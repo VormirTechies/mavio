@@ -70,6 +70,28 @@ export interface ProgressEvent {
   percent?: number;
   engineId?: string;
 }
+/**
+ * Opt-in structured diagnostics. No engine logs, media, paths, or causes.
+ * A custom adapter's engineId is caller-controlled.
+ */
+export type DiagnosticEvent = {
+  engineId: string;
+  runtime: Runtime;
+} & (
+  | {
+      type: "job-progress";
+      jobId: string;
+      stage: JobStage;
+      percent?: number;
+    }
+  | {
+      type: "job-error";
+      jobId: string;
+      stage: JobStage;
+      code: ErrorCode;
+    }
+);
+
 export interface ExecutionOptions {
   signal?: AbortSignal;
   onProgress?: (event: Readonly<ProgressEvent>) => void;
@@ -231,6 +253,8 @@ export interface MavioOptions {
   browser?: BrowserEngineOptions;
   engine?: "auto" | EngineAdapter;
   maxQueuedJobs?: number;
+  /** Asynchronous opt-in diagnostics; observer failures do not fail jobs. */
+  onDiagnostic?: (event: Readonly<DiagnosticEvent>) => void;
 }
 export interface MavioClient {
   from(input: MediaInput): Pipeline;

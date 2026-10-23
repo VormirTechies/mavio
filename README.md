@@ -56,6 +56,8 @@ tested profiles, and outstanding verification.
 
 ## Documentation
 
+- [Runnable consumer examples](examples/README.md)
+
 - [Package setup](packages/mavio/README.md)
 - [M5 acceptance matrix](docs/m5-acceptance-matrix.md)
 - [Approved M0 baseline](docs/m0/README.md)

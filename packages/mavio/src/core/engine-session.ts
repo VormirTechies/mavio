@@ -89,7 +89,15 @@ export class EngineSession {
       throw preserveFailure(
         createMavioError(
           cancelled ? "CANCELLED" : unavailable ? "ENGINE_UNAVAILABLE" : "ENGINE_INIT_FAILED",
-          cancelled ? "Engine initialization was cancelled." : "Engine initialization failed.",
+          cancelled
+            ? "Engine initialization was cancelled."
+            : timedOut
+              ? "Engine initialization timed out. Verify engine setup and available resources; adjust initTimeoutMs if a longer startup deadline is appropriate."
+              : unavailable
+                ? "Engine unavailable. Verify the adapter setup; for the default Node engine, install FFmpeg and FFprobe and configure absolute binary paths or PATH."
+                : this.engine.runtime === "browser"
+                  ? "Browser engine initialization failed. Verify generated same-origin JS/WASM assets, wrapper worker dependencies, HTTP responses, deployment headers, CSP, and the initialization deadline."
+                  : "Engine initialization failed. Verify native executable paths, permissions, FFmpeg/FFprobe compatibility, or custom adapter setup.",
           {
             stage: "preparing",
             jobId: context.jobId,

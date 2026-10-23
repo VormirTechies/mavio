@@ -19,10 +19,11 @@ import { executeWithEngine } from "./execution.js";
 import { createPipeline, type PipelineExecutor } from "./pipeline.js";
 import { allocateJobId, createProgress } from "./progress.js";
 import { SerialQueue } from "./queue.js";
+import { createDiagnosticReporter } from "./diagnostics.js";
 import { resolveMediaInput, resolveProcessingPlan, type RuntimeContext } from "./runtime.js";
 import { captureMetadata } from "./adapter-response.js";
 
-type ClientOptions = Pick<MavioOptions, "maxQueuedJobs" | "initTimeoutMs">;
+type ClientOptions = Pick<MavioOptions, "maxQueuedJobs" | "initTimeoutMs" | "onDiagnostic">;
 
 export function createCapabilityClient(
   engine: EngineAdapter,
@@ -40,6 +41,8 @@ export function createCapabilityClient(
   const queue = new SerialQueue(options.maxQueuedJobs);
   const session = new EngineSession(engine, options.initTimeoutMs);
   const engineId = engine.id;
+  const onDiagnostic = options.onDiagnostic;
+  const reportDiagnostic = createDiagnosticReporter(engineId, environment.runtime, onDiagnostic);
   let disposed = false;
   let disposalPromise: Promise<void> | undefined;
 
@@ -135,7 +138,22 @@ export function createCapabilityClient(
         signal,
         () => {
           jobId = allocateJobId();
-          progress = createProgress({ jobId, engineId, onProgress });
+          progress = createProgress({
+            jobId,
+            engineId,
+            onProgress:
+              onDiagnostic === undefined
+                ? onProgress
+                : (event) => {
+                    reportDiagnostic({
+                      type: "job-progress",
+                      jobId: event.jobId,
+                      stage: event.stage,
+                      ...(event.percent === undefined ? {} : { percent: event.percent }),
+                    });
+                    return onProgress?.(event);
+                  },
+          });
           progress.report("queued");
         },
       );
@@ -169,6 +187,16 @@ export function createCapabilityClient(
       });
 
       progress.report(code === "CANCELLED" ? "cancelled" : "failed");
+
+      if (onDiagnostic !== undefined && jobId !== undefined) {
+        reportDiagnostic({
+          type: "job-error",
+          jobId,
+          stage: error.stage,
+          code: error.code,
+        });
+      }
+
       throw error;
     }
   }

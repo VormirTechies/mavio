@@ -479,3 +479,37 @@ test("adapters cannot rewrite reusable pipeline descriptors or options", async (
     await client.dispose();
   }
 });
+
+for (const status of ["unsupported", "unknown"]) {
+  test(`plan guidance preserves support reasons without exposing adapter text: ${status}`, async () => {
+    const sensitive = "PRIVATE_SOURCE_DETAILS";
+    const { client, calls, video } = fixture({
+      support: {
+        status,
+        issues: [{ code: "SOURCE_PROFILE", message: sensitive }],
+      },
+    });
+
+    try {
+      await assert.rejects(video().export({ output: { kind: "bytes" } }), (error) => {
+        assert.equal(error.code, "UNSUPPORTED_CAPABILITY");
+        assert.equal(
+          error.details.reason,
+          status === "unknown" ? "UNKNOWN_SUPPORT" : "UNSUPPORTED_PLAN",
+        );
+        assert.equal(error.operation, "convert");
+        assert.equal(error.stage, "preparing");
+        assert.equal(typeof error.jobId, "string");
+        assert.match(error.message, /source profile/);
+        assert.match(error.message, /capabilities/);
+        assert.match(error.message, /presets/);
+        assert.equal(error.message.includes(sensitive), false);
+        return true;
+      });
+
+      assert.equal(calls.includes("execute"), false);
+    } finally {
+      await client.dispose();
+    }
+  });
+}
