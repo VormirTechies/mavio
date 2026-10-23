@@ -12,8 +12,9 @@ adapter, and a browser ffmpeg.wasm adapter.
 The public API supports metadata, conversion, trimming, resizing, audio
 extraction, thumbnails, and preset-based compression within documented profiles.
 
-M5 acceptance and documentation work is in progress. Local acceptance covers
-tested scenarios. Fresh cross-platform CI evidence remains outstanding.
+The documented bounded M5 acceptance scope is complete.
+Cross-platform CI passed for implementation commit `15f3989`.
+See the acceptance matrix for tested profiles, evidence, and limitations.
 
 ## Workspace
 
@@ -69,10 +70,10 @@ M0 documents preserve the approved design and historical feasibility evidence.
 Current default entry points reject configuration for the other runtime;
 do not supply both `native` and `browser` options.
 
-## Remaining milestone work
+## Milestone and release status
 
-- M4: close outstanding release gates, including fresh cross-platform CI evidence.
-- M5: finish recipe verification and consolidate acceptance evidence.
+- M4: reconcile separate release-gate records with the current CI evidence.
+- M5: documented bounded acceptance and recipe verification completed.
 
 [Public API recipes](docs/m5-recipes.md)
 

@@ -69,7 +69,7 @@ Real-media runners are relative to scripts/.
 | G03 | Composition and terminal restrictions already have tests                                                                            | Mapping/documentation work                                  | Reuse composition.test.mjs, terminals.test.mjs, and preflight.test.mjs                                                             |
 | G04 | Six preset definitions, source-profile rejection coverage, controlled compression results, and bounded video quality gates reviewed | Closed locally under M5-08 for the documented fixture scope | Retain the coverage matrix and quality floors; broader media qualification belongs to subsequent hardening                         |
 | G05 | Current README guidance corrected; public recipe guide reviewed and locally exercised                                               | Closed locally for the reviewed recipe scope under M5-11    | Retain documented source restrictions and execution limits; installed-tarball execution of the new Browser recipe remains separate |
-| G06 | Fresh complete cross-platform CI evidence was not supplied                                                                          | M4 release dependency                                       | Obtain updated CI evidence; local success does not close this gate                                                                 |
+| G06 | Fresh CI passed for implementation commit 15f3989fd22ad6a2a58666fa5eb7957973603e87                                                  | Closed for the configured CI matrix at that commit          | Retain run 39962593546 as evidence; later implementation changes require fresh checks                                              |
 
 No new operation implementation defect was demonstrated by this audit.
 The confirmed test-command defect was corrected and verified under M5-09.
@@ -201,3 +201,42 @@ Installed-tarball execution of the new Browser recipe was not performed.
 Earlier installed-package acceptance evidence remains separate.
 Fresh cross-platform CI and other outstanding M4 release gates remain open.
 Local M5-11 closure does not mark the overall M5 milestone or release complete.
+
+## M5 cross-platform CI closure — 2026-10-23
+
+Implementation commit: 15f3989fd22ad6a2a58666fa5eb7957973603e87.
+
+[GitHub Actions run 39962593546](https://github.com/VormirTechies/mavio/actions/runs/39962593546)
+completed successfully. Evidence was supplied from GitHub CLI output and
+reviewed against the workflow and package verification runner.
+
+Configured coverage:
+
+| Route   | Platforms                            | Node versions | Verification                                                |
+| ------- | ------------------------------------ | ------------- | ----------------------------------------------------------- |
+| SDK     | Ubuntu and Windows                   | 22 and 24     | npm run check                                               |
+| Native  | Ubuntu 24.04, Windows 2025, macOS 15 | 22 and 24     | npm run check:native:all                                    |
+| Browser | Ubuntu 24.04, Windows 2025, macOS 15 | 22 and 24     | Installed-package verification with MAVIO_PACKAGE_BROWSER=1 |
+
+The Browser package runner installs the pinned core, runs the installed asset
+CLI, and invokes check-browser-verified.mjs with the installed consumer and
+generated asset directories. That runner includes all 12 configured Browser
+checks, including stack regression, public operations, quality, and cancellation.
+
+Native acceptance includes compression and preset quality in addition to
+tool discovery, video, audio, and thumbnails.
+
+Platform-specific skipped steps are expected: Windows tool steps do not run
+on macOS, and macOS tool steps do not run on Windows.
+
+This closes the fresh cross-platform CI evidence gap for the tested commit.
+Together with the preceding local evidence, the documented bounded M5
+acceptance scope is complete.
+
+Earlier pending-CI statements describe historical checkpoints and are
+superseded by this section. CI does not establish arbitrary media support,
+other browser engines, or publication readiness. Separate M4 release records
+must be reconciled before declaring all release gates closed.
+
+This documentation follow-up records results for the implementation commit
+above; it does not claim CI has already run on a later documentation commit.
