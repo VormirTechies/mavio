@@ -3,7 +3,7 @@
 ## Status
 
 Baseline inventory recorded on 2026-10-23.
-M6 implementation and acceptance remain in progress.
+M6 is complete within the bounded acceptance scope recorded below.
 
 Baseline commit: 4dc8a84971991efbc76b29870e31047052bbf170.
 The project owner reported successful CI run 39981807858 for that commit.
@@ -44,7 +44,7 @@ Their passing checks provide reusable evidence, not automatic M6 completion.
 | M6-06 | Performance baseline       | No dedicated benchmark identified                                              | Reproducible initialization and warm-operation measurements with environment and fixture provenance                              | Complete locally for recorded baseline     |
 | M6-07 | Resource lifecycle         | Existing lifecycle and cleanup suites                                          | Repeated-job, rejection, cancellation/recovery, and client-disposal evidence; investigate sustained resource growth              | Complete locally for bounded investigation |
 | M6-08 | Limits and troubleshooting | Existing runtime and source-profile documents                                  | Evidence-based setup, memory, queue, timeout, source restriction, and recovery guidance                                          | Complete locally for reviewed guidance     |
-| M6-09 | Final acceptance           | M4/M5 CI evidence reusable                                                     | Consolidated M6 evidence, appropriate regression checks, and fresh CI for final changes                                          | Pending                                    |
+| M6-09 | Final acceptance           | M4/M5 CI evidence reusable                                                     | Consolidated M6 evidence, appropriate regression checks, and fresh CI for final changes                                          | Complete                                   |
 
 ## Measurement rules
 
@@ -377,3 +377,40 @@ check:m6, alongside the existing cross-platform SDK and media-route jobs.
 
 M6 remains pending fresh successful CI for the committed changes.
 Local memory observations remain bounded and are not leak-free guarantees.
+
+## M6 closure — 2026-10-24
+
+M6 is accepted as complete within its documented scope.
+
+Implementation commit: bd39f209188a85ca2dc5080dc8ffff977a0b3d79.
+
+[Passing CI run 40019434190](https://github.com/VormirTechies/mavio/actions/runs/40019434190)
+completed successfully. All 18 jobs completed with success:
+
+- Four SDK verification jobs: Ubuntu and Windows, Node 22 and 24.
+- Six Native media jobs: Ubuntu, Windows, and macOS, Node 22 and 24.
+- Six installed-package Browser route jobs: Ubuntu, Windows, and macOS,
+  Node 22 and 24.
+- Two M6 examples and bounded resource jobs: Ubuntu 24.04, Node 22 and 24.
+
+The new M6 runner also passed locally on Windows. Its additional resource and
+example CI coverage is Ubuntu-specific; the existing cross-platform media jobs
+do not establish execution of the new resource investigations on macOS.
+
+Local full checks passed with 914 SDK tests, eight helper tests, consumer type
+checks, lint, formatting, build, and installed-package verification.
+
+Accepted deliverables include consumer typing, actionable error guidance,
+opt-in structured diagnostics, three installed-package examples, reproducible
+performance observations, bounded resource investigations, the Native workspace
+read/cleanup correction, troubleshooting guidance, and consolidated evidence.
+
+Earlier pending-CI statements above describe intermediate verification stages.
+This closure records the subsequent passing implementation CI.
+
+Performance observations remain local baselines without speed guarantees.
+Resource observations do not establish a universal memory ceiling or leak-free
+long-duration behavior. Supported media profiles remain bounded.
+
+M7 security/license review and release-candidate preparation, and M8 publication,
+remain separate milestones. M6 completion does not authorize package publication.
