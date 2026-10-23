@@ -2,12 +2,15 @@
 
 ## Status
 
-Both remaining engineering gates pass locally using generated, corrected
-browser assets: the long-sequence WASM memory regression and public MP4 video
-trim acceptance. The verified suite now includes both checks.
+**M4 complete for the documented corrected-asset configuration and tested
+Chromium matrix.**
 
-M4 release acceptance still requires a fresh CI matrix for these changes.
-The earlier sixteen passing jobs cover the previous baseline, not these edits.
+The long-sequence WASM regression, public MP4 trim, and installed-package
+Browser acceptance passed locally and in fresh cross-platform CI.
+See the closure evidence below.
+
+Earlier pending-CI statements in this document describe historical checkpoints
+and are superseded by the closure section.
 
 ## Validated engine packages
 
@@ -259,3 +262,51 @@ The two engineering gates have passing local checks for the corrected asset
 configuration. M4 release acceptance reaches 100% after the updated CI matrix
 passes and this record includes that fresh evidence. Previous CI results must
 not be reused as evidence for these edits.
+
+## M4 closure — 2026-10-23
+
+Both engineering gates and the fresh CI requirement are satisfied for the
+documented supported profiles:
+
+- Long-sequence WASM stack regression: passed with generated corrected assets.
+- Public MP4 video trim acceptance: passed.
+- Full installed-package Browser verification: passed across the configured matrix.
+
+### CI evidence
+
+Implementation commit: `15f3989fd22ad6a2a58666fa5eb7957973603e87`.
+
+[CI run 39962593546](https://github.com/VormirTechies/mavio/actions/runs/39962593546)
+completed successfully. The workflow and package runner were inspected to
+confirm that Browser jobs invoke the full verified suite against the installed
+SDK and its generated assets.
+
+| Browser CI runner | Node 22 | Node 24 |
+| ----------------- | ------- | ------- |
+| ubuntu-24.04      | Passed  | Passed  |
+| windows-2025      | Passed  | Passed  |
+| macos-15          | Passed  | Passed  |
+
+The verified suite contains 12 checks, including pinned assets, stack regression,
+public MP4 trim, resize, compression, preset quality, audio operations,
+thumbnails, and active cancellation.
+
+Documentation follow-up commit:
+`1dc43bc67a620d405652824af55aac79bbe0d036`.
+
+[CI run 39966856556](https://github.com/VormirTechies/mavio/actions/runs/39966856556)
+also passed all jobs, as confirmed by the project owner.
+
+### Completion and limits
+
+M4 is complete within the tested Chromium configurations and documented source
+profiles. The required generated JavaScript correction and unchanged pinned WASM
+remain part of the accepted configuration.
+
+This does not establish support for unmodified upstream assets, arbitrary
+future engine builds, Firefox, Safari, mobile browsers, or arbitrary media.
+Public npm publication remains a separate release milestone.
+
+The fresh CI evidence above satisfies this document's completion rule.
+This closure edit records prior verified commits; it does not claim that its
+own future commit has already passed CI.
