@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-24T20:29:52.384Z",
+  "archiveSha256": "ef99cc56b118c7fbc0fcedf943fb2915ca76978b30031bdb662ccc253c542390",
+  "reconstruction": {
+    "status": "passed",
+    "evidence": "Operator-reported successful Docker build from the reconstructed source archive.",
+    "assets": {
+      "ffmpeg-core.js": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+      "ffmpeg-core.wasm": "6cc6ea8f9273549eaa1b8abf190eff9e8403f7dcdd96302e24bc36e48d816568"
+    },
+    "limitations": [
+      "Docker cache was permitted.",
+      "This does not establish cache-free, offline, or cross-host reproducibility.",
+      "Candidate adoption and source-distribution approval remain pending.",
+      "M7-D01 and M7-L01 remain open."
+    ]
+  },
+  "rootLicenseFileInventory": [
+    {
+      "archive": "sources/bindings.tar",
+      "files": ["bindings-current/LICENSE"]
+    },
+    {
+      "archive": "sources/ffmpeg.tar",
+      "files": [
+        "ffmpeg/COPYING.GPLv2",
+        "ffmpeg/COPYING.GPLv3",
+        "ffmpeg/COPYING.LGPLv2.1",
+        "ffmpeg/COPYING.LGPLv3",
+        "ffmpeg/LICENSE.md"
+      ]
+    },
+    {
+      "archive": "sources/zlib.tar",
+      "files": ["zlib/LICENSE"]
+    },
+    {
+      "archive": "sources/x264.tar",
+      "files": ["x264/AUTHORS", "x264/COPYING"]
+    },
+    {
+      "archive": "sources/lame.tar",
+      "files": ["lame/COPYING", "lame/LICENSE"]
+    }
+  ]
+}

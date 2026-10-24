@@ -274,3 +274,25 @@ commit remains pending.
 These results concern the production core unless explicitly identified as
 experimental candidate evidence. The experimental core is not adopted.
 M7-D01 and M7-L01 remain open; M7 closure and M8 publication are not approved.
+
+## Experimental opt-in route — 2026-10-25
+
+The project owner authorized a separate experimental asset-generation route,
+with further engine exploration deferred to a future release.
+
+The installed SDK exposes mavio-browser-assets-experimental. The original
+asset generator and default engine selection remain unchanged.
+
+Five local checks passed against both the workspace and a fresh installed
+package: invalid core rejection, invalid source archive rejection, invalid
+notice rejection, successful hash-verified generation, and existing-destination
+preservation. Installed scripts matched the workspace, the Windows command
+shim existed, and invalid CLI usage was rejected.
+
+Evidence:
+[Installed experimental route](security/m7-installed-experimental-assets-2026-10-25.json).
+
+These checks validate asset generation, not new media execution or production
+adoption. The earlier 18-job CI result applies to checkpoint 861d0a8 and does
+not cover these subsequent additions. M7-D01 and M7-L01 remain open.
+The authorization does not constitute a security exception or release approval.

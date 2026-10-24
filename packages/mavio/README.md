@@ -133,3 +133,32 @@ Public errors preserve underlying causes and are not automatically redacted.
 Paths, cancellation reasons, and engine or OS information may appear in
 nested errors. Select approved fields before logging or transmitting errors;
 avoid sending whole error objects or cause chains to telemetry.
+
+## Experimental Browser engine assets
+
+An optional candidate asset generator is available for local evaluation.
+It is deferred for further exploration in a future release and is not
+production-approved. The existing mavio-browser-assets command is unchanged.
+
+Run the separate command with four explicit paths:
+
+```sh
+mavio-browser-assets-experimental <new-output-directory> <candidate-core-directory> <source-archive> <notice-directory>
+```
+
+The candidate directory must contain the exact pinned raw ffmpeg-core.js and
+ffmpeg-core.wasm files. The source archive and collected notice files must also
+match the packaged pins. Arbitrary replacement builds are rejected.
+
+The command validates its inputs before creating a new destination, applies
+the tested JavaScript stack correction, and copies the unchanged candidate
+WASM, wrapper modules, source archive, and notices into manifest-backed output.
+An existing destination is rejected.
+
+Preserve the generated sources and notices with the output. These materials
+remain under review; their inclusion does not establish complete redistribution
+clearance. M7-D01 and M7-L01 remain open, including the x264 initialization
+cleanup finding. Generation does not approve production adoption or publication.
+
+Candidate binaries and the source archive are not bundled in the SDK package.
+This route does not download or build them automatically.

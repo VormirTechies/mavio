@@ -127,3 +127,14 @@ M7-D01 remains open. No security exception or release approval is recorded.
 The production asset generator still uses the original core. Candidate adoption,
 remaining dependency dispositions, licensing, installed-package acceptance, and
 required CI remain pending. Other M7 reviews can proceed independently.
+
+## Candidate build traceability — 2026-10-25
+
+A fresh prepared source context and a separately reconstructed source bundle
+both produced the tested candidate JavaScript and WASM hashes. The bundle
+reconstruction result is recorded in
+[the reconstruction evidence](security/m7-source-bundle-reconstruction-2026-10-25.json).
+
+This strengthens source/build traceability for the experimental candidate.
+It does not resolve the x264 cleanup finding, establish vulnerability freedom,
+or approve production adoption. M7-D01 remains open.

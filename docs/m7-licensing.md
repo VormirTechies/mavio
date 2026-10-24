@@ -63,3 +63,28 @@ proof that complete corresponding source is delivered for a particular binary.
 Mavio's MIT declaration does not replace engine licenses.
 No engine redistribution exception, production adoption, or publication approval
 is recorded. M7-D01 remains open independently.
+
+## Candidate source-delivery verification — 2026-10-25
+
+A local candidate source archive now contains the five pinned component
+source archives, build recipes and modifications, Emscripten source material,
+and the SDL archive verified against the pinned Emscripten port.
+
+Reconstruction from that archive successfully built the tested candidate
+JavaScript and WASM hashes. Docker cache was permitted; this does not establish
+cache-free, offline, or cross-host reproducibility.
+
+Component root licenses and notices were collected separately, including
+Emscripten, musl, compiler-rt, libc++, libc++abi, and SDL material.
+Embedded per-file notices and the final distribution notice set still require
+review. The source archive remains a local review artifact; durable delivery
+with any distributed engine has not been established.
+
+Evidence:
+
+- [Source reconstruction](security/m7-source-bundle-reconstruction-2026-10-25.json).
+- [Notice collection](security/m7-candidate-notice-collection-2026-10-25.json).
+
+M7-L01 remains open. Candidate adoption, final notice completeness,
+source-delivery arrangements, and installed-package verification remain pending.
+The production generator still selects the original npm core.
