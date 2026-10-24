@@ -52,6 +52,18 @@ export async function prepareBrowserAssets(destination, consumerDirectory = proc
     if (name.endsWith(".js"))
       files.set(`wrapper/${name}`, await readFile(join(wrapperDirectory, name)));
   }
+  files.set(
+    "ffmpegwasm-MIT.txt",
+    await readFile(new URL("../third-party/ffmpegwasm-MIT.txt", import.meta.url)),
+  );
+  files.set(
+    "GNU-GPL-2.0.txt",
+    await readFile(new URL("../third-party/GNU-GPL-2.0.txt", import.meta.url)),
+  );
+  files.set(
+    "ENGINE-LICENSING.md",
+    await readFile(new URL("../third-party/ENGINE-LICENSING.md", import.meta.url)),
+  );
   const manifest = {
     wrapperVersion: "0.12.15",
     coreVersion: "0.12.10",

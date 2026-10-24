@@ -250,3 +250,73 @@ test("invalid stdout fails even when stderr contains valid metadata", async () =
     },
   );
 });
+
+// M7 restricted Native input policy.
+test("Native probing restricts demuxers before opening the input", async () => {
+  let captured;
+
+  await probeNativeFile(configuration, tools, "/media/source.wav", context(), {
+    inspect: regularFile,
+    async run(options) {
+      captured = options;
+      return output();
+    },
+  });
+
+  const args = captured.args;
+  const whitelistIndex = args.indexOf("-format_whitelist");
+
+  assert.ok(whitelistIndex >= 0);
+  assert.ok(whitelistIndex < args.indexOf("-i"));
+  assert.equal(args[whitelistIndex + 1], "mov,matroska,wav,mp3,flac,jpeg_pipe,png_pipe,image2");
+  assert.equal(args.filter((arg) => arg === "-format_whitelist").length, 1);
+  assert.equal(args[args.indexOf("-protocol_whitelist") + 1], "file");
+  assert.equal(args[args.indexOf("-pattern_type") + 1], "none");
+  assert.deepEqual(args.slice(-2), ["-i", "/media/source.wav"]);
+});
+
+test("Native readable containers exclude reference-bearing and unreviewed demuxers", async () => {
+  const { restrictNativeReadableContainers } =
+    await import("../../dist/engines/native/input-policy.js");
+
+  const discovered = [
+    "concat",
+    "wav",
+    "mov",
+    "mp4",
+    "hls",
+    "webm",
+    "image2",
+    "jpeg_pipe",
+    "wav",
+    "dash",
+    "unreviewed",
+  ];
+  const original = [...discovered];
+
+  const readable = restrictNativeReadableContainers(discovered);
+
+  assert.deepEqual(readable, ["wav", "mov", "mp4", "webm", "image2", "jpeg_pipe"]);
+  assert.deepEqual(discovered, original);
+
+  discovered.push("mp3");
+  assert.deepEqual(readable, ["wav", "mov", "mp4", "webm", "image2", "jpeg_pipe"]);
+  assert.deepEqual(restrictNativeReadableContainers(["concat", "hls"]), []);
+});
+
+test("Native input policy retains reviewed formats and immutable command arguments", async () => {
+  const { NATIVE_INPUT_ARGUMENTS, NATIVE_INPUT_DEMUXERS } =
+    await import("../../dist/engines/native/input-policy.js");
+
+  assert.deepEqual(NATIVE_INPUT_DEMUXERS, [
+    "mov",
+    "matroska",
+    "wav",
+    "mp3",
+    "flac",
+    "jpeg_pipe",
+    "png_pipe",
+  ]);
+  assert.ok(Object.isFrozen(NATIVE_INPUT_DEMUXERS));
+  assert.ok(Object.isFrozen(NATIVE_INPUT_ARGUMENTS));
+});

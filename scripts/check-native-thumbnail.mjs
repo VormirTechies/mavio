@@ -116,6 +116,29 @@ async function main() {
 
       await executeNativeThumbnailFile(configuration, tools, options, context);
 
+      const inspection = await runNativeProcess({
+        executable: tools.ffprobe.path,
+        cwd: configuration.cwd,
+        signal: context.signal,
+        maxOutputBytes: 1_048_576,
+        args: [
+          "-v",
+          "error",
+          "-protocol_whitelist",
+          "file",
+          "-show_entries",
+          "format=format_name",
+          "-of",
+          "json",
+          "-i",
+          outputPath,
+        ],
+      });
+      console.log("Thumbnail output demuxer:", {
+        preset,
+        format: JSON.parse(inspection.stdout).format?.format_name,
+      });
+
       const output = await probeNativeFileDetails(configuration, tools, outputPath, context);
 
       validateNativeThumbnailOutput(output, { preset, width: 320, height: 180 }, context.jobId);

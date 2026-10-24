@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-24T14:24:34.947Z",
+  "status": "passed",
+  "scope": "Installed Node export: byte WAV metadata and PCM byte export",
+  "sourcePreserved": true,
+  "outputReadableAfterDisposal": true,
+  "limitation": "Focused installed-package smoke; full Native acceptance and final CI are separate evidence."
+}

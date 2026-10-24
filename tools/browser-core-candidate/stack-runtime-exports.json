@@ -1,0 +1,6 @@
+{
+  "status": "experimental-unaccepted",
+  "runtimeExportsAdded": ["stackSave", "stackRestore"],
+  "purpose": "Expose real Emscripten stack helpers for correction and regression instrumentation.",
+  "sourceFile": "src/bind/ffmpeg/export-runtime.js"
+}

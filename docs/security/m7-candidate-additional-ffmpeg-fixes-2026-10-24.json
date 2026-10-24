@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-10-24",
+  "source": "https://www.ffmpeg.org/security.html",
+  "listedRelease": "5.1.7",
+  "candidateCommit": "19feb712f5c1821d8a3fa1ad63c5bd2e3b9672eb",
+  "scope": "Additional fixes listed under 5.1.7; not a complete vulnerability assessment",
+  "method": "git apply --reverse --check; source files unchanged",
+  "results": [
+    {
+      "cve": "CVE-2023-49502",
+      "upstreamFix": "8e6c82cefb45372dee069236f08d272117d81421",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/8e6c82cefb45372dee069236f08d272117d81421.patch",
+      "patchSha256": "73832c51522d6bd78a1483c6384012594c1b9e6adf8d0a2d16bead9631913548",
+      "changedFiles": ["libavfilter/vf_bwdif.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2023-50007",
+      "upstreamFix": "3a8f94cf7b29ed4b8531306f11a6bb94fbbaf936",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/3a8f94cf7b29ed4b8531306f11a6bb94fbbaf936.patch",
+      "patchSha256": "a6a31ad720184744af9a9088f31828b776c261f31a0bb1c207cb75c9f63cc626",
+      "changedFiles": ["libavfilter/af_afwtdn.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2023-50008",
+      "upstreamFix": "28a7db723971c73f02ab5ad5f0a45fa288775e0a",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/28a7db723971c73f02ab5ad5f0a45fa288775e0a.patch",
+      "patchSha256": "8346b3a8e628477705793ebcf3aef84c4770ad2e9306b2c1497ef34b725e2f22",
+      "changedFiles": ["libavfilter/vf_colorcorrect.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2023-6602",
+      "upstreamFix": "9803800e0e8cd8e1e7695f77cfbf4e0db0abfe57",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/9803800e0e8cd8e1e7695f77cfbf4e0db0abfe57.patch",
+      "patchSha256": "94b8a91a3afbf50c418830ee903b5d88e3e3f88ef2fdc70791499936b29eef51",
+      "changedFiles": ["doc/demuxers.texi", "libavformat/hls.c"],
+      "status": "manual-source-review-passed",
+      "diagnostic": "error: patch failed: libavformat/hls.c:221\nerror: libavformat/hls.c: patch does not apply",
+      "reversePatchCheck": {
+        "status": "requires-source-inspection",
+        "diagnostic": "error: patch failed: libavformat/hls.c:221\nerror: libavformat/hls.c: patch does not apply"
+      },
+      "manualReview": {
+        "sourceFile": "libavformat/hls.c",
+        "sourceSha256": "22db28e55cfe726c62b2a9826977f3a43eeaea6735e4f34efb22a1aec8d2a5e0",
+        "findings": [
+          "test_segment rejects disallowed segment extensions and detected-format mismatches.",
+          "Validation runs during playlist parsing and after initial format probing.",
+          "extension_picky defaults to enabled.",
+          "Later code uses allowed_segment_extensions and explicit format-specific extension handling."
+        ],
+        "limitation": "Review covers this listed patch only; it does not establish coverage of every part of CVE-2023-6602."
+      }
+    },
+    {
+      "cve": "CVE-2023-6604",
+      "upstreamFix": "9803800e0e8cd8e1e7695f77cfbf4e0db0abfe57",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/9803800e0e8cd8e1e7695f77cfbf4e0db0abfe57.patch",
+      "patchSha256": "94b8a91a3afbf50c418830ee903b5d88e3e3f88ef2fdc70791499936b29eef51",
+      "changedFiles": ["doc/demuxers.texi", "libavformat/hls.c"],
+      "status": "manual-source-review-passed",
+      "diagnostic": "error: patch failed: libavformat/hls.c:221\nerror: libavformat/hls.c: patch does not apply",
+      "reversePatchCheck": {
+        "status": "requires-source-inspection",
+        "diagnostic": "error: patch failed: libavformat/hls.c:221\nerror: libavformat/hls.c: patch does not apply"
+      },
+      "manualReview": {
+        "sourceFile": "libavformat/hls.c",
+        "sourceSha256": "22db28e55cfe726c62b2a9826977f3a43eeaea6735e4f34efb22a1aec8d2a5e0",
+        "findings": [
+          "test_segment rejects disallowed segment extensions and detected-format mismatches.",
+          "Validation runs during playlist parsing and after initial format probing.",
+          "extension_picky defaults to enabled.",
+          "Later code uses allowed_segment_extensions and explicit format-specific extension handling."
+        ],
+        "limitation": "Review covers this listed patch only; it does not establish coverage of every part of CVE-2023-6602."
+      }
+    },
+    {
+      "cve": "CVE-2023-6605",
+      "upstreamFix": "097131a6474bd6294ff337fa92025df60dff907a",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/097131a6474bd6294ff337fa92025df60dff907a.patch",
+      "patchSha256": "cad48aa390f1eedbc0a62302c5bffb97a0e46435a20ae6ae2a51e6815082edd3",
+      "changedFiles": ["libavformat/dashdec.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-31582",
+      "upstreamFix": "785a6df0e477f408c3e939a043b8608acf071964",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/785a6df0e477f408c3e939a043b8608acf071964.patch",
+      "patchSha256": "720fbeebd2af41ca442a430911608d1c98bfc85a81a982c61b639eb0c882d423",
+      "changedFiles": ["libavfilter/vf_codecview.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-35367",
+      "upstreamFix": "1a874e645d4a0adef9b494482fc67d12d35395cd",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/1a874e645d4a0adef9b494482fc67d12d35395cd.patch",
+      "patchSha256": "1cf364aeac1f1ec69dfe3d6cff2edb9dd9a1fa365d0a43b0f9548b13174ccdae",
+      "changedFiles": ["libavcodec/ppc/vp8dsp_altivec.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-35368",
+      "upstreamFix": "d45964ac04a83f02cb6ddc63af6d0b646c7d9082",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/d45964ac04a83f02cb6ddc63af6d0b646c7d9082.patch",
+      "patchSha256": "24eb50d3002ef20b202a28b04e67cbfb7eedbfaba11c1b4a87cd2c300e52e622",
+      "changedFiles": ["libavcodec/rkmppdec.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2025-0518",
+      "upstreamFix": "edfcade702b41de4417e2597ba2aff6ecbdead0e",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/edfcade702b41de4417e2597ba2aff6ecbdead0e.patch",
+      "patchSha256": "02904449ff8199ae84c7ca1454852c0d57867dee04f76f85c83e16720b3a5f75",
+      "changedFiles": ["libavfilter/af_pan.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2025-9951",
+      "upstreamFix": "eaf748ec88ada50d40ff533d9f2d9515b583b839",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/eaf748ec88ada50d40ff533d9f2d9515b583b839.patch",
+      "patchSha256": "eaae29780f879fbcd7b40cf47ce925981398a5e1b67a224c5b29b1a88e50a8fb",
+      "changedFiles": ["libavcodec/jpeg2000dec.c"],
+      "status": "manual-source-review-passed",
+      "diagnostic": "error: patch failed: libavcodec/jpeg2000dec.c:346\nerror: libavcodec/jpeg2000dec.c: patch does not apply",
+      "reversePatchCheck": {
+        "status": "requires-source-inspection",
+        "diagnostic": "error: patch failed: libavcodec/jpeg2000dec.c:346\nerror: libavcodec/jpeg2000dec.c: patch does not apply"
+      },
+      "manualReview": {
+        "sourceFile": "libavcodec/jpeg2000dec.c",
+        "sourceSha256": "67a173d4791bab5b78596da0cdf04fa2c1619f368656ec6773b0756a7f212f86",
+        "findings": [
+          "Negative cdef values are initialized in get_siz before component processing.",
+          "The old late initialization block is absent from jpeg2000_decode_frame.",
+          "Additional channel-definition validation follows the early initialization."
+        ],
+        "limitation": "Source-level patch review; no malicious-input exploit test performed."
+      }
+    },
+    {
+      "cve": "CVE-2025-9951",
+      "upstreamFix": "1f03c050e4e37f96968d1ffa4d720ed20810fdf6",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/1f03c050e4e37f96968d1ffa4d720ed20810fdf6.patch",
+      "patchSha256": "d8bb2abfa820dbe44eccd4931ac7dfd3119c47ee99b1db924883263419d87b03",
+      "changedFiles": ["libavcodec/jpeg2000dec.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2025-22919",
+      "upstreamFix": "a01eaecf6325cefab5b26e0d905df6662db37be1",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/a01eaecf6325cefab5b26e0d905df6662db37be1.patch",
+      "patchSha256": "6970dfa9341bc203f59b7937c914605568336377a6d84de1ed888aa24cc2b172",
+      "changedFiles": ["libavfilter/buffersrc.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2025-59728",
+      "upstreamFix": "6e9758a4e7f983d67a63218021c5b9002264355e",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/6e9758a4e7f983d67a63218021c5b9002264355e.patch",
+      "patchSha256": "a515ede55ea87dd98d1eebc24d9cf3ce93c3175fe32098317d18cc9048fd7006",
+      "changedFiles": ["libavformat/dashdec.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2025-59731",
+      "upstreamFix": "ec959281897aa29076f3083edbc2306357342d7c",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/ec959281897aa29076f3083edbc2306357342d7c.patch",
+      "patchSha256": "286781b57261ca0bc1481de9bb91f0815ef1357873a360db832868602c11241d",
+      "changedFiles": ["libavcodec/exr.c"],
+      "status": "manual-source-review-passed",
+      "diagnostic": "error: patch failed: libavcodec/exr.c:999\nerror: libavcodec/exr.c: patch does not apply",
+      "reversePatchCheck": {
+        "status": "requires-source-inspection",
+        "diagnostic": "error: patch failed: libavcodec/exr.c:999\nerror: libavcodec/exr.c: patch does not apply"
+      },
+      "manualReview": {
+        "sourceFile": "libavcodec/exr.c",
+        "sourceSha256": "f98a2eaa504c137aecad3ab91012526de66eb9b8bd9d21ca113f87315520c810",
+        "findings": [
+          "have_rle starts at zero and is set after successful RLE processing.",
+          "rle_raw_size is bounded by INT_MAX and checked against image dimensions.",
+          "The alpha reconstruction loop requires have_rle."
+        ],
+        "limitation": "Source-level patch review; no malicious-input exploit test performed."
+      }
+    },
+    {
+      "cve": "CVE-2025-59732",
+      "upstreamFix": "20708b957e8d4d57801c0b7ac52131988b093a49",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/20708b957e8d4d57801c0b7ac52131988b093a49.patch",
+      "patchSha256": "7d8e9f17c16ca8b41105f03c0c892a5e0c36477a8878438b0dbc43e7b21b8185",
+      "changedFiles": ["libavcodec/exr.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2025-59733",
+      "upstreamFix": "1080d0e3cded6d8e177c2ce8b6649bc238be2ff6",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/1080d0e3cded6d8e177c2ce8b6649bc238be2ff6.patch",
+      "patchSha256": "6948a99f0bec40857021881704796438f635354fdb141a0ce42cbc258ae7049f",
+      "changedFiles": ["libavcodec/exr.c"],
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    }
+  ]
+}

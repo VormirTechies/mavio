@@ -1,0 +1,13 @@
+{
+  "inspectedAt": "2026-10-24T14:09:28.090Z",
+  "name": "@vormir/mavio",
+  "version": "0.0.3",
+  "private": true,
+  "archiveSha256": "d33aa81bf8dd67451adc2b406ade3a1965dcf40c71bb0342515b1b3fdc274fba",
+  "archiveEntries": 408,
+  "inspectedMaps": 133,
+  "requiredNoticesPresent": true,
+  "prohibitedEntries": [],
+  "status": "local-archive-inspection-passed",
+  "remaining": "Fresh installed consumers, final candidate identity, open gates, and required CI"
+}

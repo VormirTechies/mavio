@@ -1,9 +1,10 @@
+import { verifyCandidateCoreAsset, patchCandidateBrowserCore } from "./candidate-browser-core.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { chromium } from "playwright";
 import { patchBrowserCore } from "../packages/mavio/scripts/browser-assets.mjs";
 import { gunzipSync } from "node:zlib";
@@ -60,7 +61,16 @@ async function main() {
   );
 
   const wrapperDirectory = dirname(sdkRequire.resolve("@ffmpeg/ffmpeg/worker"));
-  const coreDirectory = join(dirname(dirname(rootRequire.resolve("@ffmpeg/core"))), "esm");
+
+  const candidateCoreDirectory = process.env.MAVIO_REPLAY_CANDIDATE_CORE_DIR;
+  const coreDirectory = candidateCoreDirectory
+    ? resolve(candidateCoreDirectory)
+    : join(dirname(dirname(rootRequire.resolve("@ffmpeg/core"))), "esm");
+
+  console.log(
+    "Regression core: " +
+      (candidateCoreDirectory ? "hash-pinned experimental candidate" : "pinned upstream package"),
+  );
 
   const assets = new Map([
     [
@@ -86,8 +96,9 @@ async function main() {
 
   for (const name of ["ffmpeg-core.js", "ffmpeg-core.wasm"]) {
     let body = await readFile(join(coreDirectory, name));
+    if (candidateCoreDirectory) verifyCandidateCoreAsset(name, body);
     if (name === "ffmpeg-core.js" && process.env.MAVIO_REPLAY_STACK_RESTORE === "1") {
-      body = patchBrowserCore(body);
+      body = candidateCoreDirectory ? patchCandidateBrowserCore(body) : patchBrowserCore(body);
     }
     if (name === "ffmpeg-core.js" && stackControl) body = instrumentCoreStack(body);
     assets.set(`/core/${name}`, {

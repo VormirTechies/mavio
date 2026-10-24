@@ -1,3 +1,4 @@
+import { NATIVE_INPUT_ARGUMENTS } from "./input-policy.js";
 import { isAbsolute, normalize } from "node:path";
 import { platform } from "node:process";
 import type { ProcessingPlan } from "../../contracts.js";
@@ -123,8 +124,7 @@ export function buildNativeThumbnailCommand({
     "-xerror",
     ...filters.inputArgs,
     "-noautorotate",
-    "-protocol_whitelist",
-    "file",
+    ...NATIVE_INPUT_ARGUMENTS,
     "-i",
     inputPath,
     "-map",

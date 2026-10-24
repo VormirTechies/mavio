@@ -1,0 +1,25 @@
+{
+  "cve": "CVE-2025-25467",
+  "status": "library finding open; SDK worker-discard mitigation reviewed",
+  "sourceFinding": "Candidate encoder_open failure cleanup frees the context without demonstrating cleanup of all copied allocations.",
+  "sdkMitigation": [
+    "Nonzero encoder exit or error diagnostics reject MP4 execution.",
+    "The enclosing preparation failure handler terminates a loaded worker.",
+    "Termination failures are reported as cleanup issues."
+  ],
+  "sourceHashes": {
+    "packages/mavio/src/engines/browser/mp4-execution.ts": "05574bd0b1f87964dc2a45f6eef3db37e24f615c4c3c2dc18ce57424799224f1",
+    "packages/mavio/src/engines/browser/mp4-bytes.ts": "75df18ead83553a2f16d84c9ac582a97d1b53f030116d7faf649f89f4c6bde00"
+  },
+  "existingTerminationTestFiles": [
+    "packages/mavio/tests/runtime/browser-mp4-bytes.test.mjs",
+    "packages/mavio/tests/runtime/browser-mp4-execution.test.mjs"
+  ],
+  "existingTerminationTests": "passed",
+  "limitations": [
+    "No candidate-specific LeakSanitizer reproduction performed.",
+    "These tests do not establish the size or reachability of this particular leak.",
+    "Worker discard mitigates lifetime; it does not fix x264.",
+    "No release security exception is approved by this record."
+  ]
+}

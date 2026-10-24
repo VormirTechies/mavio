@@ -1,0 +1,1867 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-24T10:28:15.729Z",
+  "source": "https://security-tracker.debian.org/tracker/data/json",
+  "responseSha256": "85468f09af5b763c1773cef8398c0706369e06258afdad58d8da9e357328b62f",
+  "status": "assessment-leads-only",
+  "limitation": "Downstream tracker records are not findings against the candidate. Source versions, patches, linked components, and reachable routes require assessment.",
+  "packages": {
+    "x264": {
+      "CVE-2025-25467": {
+        "description": "Insufficient tracking and releasing of allocated used memory in libx264 git master allows attackers to execute arbitrary code via creating a crafted AAC file.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "open",
+            "repositories": {
+              "bookworm": "2:0.164.3095+gitbaee400-3"
+            },
+            "urgency": "unimportant"
+          },
+          "forky": {
+            "status": "open",
+            "repositories": {
+              "forky": "2:0.165.3223+git20250910.0480cb0-1"
+            },
+            "urgency": "unimportant"
+          },
+          "sid": {
+            "status": "open",
+            "repositories": {
+              "sid": "2:0.165.3223+git20250910.0480cb0-1"
+            },
+            "urgency": "unimportant"
+          },
+          "trixie": {
+            "status": "open",
+            "repositories": {
+              "trixie": "2:0.164.3108+git31e19f9-2"
+            },
+            "urgency": "unimportant"
+          }
+        }
+      }
+    },
+    "lame": {
+      "CVE-2015-9099": {
+        "description": "The lame_init_params function in lame.c in libmp3lame.a in LAME 3.99.5 allows remote attackers to cause a denial of service (invalid read and application crash) via a crafted audio file with a negative sample rate.",
+        "debianbug": 775959,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2015-9100": {
+        "description": "The fill_buffer_resample function in util.c in libmp3lame.a in LAME 3.99.5 allows remote attackers to cause a denial of service (NULL pointer dereference and application crash) via a crafted audio file.",
+        "debianbug": 777160,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2015-9101": {
+        "description": "The fill_buffer_resample function in util.c in libmp3lame.a in LAME 3.98.4, 3.98.2, 3.98, 3.99, 3.99.1, 3.99.2, 3.99.3, 3.99.4 and 3.99.5 allows remote attackers to cause a denial of service (heap-based buffer over-read and application crash) via a crafted audio file.",
+        "debianbug": 777161,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-11720": {
+        "description": "There is a division-by-zero vulnerability in LAME 3.99.5, caused by a malformed input file.",
+        "debianbug": 870809,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "low"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "low"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "low"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-6",
+            "urgency": "low"
+          }
+        }
+      },
+      "CVE-2017-13712": {
+        "description": "NULL Pointer Dereference in the id3v2AddAudioDuration function in libmp3lame/id3tag.c in LAME 3.99.5 allows attackers to perform Denial of Service by triggering a NULL first argument.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "low"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "low"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "low"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "low"
+          }
+        }
+      },
+      "CVE-2017-15018": {
+        "description": "LAME 3.99.5, 3.99.4, 3.99.3, 3.99.2, 3.99.1, 3.99, 3.98.4, 3.98.2 and 3.98 have a heap-based buffer over-read when handling a malformed file in k_34_4 in vbrquantize.c.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-15019": {
+        "description": "LAME 3.99.5 has a NULL Pointer Dereference in the hip_decode_init function within libmp3lame/mpglib_interface.c via a malformed mpg file, because of an incorrect calloc call.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.100-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-15045": {
+        "description": "LAME 3.99, 3.99.1, 3.99.2, 3.99.3, 3.99.4, 3.99.5, 3.98.4, 3.98.2 and 3.98 has a heap-based buffer over-read in fill_buffer in libmp3lame/util.c, related to lame_encode_buffer_sample_t in libmp3lame/lame.c, a different vulnerability than CVE-2017-9410.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-15046": {
+        "description": "LAME 3.99.5, 3.99.4, 3.98.4, 3.98.2, 3.98 and 3.97 have a stack-based buffer overflow in unpack_read_samples in frontend/get_audio.c, a different vulnerability than CVE-2017-9412.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-8419": {
+        "description": "LAME through 3.99.5 relies on the signed integer data type for values in a WAV or AIFF header, which allows remote attackers to cause a denial of service (stack-based buffer overflow or heap-based buffer overflow) or possibly have unspecified other impact via a crafted file, as demonstrated by mishandling of num_channels.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-9412": {
+        "description": "The unpack_read_samples function in frontend/get_audio.c in LAME 3.99.5 allows remote attackers to cause a denial of service (invalid memory read and application crash) via a crafted wav file.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-7",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-9869": {
+        "description": "The II_step_one function in layer2.c in mpglib, as used in libmpgdecoder.a in LAME 3.99.5 and other products, allows remote attackers to cause a denial of service (buffer over-read and application crash) via a crafted audio file.",
+        "debianbug": 867725,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-9870": {
+        "description": "The III_i_stereo function in layer3.c in mpglib, as used in libmpgdecoder.a in LAME 3.99.5 and other products, allows remote attackers to cause a denial of service (buffer over-read and application crash) via a crafted audio file that is mishandled in the code for the \"block_type == 2\" case, a similar issue to CVE-2017-11126.",
+        "debianbug": 867725,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-9871": {
+        "description": "The III_i_stereo function in layer3.c in mpglib, as used in libmpgdecoder.a in LAME 3.99.5 and other products, allows remote attackers to cause a denial of service (stack-based buffer overflow and application crash) or possibly have unspecified other impact via a crafted audio file.",
+        "debianbug": 867725,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2017-9872": {
+        "description": "The III_dequantize_sample function in layer3.c in mpglib, as used in libmpgdecoder.a in LAME 3.99.5 and other products, allows remote attackers to cause a denial of service (stack-based buffer overflow and application crash) or possibly have unspecified other impact via a crafted audio file.",
+        "debianbug": 867725,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "4.0-1"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "3.100-6"
+            },
+            "fixed_version": "3.99.5+repack1-8",
+            "urgency": "not yet assigned"
+          }
+        }
+      }
+    },
+    "libsdl2": {
+      "CVE-2017-2888": {
+        "description": "An exploitable integer overflow vulnerability exists when creating a new RGB Surface in SDL 2.0.5. A specially crafted file can cause an integer overflow resulting in too little memory being allocated which can lead to a buffer overflow and potential code execution. An attacker can provide a specially crafted image file to trigger this vulnerability.",
+        "debianbug": 878264,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-13616": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in BlitNtoN in video/SDL_blit_N.c when called from SDL_SoftBlit in video/SDL_blit.c.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-13626": {
+        "description": "SDL (Simple DirectMedia Layer) 2.x through 2.0.9 has a heap-based buffer over-read in Fill_IMA_ADPCM_block, caused by an integer overflow in IMA_ADPCM_decode() in audio/SDL_wave.c.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7572": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a buffer over-read in IMA_ADPCM_nibble in audio/SDL_wave.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7573": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in InitMS_ADPCM in audio/SDL_wave.c (inside the wNumCoef loop).",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7574": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in IMA_ADPCM_decode in audio/SDL_wave.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7575": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer overflow in MS_ADPCM_decode in audio/SDL_wave.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7576": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in InitMS_ADPCM in audio/SDL_wave.c (outside the wNumCoef loop).",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7577": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a buffer over-read in SDL_LoadWAV_RW in audio/SDL_wave.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7578": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in InitIMA_ADPCM in audio/SDL_wave.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7635": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in Blit1to4 in video/SDL_blit_1.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7636": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in SDL_GetRGB in video/SDL_pixels.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7637": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer overflow in SDL_FillRect in video/SDL_surface.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.6+dfsg1-4",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2019-7638": {
+        "description": "SDL (Simple DirectMedia Layer) through 1.2.15 and 2.x through 2.0.9 has a heap-based buffer over-read in Map1toN in video/SDL_pixels.c.",
+        "debianbug": 924610,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.10+dfsg1-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2020-14409": {
+        "description": "SDL (Simple DirectMedia Layer) through 2.0.12 has an Integer Overflow (and resultant SDL_memcpy heap corruption) in SDL_BlitCopy in video/SDL_blit_copy.c via a crafted .BMP file.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2020-14410": {
+        "description": "SDL (Simple DirectMedia Layer) through 2.0.12 has a heap-based buffer over-read in Blit_3or4_to_3or4__inversed_rgb in video/SDL_blit_N.c via a crafted .BMP file.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.14+dfsg2-2",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2021-33657": {
+        "description": "There is a heap overflow problem in video/SDL_pixels.c in SDL (Simple DirectMedia Layer) 2.x to 2.0.18 versions. By crafting a malicious .BMP file, an attacker can cause the application using this library to crash, denial of service or Code execution.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.0.20+dfsg-2",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.20+dfsg-2",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.0.20+dfsg-2",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.0.20+dfsg-2",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2022-4743": {
+        "description": "A potential memory leak issue was discovered in SDL2 in GLES_CreateTexture() function in SDL_render_gles.c. The vulnerability allows an attacker to cause a denial of service attack. The vulnerability affects SDL2 v2.0.4 and above. SDL-1.x are not affected.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "2.26.5+dfsg-1"
+            },
+            "fixed_version": "2.26.0+dfsg-1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.26.0+dfsg-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "2.32.10+dfsg-8"
+            },
+            "fixed_version": "2.26.0+dfsg-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "2.32.4+dfsg-1"
+            },
+            "fixed_version": "2.26.0+dfsg-1",
+            "urgency": "not yet assigned"
+          }
+        }
+      }
+    },
+    "zlib": {
+      "CVE-2003-0107": {
+        "description": "Buffer overflow in the gzprintf function in zlib 1.1.4, when zlib is compiled without vsnprintf or when long inputs are truncated using vsnprintf, allows attackers to cause a denial of service or possibly execute arbitrary code.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.1.4-10",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.1.4-10",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.1.4-10",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.1.4-10",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2004-0797": {
+        "description": "The error handling in the (1) inflate and (2) inflateBack functions in ZLib compression library 1.2.x allows local users to cause a denial of service (application crash).",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.1.1-6",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.1.1-6",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.1.1-6",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.1.1-6",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2005-1849": {
+        "description": "inftrees.h in zlib 1.2.2 allows remote attackers to cause a denial of service (application crash) via an invalid file that causes a large dynamic tree to be produced.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.3-1",
+            "urgency": "low"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.3-1",
+            "urgency": "low"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.3-1",
+            "urgency": "low"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.3-1",
+            "urgency": "low"
+          }
+        }
+      },
+      "CVE-2005-2096": {
+        "description": "zlib 1.2 and later versions allows remote attackers to cause a denial of service (crash) via a crafted compressed stream with an incomplete code description of a length greater than 1, which leads to a buffer overflow, as demonstrated using a crafted PNG file.",
+        "debianbug": 317133,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.2-7",
+            "urgency": "medium"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.2-7",
+            "urgency": "medium"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.2-7",
+            "urgency": "medium"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.2-7",
+            "urgency": "medium"
+          }
+        }
+      },
+      "CVE-2016-9840": {
+        "description": "inftrees.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact by leveraging improper pointer arithmetic.",
+        "debianbug": 847270,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2016-9841": {
+        "description": "inffast.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact by leveraging improper pointer arithmetic.",
+        "debianbug": 847270,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-4",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-4",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-4",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-4",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2016-9842": {
+        "description": "The inflateMark function in inflate.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact via vectors involving left shifts of negative integers.",
+        "debianbug": 847274,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2016-9843": {
+        "description": "The crc32_big function in crc32.c in zlib 1.2.8 might allow context-dependent attackers to have unspecified impact via vectors involving big-endian CRC calculation.",
+        "debianbug": 847275,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.8.dfsg-3",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2018-25032": {
+        "description": "zlib before 1.2.12 allows memory corruption when deflating (i.e., when compressing) if the input has many distant matches.",
+        "debianbug": 1008265,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2022-37434": {
+        "description": "zlib through 1.2.12 has a heap-based buffer over-read or buffer overflow in inflate in inflate.c via a large gzip header extra field. NOTE: only applications that call inflateGetHeader are affected. Some common applications bundle the affected zlib source code but may be unable to call inflateGetHeader (e.g., see the nodejs/node reference).",
+        "debianbug": 1016710,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4.1",
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4.1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4.1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.11.dfsg-4.1",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2023-45853": {
+        "description": "MiniZip in zlib through 1.3 has an integer overflow and resultant heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long filename, comment, or extra field. NOTE: MiniZip is not a supported part of the zlib product. NOTE: pyminizip through 0.2.6 is also vulnerable because it bundles an affected zlib version, and exposes the applicable MiniZip code through its compress API.",
+        "debianbug": 1054290,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "open",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "urgency": "not yet assigned",
+            "nodsa": "contrib/minizip not built and src:zlib not producing binary packages",
+            "nodsa_reason": "ignored"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.3.dfsg-2",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.3.dfsg-2",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.3.dfsg-2",
+            "urgency": "not yet assigned"
+          }
+        }
+      },
+      "CVE-2026-22184": {
+        "description": "zlib versions up to and including 1.3.1.2 include a global buffer overflow in the untgz utility located under contrib/untgz. The vulnerability is limited to the standalone demonstration utility and does not affect the core zlib compression library. The flaw occurs when a user executes the untgz command with an excessively long archive name supplied via the command line, leading to an out-of-bounds write in a fixed-size global buffer.",
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "resolved",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "fixed_version": "1:1.2.6.dfsg-1",
+            "urgency": "unimportant"
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.6.dfsg-1",
+            "urgency": "unimportant"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.2.6.dfsg-1",
+            "urgency": "unimportant"
+          },
+          "trixie": {
+            "status": "resolved",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "fixed_version": "1:1.2.6.dfsg-1",
+            "urgency": "unimportant"
+          }
+        }
+      },
+      "CVE-2026-27171": {
+        "description": "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64 because x2nmodp can do right shifts within a loop that has no termination condition.",
+        "debianbug": 1128336,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "open",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "urgency": "not yet assigned",
+            "nodsa": "Minor issue",
+            "nodsa_reason": ""
+          },
+          "forky": {
+            "status": "resolved",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.3.dfsg+really1.3.2-1",
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "resolved",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "fixed_version": "1:1.3.dfsg+really1.3.2-1",
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "open",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "urgency": "not yet assigned",
+            "nodsa": "Minor issue",
+            "nodsa_reason": ""
+          }
+        }
+      },
+      "CVE-2026-85091": {
+        "description": "zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow vulnerability in the gz_vacate() function when processing non-blocking gzwrite() operations with stale external buffer pointers. Attackers can trigger the overflow by calling gzprintf() or gzvprintf() after a write stall, causing an unchecked memmove() to write beyond the internal input buffer boundary.",
+        "debianbug": 1146895,
+        "scope": "local",
+        "releases": {
+          "bookworm": {
+            "status": "open",
+            "repositories": {
+              "bookworm": "1:1.2.13.dfsg-1"
+            },
+            "urgency": "not yet assigned"
+          },
+          "forky": {
+            "status": "open",
+            "repositories": {
+              "forky": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "urgency": "not yet assigned"
+          },
+          "sid": {
+            "status": "open",
+            "repositories": {
+              "sid": "1:1.3.dfsg+really1.3.2-3"
+            },
+            "urgency": "not yet assigned"
+          },
+          "trixie": {
+            "status": "open",
+            "repositories": {
+              "trixie": "1:1.3.dfsg+really1.3.1-1"
+            },
+            "urgency": "not yet assigned"
+          }
+        }
+      }
+    }
+  }
+}

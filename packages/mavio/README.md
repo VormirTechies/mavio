@@ -106,3 +106,30 @@ other browser families require separate verification.
 ## License
 
 MIT.
+
+## Native input restrictions
+
+Default Native input demuxers are restricted to MOV/MP4-family containers,
+Matroska/WebM, WAV, MP3, FLAC, and direct JPEG/PNG streams. Metadata probing
+also permits image2 with filename-pattern expansion disabled for single-file
+images and generated-thumbnail readback. Image-sequence processing is excluded.
+
+Native readableContainers reflects the restricted metadata policy and installed
+demuxer availability. Source-profile and operation restrictions still apply.
+Concat, HLS, DASH, and unreviewed demuxers are excluded; broad Native metadata
+support is deferred.
+
+The restriction is not a filesystem or process sandbox. Use trusted Native
+tools, application-controlled paths and permissions, and appropriate isolation
+for hostile media.
+
+## Diagnostics and sensitive error information
+
+Built-in diagnostic events expose selected identifiers, lifecycle fields,
+error codes, and progress values. They exclude error messages, causes,
+details, paths, and media bytes.
+
+Public errors preserve underlying causes and are not automatically redacted.
+Paths, cancellation reasons, and engine or OS information may appear in
+nested errors. Select approved fields before logging or transmitting errors;
+avoid sending whole error objects or cause chains to telemetry.

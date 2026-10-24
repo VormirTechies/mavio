@@ -1,0 +1,260 @@
+diff --git a/fftools/cmdutils.c b/fftools/cmdutils.c
+index 18e768b..1c75cfa 100644
+--- a/fftools/cmdutils.c
++++ b/fftools/cmdutils.c
+@@ -506,7 +506,7 @@ static const AVOption *opt_find(void *obj, const char *name, const char *unit,
+     return o;
+ }
+ 
+-#define FLAGS (o->type == AV_OPT_TYPE_FLAGS && (arg[0]=='-' || arg[0]=='+')) ? AV_DICT_APPEND : 0
++#define FLAGS ((o->type == AV_OPT_TYPE_FLAGS && (arg[0]=='-' || arg[0]=='+')) ? AV_DICT_APPEND : 0)
+ int opt_default(void *optctx, const char *opt, const char *arg)
+ {
+     const AVOption *o;
+diff --git a/fftools/ffmpeg.c b/fftools/ffmpeg.c
+index e7384f0..960c3d2 100644
+--- a/fftools/ffmpeg.c
++++ b/fftools/ffmpeg.c
+@@ -491,8 +491,9 @@ static int read_key(void)
+         }
+         //Read it
+         if(nchars != 0) {
+-            read(0, &ch, 1);
+-            return ch;
++            if (read(0, &ch, 1) == 1)
++                return ch;
++            return 0;
+         }else{
+             return -1;
+         }
+@@ -1278,6 +1279,9 @@ static void do_video_out(OutputFile *of,
+             av_log(NULL, AV_LOG_DEBUG, "Forced keyframe at time %f\n", pts_time);
+         }
+ 
++        if (ost->top_field_first >= 0)
++            in_picture->top_field_first = !!ost->top_field_first;
++
+         ret = encode_frame(of, ost, in_picture);
+         if (ret < 0)
+             exit_program(1);
+diff --git a/fftools/ffmpeg.h b/fftools/ffmpeg.h
+index 391a35c..9444714 100644
+--- a/fftools/ffmpeg.h
++++ b/fftools/ffmpeg.h
+@@ -237,6 +237,9 @@ typedef struct OptionsContext {
+     int        nb_autoscale;
+     SpecifierOpt *bits_per_raw_sample;
+     int        nb_bits_per_raw_sample;
++
++
++    int depth;
+ } OptionsContext;
+ 
+ typedef struct InputFilter {
+diff --git a/fftools/ffmpeg_opt.c b/fftools/ffmpeg_opt.c
+index 0969b12..e2d53d1 100644
+--- a/fftools/ffmpeg_opt.c
++++ b/fftools/ffmpeg_opt.c
+@@ -475,6 +475,8 @@ static int opt_map(void *optctx, const char *opt, const char *arg)
+             for (i = 0; i < o->nb_stream_maps; i++) {
+                 m = &o->stream_maps[i];
+                 if (file_idx == m->file_index &&
++                    m->stream_index >= 0 &&
++                    m->stream_index < input_files[m->file_index]->nb_streams &&
+                     check_stream_specifier(input_files[m->file_index]->ctx,
+                                            input_files[m->file_index]->ctx->streams[m->stream_index],
+                                            *p == ':' ? p + 1 : p) > 0)
+@@ -2054,6 +2056,7 @@ static OutputStream *new_audio_stream(OptionsContext *o, AVFormatContext *oc, in
+         int channels = 0;
+         char *layout = NULL;
+         char *sample_fmt = NULL;
++        const char *apad = NULL;
+ 
+         MATCH_PER_STREAM_OPT(audio_channels, i, channels, oc, st);
+         if (channels) {
+@@ -2091,8 +2094,12 @@ static OutputStream *new_audio_stream(OptionsContext *o, AVFormatContext *oc, in
+ 
+         MATCH_PER_STREAM_OPT(audio_sample_rate, i, audio_enc->sample_rate, oc, st);
+ 
+-        MATCH_PER_STREAM_OPT(apad, str, ost->apad, oc, st);
+-        ost->apad = av_strdup(ost->apad);
++        MATCH_PER_STREAM_OPT(apad, str, apad, oc, st);
++        if (apad) {
++            ost->apad = av_strdup(apad);
++            if (!ost->apad)
++                exit_program(1);
++        }
+ 
+         ost->avfilter = get_ost_filters(o, oc, ost);
+         if (!ost->avfilter)
+@@ -3262,6 +3269,12 @@ static int opt_preset(void *optctx, const char *opt, const char *arg)
+     FILE *f=NULL;
+     char filename[1000], line[1000], tmp_line[1000];
+     const char *codec_name = NULL;
++    int depth = o->depth;
++
++    if (depth > 2) {
++        av_log(NULL, AV_LOG_ERROR, "too deep recursion\n");
++        return AVERROR(EINVAL);
++    }
+ 
+     tmp_line[0] = *opt;
+     tmp_line[1] = 0;
+@@ -3275,6 +3288,7 @@ static int opt_preset(void *optctx, const char *opt, const char *arg)
+         exit_program(1);
+     }
+ 
++    o->depth ++;
+     while (fgets(line, sizeof(line), f)) {
+         char *key = tmp_line, *value, *endptr;
+ 
+@@ -3299,6 +3313,7 @@ static int opt_preset(void *optctx, const char *opt, const char *arg)
+         }
+     }
+ 
++    o->depth = depth;
+     fclose(f);
+ 
+     return 0;
+diff --git a/fftools/ffplay.c b/fftools/ffplay.c
+index 9242047..99c93e5 100644
+--- a/fftools/ffplay.c
++++ b/fftools/ffplay.c
+@@ -1992,6 +1992,8 @@ static int configure_audio_filters(VideoState *is, const char *afilters, int for
+         goto end;
+ 
+     if (force_output_format) {
++        av_bprint_clear(&bp);
++        av_channel_layout_describe_bprint(&is->audio_tgt.ch_layout, &bp);
+         sample_rates   [0] = is->audio_tgt.freq;
+         if ((ret = av_opt_set_int(filt_asink, "all_channel_counts", 0, AV_OPT_SEARCH_CHILDREN)) < 0)
+             goto end;
+@@ -2356,12 +2358,13 @@ static int audio_decode_frame(VideoState *is)
+         av_channel_layout_compare(&af->frame->ch_layout, &is->audio_src.ch_layout) ||
+         af->frame->sample_rate   != is->audio_src.freq           ||
+         (wanted_nb_samples       != af->frame->nb_samples && !is->swr_ctx)) {
++        int ret;
+         swr_free(&is->swr_ctx);
+-        swr_alloc_set_opts2(&is->swr_ctx,
++        ret = swr_alloc_set_opts2(&is->swr_ctx,
+                             &is->audio_tgt.ch_layout, is->audio_tgt.fmt, is->audio_tgt.freq,
+                             &af->frame->ch_layout, af->frame->format, af->frame->sample_rate,
+                             0, NULL);
+-        if (!is->swr_ctx || swr_init(is->swr_ctx) < 0) {
++        if (ret < 0 || swr_init(is->swr_ctx) < 0) {
+             av_log(NULL, AV_LOG_ERROR,
+                    "Cannot create sample rate converter for conversion of %d Hz %s %d channels to %d Hz %s %d channels!\n",
+                     af->frame->sample_rate, av_get_sample_fmt_name(af->frame->format), af->frame->ch_layout.nb_channels,
+diff --git a/fftools/ffprobe.c b/fftools/ffprobe.c
+index 608d905..67db1ca 100644
+--- a/fftools/ffprobe.c
++++ b/fftools/ffprobe.c
+@@ -1896,12 +1896,14 @@ static void writer_register_all(void)
+     writer_print_string(w, k, pbuf.str, 0);    \
+ } while (0)
+ 
+-#define print_list_fmt(k, f, n, ...) do {       \
++#define print_list_fmt(k, f, n, m, ...) do {    \
+     av_bprint_clear(&pbuf);                     \
+     for (int idx = 0; idx < n; idx++) {         \
+-        if (idx > 0)                            \
+-            av_bprint_chars(&pbuf, ' ', 1);     \
+-        av_bprintf(&pbuf, f, __VA_ARGS__);      \
++        for (int idx2 = 0; idx2 < m; idx2++) {  \
++            if (idx > 0 || idx2 > 0)            \
++                av_bprint_chars(&pbuf, ' ', 1); \
++            av_bprintf(&pbuf, f, __VA_ARGS__);  \
++        }                                       \
+     }                                           \
+     writer_print_string(w, k, pbuf.str, 0);     \
+ } while (0)
+@@ -2012,7 +2014,7 @@ static void print_dovi_metadata(WriterContext *w, const AVDOVIMetadata *dovi)
+             const AVDOVIReshapingCurve *curve = &mapping->curves[c];
+             writer_print_section_header(w, SECTION_ID_FRAME_SIDE_DATA_COMPONENT);
+ 
+-            print_list_fmt("pivots", "%"PRIu16, curve->num_pivots, curve->pivots[idx]);
++            print_list_fmt("pivots", "%"PRIu16, curve->num_pivots, 1, curve->pivots[idx]);
+ 
+             writer_print_section_header(w, SECTION_ID_FRAME_SIDE_DATA_PIECE_LIST);
+             for (int i = 0; i < curve->num_pivots - 1; i++) {
+@@ -2024,7 +2026,7 @@ static void print_dovi_metadata(WriterContext *w, const AVDOVIMetadata *dovi)
+                     print_str("mapping_idc_name",   "polynomial");
+                     print_int("poly_order",         curve->poly_order[i]);
+                     print_list_fmt("poly_coef", "%"PRIi64,
+-                                   curve->poly_order[i] + 1,
++                                   curve->poly_order[i] + 1, 1,
+                                    curve->poly_coef[i][idx]);
+                     break;
+                 case AV_DOVI_MAPPING_MMR:
+@@ -2032,8 +2034,8 @@ static void print_dovi_metadata(WriterContext *w, const AVDOVIMetadata *dovi)
+                     print_int("mmr_order",          curve->mmr_order[i]);
+                     print_int("mmr_constant",       curve->mmr_constant[i]);
+                     print_list_fmt("mmr_coef", "%"PRIi64,
+-                                   curve->mmr_order[i] * 7,
+-                                   curve->mmr_coef[i][0][idx]);
++                                   curve->mmr_order[i], 7,
++                                   curve->mmr_coef[i][idx][idx2]);
+                     break;
+                 default:
+                     print_str("mapping_idc_name",   "unknown");
+@@ -2071,15 +2073,15 @@ static void print_dovi_metadata(WriterContext *w, const AVDOVIMetadata *dovi)
+         print_int("dm_metadata_id",         color->dm_metadata_id);
+         print_int("scene_refresh_flag",     color->scene_refresh_flag);
+         print_list_fmt("ycc_to_rgb_matrix", "%d/%d",
+-                       FF_ARRAY_ELEMS(color->ycc_to_rgb_matrix),
++                       FF_ARRAY_ELEMS(color->ycc_to_rgb_matrix), 1,
+                        color->ycc_to_rgb_matrix[idx].num,
+                        color->ycc_to_rgb_matrix[idx].den);
+         print_list_fmt("ycc_to_rgb_offset", "%d/%d",
+-                       FF_ARRAY_ELEMS(color->ycc_to_rgb_offset),
++                       FF_ARRAY_ELEMS(color->ycc_to_rgb_offset), 1,
+                        color->ycc_to_rgb_offset[idx].num,
+                        color->ycc_to_rgb_offset[idx].den);
+         print_list_fmt("rgb_to_lms_matrix", "%d/%d",
+-                       FF_ARRAY_ELEMS(color->rgb_to_lms_matrix),
++                       FF_ARRAY_ELEMS(color->rgb_to_lms_matrix), 1,
+                        color->rgb_to_lms_matrix[idx].num,
+                        color->rgb_to_lms_matrix[idx].den);
+         print_int("signal_eotf",            color->signal_eotf);
+diff --git a/fftools/opt_common.c b/fftools/opt_common.c
+index ae5e28a..938a6a6 100644
+--- a/fftools/opt_common.c
++++ b/fftools/opt_common.c
+@@ -722,10 +722,13 @@ int show_codecs(void *optctx, const char *opt, const char *arg)
+     return 0;
+ }
+ 
+-static void print_codecs(int encoder)
++static int print_codecs(int encoder)
+ {
+     const AVCodecDescriptor **codecs;
+-    unsigned i, nb_codecs = get_codecs_sorted(&codecs);
++    int i, nb_codecs = get_codecs_sorted(&codecs);
++
++    if (nb_codecs < 0)
++        return nb_codecs;
+ 
+     printf("%s:\n"
+            " V..... = Video\n"
+@@ -759,18 +762,17 @@ static void print_codecs(int encoder)
+         }
+     }
+     av_free(codecs);
++    return 0;
+ }
+ 
+ int show_decoders(void *optctx, const char *opt, const char *arg)
+ {
+-    print_codecs(0);
+-    return 0;
++    return print_codecs(0);
+ }
+ 
+ int show_encoders(void *optctx, const char *opt, const char *arg)
+ {
+-    print_codecs(1);
+-    return 0;
++    return print_codecs(1);
+ }
+ 
+ int show_bsfs(void *optctx, const char *opt, const char *arg)

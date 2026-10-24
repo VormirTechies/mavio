@@ -1,3 +1,4 @@
+import { NATIVE_INPUT_ARGUMENTS } from "./input-policy.js";
 import type {
   EngineContext,
   MediaMetadata as MavioMediaMetadata,
@@ -150,8 +151,7 @@ export async function prepareNativeThumbnailFile(
         "-xerror",
         ...filters.inputArgs,
         "-noautorotate",
-        "-protocol_whitelist",
-        "file",
+        ...NATIVE_INPUT_ARGUMENTS,
         "-i",
         inputPath,
         "-map",

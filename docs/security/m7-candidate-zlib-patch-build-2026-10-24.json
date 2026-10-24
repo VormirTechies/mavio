@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "cve": "CVE-2026-85091",
+  "upstreamFix": "df84af25dc1942490e1d1c899a07619152a46148",
+  "patchedBuildSourceReverseCheck": "passed",
+  "gzwriteSourceSha256": "31d0da140edf382b82b13e2d87a22f59e158d9014ee026459e01cf437d0ab07d",
+  "patchSha256": "110ff14375733173d8aa54574473424fbd7dfe4b81f1ca34a759c6fe14b15b14",
+  "assets": {
+    "ffmpeg-core.js": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+    "ffmpeg-core.wasm": "6cc6ea8f9273549eaa1b8abf190eff9e8403f7dcdd96302e24bc36e48d816568"
+  },
+  "artifactComparison": "Byte-identical to the previously tested stack-export candidate",
+  "limitation": "Link-time omission of the changed code has not been independently demonstrated."
+}

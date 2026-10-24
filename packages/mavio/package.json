@@ -9,7 +9,10 @@
     "dist",
     "scripts/browser-assets.mjs",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "third-party",
+    "SECURITY.md"
   ],
   "bin": {
     "mavio-browser-assets": "./scripts/browser-assets.mjs"
