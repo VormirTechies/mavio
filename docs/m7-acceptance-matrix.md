@@ -296,3 +296,21 @@ These checks validate asset generation, not new media execution or production
 adoption. The earlier 18-job CI result applies to checkpoint 861d0a8 and does
 not cover these subsequent additions. M7-D01 and M7-L01 remain open.
 The authorization does not constitute a security exception or release approval.
+
+## Experimental implementation checkpoint — 2026-10-25
+
+Implementation commit: `c302f59c050bd082ab73879851c1935c1ebe7d87`.
+
+All 18 standard CI jobs passed against this exact implementation commit.
+Workspace and fresh installed-package experimental generation checks also
+passed locally, including mismatched-input rejection and destination preservation.
+
+[CI evidence](security/m7-experimental-checkpoint-ci-2026-10-25.json).
+
+The experimental opt-in implementation is complete for this reviewed scope.
+Further candidate-engine exploration is deferred to a future release.
+The default Browser asset generator remains unchanged.
+
+M7-D01 and M7-L01 remain open. This checkpoint does not accept the x264
+finding, establish complete redistribution clearance, or authorize merging,
+production adoption, or publication. Overall M7 acceptance remains incomplete.
