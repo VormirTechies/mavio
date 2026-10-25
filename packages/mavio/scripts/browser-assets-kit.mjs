@@ -67,6 +67,11 @@ export async function prepareBrowserAssetsFromKit(destination, kitDirectory) {
     ),
   );
 
+  files.set(
+    "notices/musl-EMBEDDED-NOTICES.txt",
+    await readFile(new URL("../third-party/musl-EMBEDDED-NOTICES.txt", import.meta.url)),
+  );
+
   const manifest = {
     status: "candidate-v2-integration-under-review",
     candidateId: pins.candidateId,

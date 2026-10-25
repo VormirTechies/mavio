@@ -2,8 +2,9 @@
 
 ## Status
 
-Open. Notice preservation is implemented locally; complete engine
-redistribution clearance has not been established.
+Reviewed candidate distribution model accepted for 0.0.3 only, subject to
+preserving applicable obligations and verifying public delivery during M8.
+This is not a license waiver or blanket consuming-application clearance.
 
 ## Reviewed components
 
@@ -88,3 +89,47 @@ Evidence:
 M7-L01 remains open. Candidate adoption, final notice completeness,
 source-delivery arrangements, and installed-package verification remain pending.
 The production generator still selects the original npm core.
+
+## Current v2 release scope — 2026-10-26
+
+This section supersedes earlier statements that normal generation selects
+the original npm core or that v2 source delivery has not been assembled.
+
+The project owner approved v2 as the required normal Browser generation route.
+The SDK archive contains generation code and pins, not engine binaries.
+The separately supplied kit contains the pinned binaries, source archive,
+collected component/runtime notices, and modification record.
+
+Source reconstruction, corrected evidence refresh, installed generation,
+and all required-v2 CI jobs passed. The archive is held in an unpublished
+GitHub draft and has been downloaded and hash-verified by CI.
+
+Evidence:
+
+- [Source metadata refresh](security/m7-candidate-v2-source-metadata-refresh-2026-10-25.json).
+- [Pinned kit contents](security/m7-candidate-v2-engine-kit-2026-10-25.json).
+- [Required-v2 CI](security/m7-required-v2-ci-2026-10-26.json).
+
+M7-L01 remains open for final notice completeness and intended-distribution
+review. A public source/binary delivery channel is not yet approved.
+Separately installed Native tools remain application-managed; no Native
+executable distribution is added to the SDK package.
+
+Earlier records remain historical evidence. No general consuming-application
+licensing clearance, security exception, or public publication is implied.
+
+## Release-scoped distribution-model decision — 2026-10-26
+
+The owner approved the reviewed 0.0.3 candidate distribution model:
+MIT SDK separately from the GPL-enabled engine, preserving the generated
+source archive, notices, and modification records together.
+
+M7-L01 has an accepted candidate-model disposition subject to those conditions.
+This supersedes earlier statements that no owner decision exists. It does not
+waive license requirements or approve every consuming application's distribution.
+
+Public binary/source delivery must be verified during M8 before publication.
+The remaining notice-completeness and distribution review must be revisited
+before the next release. No approval carries forward automatically.
+
+[Decision record](security/m7-owner-dispositions-2026-10-26.json).

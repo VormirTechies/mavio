@@ -2,9 +2,9 @@
 
 ## Status
 
-M7 is in progress. M7-01 baseline inventory is complete for the inspected scope.
-Security acceptance, dependency assessment, licensing decisions, release-candidate
-validation, and final CI remain pending.
+M7 finalization is in progress. Release-scoped owner dispositions are recorded.
+The final committed package identity, final CI, and acceptance record remain pending.
+Merging and public publication are not authorized.
 
 Inventory date: 2026-10-24.
 Baseline commit: 5570c7c.
@@ -13,18 +13,18 @@ M6 implementation commit bd39f209188a85ca2dc5080dc8ffff977a0b3d79 passed all
 
 ## Task matrix
 
-| ID    | Task                                     | Required evidence                                                                                              | Status                                                               |
-| ----- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| M7-01 | Release inventory and trust boundaries   | Current package contents, dependency inventory, execution boundaries, and application responsibilities         | Inventory complete                                                   |
-| M7-02 | Native execution and filesystem security | Review executable selection, arguments, protocols, staging, paths, publication, cleanup, and demonstrated gaps | Complete locally for reviewed scope                                  |
-| M7-03 | Browser deployment and worker security   | Review asset URLs, generated asset integrity, worker dependencies, CSP guidance, and ownership                 | Complete locally for reviewed scope                                  |
-| M7-04 | Dependency vulnerability assessment      | Applicable findings, remediation, and justified outstanding risks                                              | Open: M7-D01                                                         |
-| M7-05 | Sensitive-data exposure                  | Review errors, causes, diagnostics, examples, and committed reports                                            | Complete locally for reviewed scope                                  |
-| M7-06 | Licensing and redistribution             | Verified component licenses, distribution boundaries, notices, and applicable obligations                      | Open: M7-L01; notice preservation verified locally                   |
-| M7-07 | Security and release policies            | Supported reporting channel, supported-version policy, and release-blocking criteria                           | Complete locally; final package check pending                        |
-| M7-08 | Release-candidate package                | Reviewed metadata, version, exports, declarations, package contents, notices, and fresh consumers              | Local archive and installed consumers passed; final identity pending |
-| M7-09 | Candidate acceptance                     | Required local checks and fresh CI tied to the reviewed candidate commit                                       | Standard checks passed locally; fresh CI pending                     |
-| M7-10 | Final acceptance record                  | Traceable findings, resolutions, package identity, checks, CI, and limitations                                 | Pending                                                              |
+| ID    | Task                                     | Required evidence                                                                                              | Status                                        |
+| ----- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| M7-01 | Release inventory and trust boundaries   | Current package contents, dependency inventory, execution boundaries, and application responsibilities         | Inventory complete                            |
+| M7-02 | Native execution and filesystem security | Review executable selection, arguments, protocols, staging, paths, publication, cleanup, and demonstrated gaps | Complete locally for reviewed scope           |
+| M7-03 | Browser deployment and worker security   | Review asset URLs, generated asset integrity, worker dependencies, CSP guidance, and ownership                 | Complete locally for reviewed scope           |
+| M7-04 | Dependency vulnerability assessment      | Applicable findings, remediation, and justified outstanding risks                                              | Disposition accepted for 0.0.3 only           |
+| M7-05 | Sensitive-data exposure                  | Review errors, causes, diagnostics, examples, and committed reports                                            | Complete locally for reviewed scope           |
+| M7-06 | Licensing and redistribution             | Verified component licenses, distribution boundaries, notices, and applicable obligations                      | Candidate model accepted with conditions      |
+| M7-07 | Security and release policies            | Supported reporting channel, supported-version policy, and release-blocking criteria                           | Complete locally; final package check pending |
+| M7-08 | Release-candidate package                | Reviewed metadata, version, exports, declarations, package contents, notices, and fresh consumers              | Final committed archive identity pending      |
+| M7-09 | Candidate acceptance                     | Required local checks and fresh CI tied to the reviewed candidate commit                                       | Final checkpoint CI pending                   |
+| M7-10 | Final acceptance record                  | Traceable findings, resolutions, package identity, checks, CI, and limitations                                 | Final acceptance record pending               |
 
 ## Package baseline
 

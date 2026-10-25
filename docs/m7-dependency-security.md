@@ -2,8 +2,9 @@
 
 ## Status
 
-Open. Browser compiled-engine exposure requires resolution before release
-acceptance. No dependency upgrade or security exception has been approved.
+Release-scoped disposition accepted for the reviewed 0.0.3/v2 profile.
+The documented residual risk requires fresh review before the next release.
+See the owner decision dated 2026-10-26; this is not vulnerability-freedom certification.
 
 ## npm advisory and provenance evidence
 
@@ -174,3 +175,14 @@ This is bounded remediation evidence for the reproduced leak, not proof that
 every partial-initialization failure or all CVE impact is resolved.
 M7-D01 remains open pending final candidate adoption and dependency disposition.
 The original default npm core is not cleared by these v2 results.
+
+## Release-scoped owner disposition — 2026-10-26
+
+M7-D01 is dispositioned for the reviewed 0.0.3/v2 release profile.
+The owner accepts the specifically documented x264 residual uncertainty,
+with existing mitigation and mandatory review triggers.
+
+This is release-scoped risk acceptance, not a declaration that all x264
+initialization paths or all CVE impact are fixed. It expires for the next release.
+
+[Decision record](security/m7-owner-dispositions-2026-10-26.json).

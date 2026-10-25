@@ -41,7 +41,7 @@ The browser adapter accepts `createMavio({ browser: { assets } })`. Generate the
 accepted browser assets using the packaged command:
 
 ```sh
-npm install --save-dev --save-exact @ffmpeg/core@0.12.10
+export MAVIO_BROWSER_ENGINE_KIT=/path/to/engine-kit-reviewed
 npx --no-install mavio-browser-assets public/mavio-engine
 ```
 

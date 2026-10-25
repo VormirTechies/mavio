@@ -1,38 +1,38 @@
-# Generated engine licensing
+# Browser engine licensing and source delivery
 
-## Included notices
+## Normal generation
 
-- ffmpegwasm-MIT.txt preserves the upstream wrapper copyright and MIT terms.
-- GNU-GPL-2.0.txt provides the GPL version 2 license text.
-- manifest.json records hashes of these notices and the generated assets.
+Normal mavio-browser-assets generation requires the pinned v2 engine kit:
+ffmpeg-5.1.10-mavio-x264-cleanup-v2.
+The original @ffmpeg/core 0.12.10 package is not a fallback.
 
-The wrapper package declares MIT. The pinned @ffmpeg/core 0.12.10 package
-declares GPL-2.0-or-later. Its compiled FFmpeg and external libraries have
-their own applicable licenses. These assets are not all licensed under MIT.
+Generated output includes the engine, wrapper modules, notices/, sources/,
+a modification record, and a hash manifest. Preserve these materials together.
+The generated ENGINE-LICENSING.md describes that specific output.
 
-## Modification record
+Mavio's SDK code remains MIT. That declaration does not replace the separate
+licenses of FFmpeg, x264, LAME, zlib, bindings, or runtime components.
+The v2 build enables GPL components. Component and runtime license texts
+are preserved in the kit's notice collection and complete source material.
 
-Mavio modifies the pinned core JavaScript to restore the WASM stack after
-both native entry points. The generator leaves the upstream WASM unchanged.
-The SDK's scripts/browser-assets.mjs contains that JavaScript correction.
-This document describes the production generator, not the experimental core.
+## Modification and source records
 
-## Redistribution assessment remains open
+The source archive preserves pinned source snapshots, build recipes,
+command-line maintenance changes, runtime-export changes, the zlib patch,
+and the local x264 parameter-cleanup patch.
+Generated JavaScript restores the stack after both native entry points.
+The generator copies the compiled WASM unchanged.
 
-These files do not form a complete engine compliance bundle. Before distributing
-or hosting the generated engine, establish corresponding source for the actual
-binary, preserve applicable component notices, include modifications and build
-instructions, and assess the license requirements of the intended distribution.
+## Acceptance boundary
 
-A manifest, npm package URL, or generic upstream repository link does not by
-itself establish complete corresponding-source delivery. Mavio does not currently
-certify that the upstream core's exact build source has been established.
+The reviewed source archive reconstructed the tested binaries. Its later
+acceptance-metadata refresh preserved all recorded build-material hashes.
+Installed generation and cross-platform verification passed.
 
-References:
+These technical checks do not themselves establish complete licensing
+clearance for every consuming application or distribution.
+Final notice completeness and distribution-model review remain M7-L01 work.
+Review storage is an unpublished GitHub draft, not a public delivery channel.
 
-- https://ffmpegwasm.netlify.app/docs/faq/
-- https://ffmpeg.org/legal.html
-- https://github.com/ffmpegwasm/ffmpeg.wasm
-
-The experimental updated core is not adopted by this generator.
-Security acceptance and redistribution review remain separate open gates.
+The separate experimental v1 command retains its own pins and generated guide.
+No public publication is authorized by this document.

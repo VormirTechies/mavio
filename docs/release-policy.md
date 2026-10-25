@@ -24,10 +24,18 @@ to the final candidate is recorded.
 Functional success does not override a security or redistribution gate.
 An experimental core is not adopted by passing compatibility tests alone.
 
-## Current open gates
+## Current release dispositions
 
-M7-D01 dependency security disposition and M7-L01 engine source delivery
-and notice completeness remain open. No exception is approved by this policy.
+For the reviewed 0.0.3/v2 profile, the owner approved the documented
+security residual-risk disposition and candidate distribution model.
+See docs/security/m7-owner-dispositions-2026-10-26.json.
+
+These decisions apply to this release only and do not carry forward.
+License obligations remain in force. Public binary/source delivery must
+be verified during M8 before distribution.
+
+Final committed package identity, final validation, and the M7 acceptance
+record remain pending. No merge or publication approval is implied.
 
 ## Publication
 

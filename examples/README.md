@@ -73,9 +73,11 @@ npm start -- 4174. Stop a server with Ctrl+C.
 
 ## Asset and source requirements
 
-The Browser examples pin core 0.12.10 and generate corrected assets using
-the installed SDK CLI. Run the assets command once in a fresh consumer;
-the destination public/mavio-engine must be new.
+The Browser examples require the pinned Mavio v2 engine kit.
+Set MAVIO_BROWSER_ENGINE_KIT before running their assets command.
+The generator verifies the kit and includes its source archive and notices.
+Installing the original npm core alone is insufficient; there is no silent fallback.
+Kit availability and public distribution remain subject to release acceptance.
 
 The shared server binds to 127.0.0.1 and supplies the verified COOP/COEP
 headers and JavaScript/WASM content types. It is a local development server.
