@@ -11,8 +11,14 @@ const bytes = await readFile(archive);
 assert.equal(bytes.length, 51321159);
 assert.equal(hash(bytes), "d3716527590fa75336f7e1234bb097fd1b87523b17996c052981f1dd862cb838");
 
+// Git Bash tar treats Windows drive letters as remote-host syntax.
+const tarExecutable =
+  process.platform === "win32"
+    ? join(process.env.SystemRoot ?? "C:\\Windows", "System32", "tar.exe")
+    : "tar";
+
 function tar(args) {
-  const result = spawnSync("tar", args, {
+  const result = spawnSync(tarExecutable, args, {
     encoding: "utf8",
     maxBuffer: 16 * 1024 * 1024,
     windowsHide: true,
