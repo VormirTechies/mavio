@@ -1,0 +1,22 @@
+{
+  "status": "referenced-source-assessment-not-binary-exploit-verification",
+  "upstreamReleaseRecipeCommit": "71aa99d37c02a7b4c435275ca9ef50e612f6efa1",
+  "referencedFFmpegTag": "n5.1.4",
+  "inspectedFFmpegCommit": "4729204c17f756e186d622060088371d10b34f7e",
+  "cve": "CVE-2024-7272",
+  "upstreamFix": "a937b3c58babae893fb46b286a4792cd24a01d3d",
+  "patchUrl": "https://github.com/FFmpeg/FFmpeg/commit/a937b3c58babae893fb46b286a4792cd24a01d3d.patch",
+  "patchSha256": "4d03bff204970d587823266a98656fe4722a7e3057e466ed983e350ae0022921",
+  "sourceSha256": "3d963dab0c0c5ae56e9ffebd3365993fe075d2e8cda23ad3be045187d36bced6",
+  "forwardPatchApplies": true,
+  "reversePatchApplies": false,
+  "forwardDiagnostic": "",
+  "reverseDiagnostic": "error: patch failed: libswresample/swresample.c:227\nerror: libswresample/swresample.c: patch does not apply",
+  "limitations": [
+    "Patch checks inspect the FFmpeg source referenced by the release recipe.",
+    "They do not independently establish the exact source of the npm binary.",
+    "They do not demonstrate exploitability or assess every security fix.",
+    "No source modification or core rebuild was performed.",
+    "M7-D01 and M7-L01 remain open."
+  ]
+}

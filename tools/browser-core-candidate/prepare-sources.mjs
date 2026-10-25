@@ -55,7 +55,10 @@ git(bindings, ["apply", "--directory=src", maintenancePath]);
 const zlibPatch = await readFile(join(recipe, pins.zlibSecurityPatch.file));
 assert.equal(createHash("sha256").update(zlibPatch).digest("hex"), pins.zlibSecurityPatch.sha256);
 
-// The Docker recipe applies the zlib patch and runtime-export changes.
+const x264Patch = await readFile(join(recipe, pins.x264CleanupPatch.file));
+assert.equal(createHash("sha256").update(x264Patch).digest("hex"), pins.x264CleanupPatch.sha256);
+
+// Docker applies both dependency patches and the runtime-export changes.
 for (const name of [
   "Dockerfile",
   ".dockerignore",
@@ -66,6 +69,7 @@ for (const name of [
   "fftools-maintenance.patch",
   "zlib-CVE-2026-85091.patch",
   "zlib-security-patch.json",
+  "x264-initialization-param-cleanup.patch",
 ]) {
   await copyFile(join(recipe, name), join(destination, name));
 }

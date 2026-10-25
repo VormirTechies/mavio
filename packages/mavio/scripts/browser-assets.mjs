@@ -32,6 +32,12 @@ export function patchBrowserCore(bytes) {
 }
 
 export async function prepareBrowserAssets(destination, consumerDirectory = process.cwd()) {
+  if (process.env.MAVIO_BROWSER_ENGINE_KIT !== undefined) {
+    assert.ok(process.env.MAVIO_BROWSER_ENGINE_KIT.trim(), "Browser engine kit path is empty.");
+    const { prepareBrowserAssetsFromKit } = await import("./browser-assets-kit.mjs");
+    return prepareBrowserAssetsFromKit(destination, resolve(process.env.MAVIO_BROWSER_ENGINE_KIT));
+  }
+
   const consumer = createRequire(join(resolve(consumerDirectory), "package.json"));
   const sdk = createRequire(import.meta.url);
   const coreDirectory = join(dirname(dirname(consumer.resolve("@ffmpeg/core"))), "esm");

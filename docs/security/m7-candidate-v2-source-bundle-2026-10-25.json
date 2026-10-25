@@ -1,0 +1,109 @@
+{
+  "recordedAt": "2026-10-25T16:47:28.162Z",
+  "status": "acceptance-metadata-refreshed-build-materials-unchanged",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "archiveSha256": "0dfb89431aa1a84c9acded07992724c3c112a7a8e49aac7a41072c7f633efe79",
+  "manifest": {
+    "status": "candidate-v2-source-bundle-awaiting-reconstruction",
+    "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+    "sourceArchives": [
+      {
+        "file": "sources/bindings.tar",
+        "repository": "https://github.com/ffmpegwasm/ffmpeg.wasm.git",
+        "commit": "f876f907c7e9b9bf51d4ed0b913a855a63ae63fc",
+        "sha256": "4e73fda8bcb0127b36997d41061c551f591225dd92d152cc840a720919f400ec"
+      },
+      {
+        "file": "sources/ffmpeg.tar",
+        "repository": "https://github.com/FFmpeg/FFmpeg.git",
+        "commit": "19feb712f5c1821d8a3fa1ad63c5bd2e3b9672eb",
+        "sha256": "052fec07e68a5ee85be39034915af1935c0f66992dd2ffe9f6ee6956b099b1d7"
+      },
+      {
+        "file": "sources/zlib.tar",
+        "repository": "https://github.com/madler/zlib.git",
+        "commit": "da607da739fa6047df13e66a2af6b8bec7c2a498",
+        "sha256": "9b4b73310dc3bef16e5d76753d8c6db7df16f1ad90ee7be3bc02761560b0c15d"
+      },
+      {
+        "file": "sources/x264.tar",
+        "repository": "https://github.com/ffmpegwasm/x264.git",
+        "commit": "33cac6b77d5b9259c552156013a817ab23119612",
+        "sha256": "78959db6fa69927a2ed27e37a9b24e5d4b7910b73ab52e756e0422c5459532cf"
+      },
+      {
+        "file": "sources/lame.tar",
+        "repository": "https://github.com/ffmpegwasm/lame.git",
+        "commit": "2badea1974ae36cb8312afe99cff1e6b3b5decee",
+        "sha256": "db9b52da7feccae415b4caaa281dc14d2cfc8b6b0cdb227ba47b0f11f25fe328"
+      }
+    ],
+    "runtimeFiles": [
+      {
+        "file": "runtime-materials/emscripten-source.tar.gz",
+        "sha256": "60b170dc119d68745677202920164f42b1e662a6c46953e3df82f53708ccf02c"
+      },
+      {
+        "file": "runtime-materials/SDL-release-2.24.2.zip",
+        "sha256": "dc33dfdb24c28b757f32345ea8eca67a6030c9dcb084ae8c78bc27a21e737ada"
+      }
+    ],
+    "recipeFiles": [
+      ".dockerignore",
+      "Dockerfile",
+      "build.sh",
+      "export-stack-runtime.sh",
+      "fftools-maintenance.patch",
+      "prepare-sources.mjs",
+      "sources.json",
+      "stack-runtime-exports.json",
+      "x264-initialization-param-cleanup.patch",
+      "zlib-CVE-2026-85091.patch",
+      "zlib-security-patch.json"
+    ],
+    "files": {
+      ".dockerignore": "c67034e042ac3a04008d0b5a4303b6b5b9ffa31363382becf0ea33f366ce561c",
+      "build.sh": "9488145961d44eac1f6b50fe5efdd852dd14a11625c34120a3849d0ecf425867",
+      "candidate-browser-core.mjs": "8e96fb9a7cf92d6458766e1da4d96537659dbde8123b8bf4e5d1b71ec5eb2dd4",
+      "Dockerfile": "fb1d1f438c7fa2d7524a55baae00a509f20ae537b071e4dcf336abfbb4d9c210",
+      "export-stack-runtime.sh": "1728a1c6e0061033d6bd9896a1bc531e668961e0d3df2f134cf6f0fe49eb338a",
+      "fftools-maintenance.patch": "ecf4201bdb9f4cda1f2fafb0866f5549f787d413af775be547bb2edbe0dda8be",
+      "notices/bindings-current--LICENSE": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f",
+      "notices/emscripten--AUTHORS": "01f19acf8680713c8c4396ce01df9fa988e7389aede5c5fe7b1bc21ad57e2544",
+      "notices/emscripten--LICENSE": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86",
+      "notices/emscripten--system--lib--compiler-rt--LICENSE.TXT": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d",
+      "notices/emscripten--system--lib--libc--musl--COPYRIGHT": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af",
+      "notices/emscripten--system--lib--libcxx--LICENSE.TXT": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+      "notices/emscripten--system--lib--libcxxabi--LICENSE.TXT": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+      "notices/ffmpeg--COPYING.GPLv2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "notices/ffmpeg--COPYING.GPLv3": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "notices/ffmpeg--COPYING.LGPLv2.1": "246041b6ecf9bc32d718a62c57877c78b5eb397b6467e74ed7ae2626ab189c30",
+      "notices/ffmpeg--COPYING.LGPLv3": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+      "notices/ffmpeg--LICENSE.md": "cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2",
+      "notices/lame--COPYING": "bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd",
+      "notices/lame--LICENSE": "7a40cbd8818c57e5285e83c772a459a996d1662c824a879836b97b473c07cae4",
+      "notices/SDL2-LICENSE.txt": "fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426",
+      "notices/x264--AUTHORS": "783150c1bef404fc7140924f3006eff27c940ea73ef38b3bc76fcb9c173229a5",
+      "notices/x264--COPYING": "32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670",
+      "notices/zlib--LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "prepare-sources.mjs": "90c42d9472f55a12b8e45d76b7c34558a0976e7a0d6a9af90923ffadcf1f5b83",
+      "runtime-materials/emscripten-source.tar.gz": "60b170dc119d68745677202920164f42b1e662a6c46953e3df82f53708ccf02c",
+      "runtime-materials/SDL-release-2.24.2.zip": "dc33dfdb24c28b757f32345ea8eca67a6030c9dcb084ae8c78bc27a21e737ada",
+      "SOURCE-BUNDLE.md": "13f043f7eee50d2b17cd1782e48f6592371cc26ed36c8a617736c1004546e114",
+      "sources/bindings.tar": "4e73fda8bcb0127b36997d41061c551f591225dd92d152cc840a720919f400ec",
+      "sources/ffmpeg.tar": "052fec07e68a5ee85be39034915af1935c0f66992dd2ffe9f6ee6956b099b1d7",
+      "sources/lame.tar": "db9b52da7feccae415b4caaa281dc14d2cfc8b6b0cdb227ba47b0f11f25fe328",
+      "sources/x264.tar": "78959db6fa69927a2ed27e37a9b24e5d4b7910b73ab52e756e0422c5459532cf",
+      "sources/zlib.tar": "9b4b73310dc3bef16e5d76753d8c6db7df16f1ad90ee7be3bc02761560b0c15d",
+      "sources.json": "1e48da07f1f6dc6695bf83b3d6fe1185a2c5fc727e8851fee4e5ef4f2ab677c0",
+      "stack-runtime-exports.json": "5f8f73da760454bf4ce5c3a7a98948c8eea4e7583afe16f89a6d52da172bef89",
+      "tested-candidate-evidence.json": "8cce38dd38e1aa7332e273d9178c902b925f2ec498e0c8d969cb5860747fedca",
+      "verification/x264-cleanup-evidence.json": "32cacaa4e1e0d8566804e059cdc4bcce637db96bc22378148dc0782b23c502bb",
+      "verification/x264-sanitizer/Dockerfile": "ff410acb4a01f3ad3cc2a205969f6cbdb8c3e2e0dee24e471eef432b44b3d1be",
+      "verification/x264-sanitizer/initialization.c": "c28141de7f7d0999b98497db9eeba00fa7545398a02ab279cbf0803de654727c",
+      "x264-initialization-param-cleanup.patch": "4efb5858259ffe5fa80f4d155ab55a66b7862757e785193e3c259d5db8d7b5d1",
+      "zlib-CVE-2026-85091.patch": "110ff14375733173d8aa54574473424fbd7dfe4b81f1ca34a759c6fe14b15b14",
+      "zlib-security-patch.json": "cf16d6f711ccf838b1692760f5011553332f2766d648f59d547d4439f513ad89"
+    }
+  }
+}

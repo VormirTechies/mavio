@@ -15,7 +15,9 @@
     "SECURITY.md",
     "scripts/browser-assets-experimental.mjs",
     "scripts/experimental-core.mjs",
-    "scripts/experimental-core-pins.json"
+    "scripts/experimental-core-pins.json",
+    "scripts/browser-assets-kit.mjs",
+    "scripts/browser-engine-kit-pins.json"
   ],
   "bin": {
     "mavio-browser-assets": "./scripts/browser-assets.mjs",

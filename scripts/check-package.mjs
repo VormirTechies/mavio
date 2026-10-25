@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -47,6 +47,9 @@ for (const required of [
   "dist/node.d.ts",
   "dist/contracts.d.ts",
   "scripts/browser-assets.mjs",
+  "scripts/browser-assets-kit.mjs",
+  "scripts/browser-engine-kit-pins.json",
+  "scripts/experimental-core.mjs",
 ]) {
   assert.ok(files.has(required), `Missing package file: ${required}`);
 }
@@ -113,15 +116,43 @@ if (process.env.MAVIO_PACKAGE_BROWSER === "1") {
     consumerDir,
   );
 
+  const selectedKit = process.env.MAVIO_BROWSER_ENGINE_KIT;
+  const kitPins = selectedKit
+    ? JSON.parse(
+        readFileSync(
+          path.join(root, "packages/mavio/scripts/browser-engine-kit-pins.json"),
+          "utf8",
+        ),
+      )
+    : undefined;
+  const expectedCoreWasm = kitPins
+    ? kitPins.files["core/ffmpeg-core.wasm"]
+    : "9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7";
   const assetDirectory = path.join(consumerDir, "browser-assets");
   const generated = JSON.parse(
     npm(["exec", "--no", "--", "mavio-browser-assets", assetDirectory], consumerDir),
   );
   assert.equal(generated.correction, "restore-stack-after-native-entry-v1");
-  assert.equal(
-    generated.files["ffmpeg-core.wasm"],
-    "9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7",
-  );
+  assert.equal(generated.files["ffmpeg-core.wasm"], expectedCoreWasm);
+  if (kitPins) {
+    assert.equal(generated.candidateId, kitPins.candidateId);
+    for (const [name, expected] of Object.entries(kitPins.files)) {
+      if (!name.startsWith("core/")) assert.equal(generated.files[name], expected, name);
+    }
+    execFileSync(
+      process.execPath,
+      [
+        path.join(root, "scripts/check-browser-engine-kit.mjs"),
+        selectedKit,
+        path.join(consumerDir, "node_modules/@vormir/mavio/scripts/browser-assets.mjs"),
+      ],
+      {
+        cwd: root,
+        stdio: "inherit",
+        windowsHide: true,
+      },
+    );
+  }
   console.log(`Installed asset CLI passed: ${assetDirectory}`);
 
   execFileSync(process.execPath, [path.join(root, "scripts/check-browser-verified.mjs")], {

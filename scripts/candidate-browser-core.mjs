@@ -1,10 +1,19 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 
-export const CANDIDATE_CORE_HASHES = Object.freeze({
-  "ffmpeg-core.js": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
-  "ffmpeg-core.wasm": "6cc6ea8f9273549eaa1b8abf190eff9e8403f7dcdd96302e24bc36e48d816568",
+const candidateProfiles = Object.freeze({
+  v1: Object.freeze({
+    "ffmpeg-core.js": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+    "ffmpeg-core.wasm": "6cc6ea8f9273549eaa1b8abf190eff9e8403f7dcdd96302e24bc36e48d816568",
+  }),
+  v2: Object.freeze({
+    "ffmpeg-core.js": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+    "ffmpeg-core.wasm": "1eb120c8a57c1a09aa2ce178d23588a8ad168a0f382fb58e1116e6624786ad84",
+  }),
 });
+const candidateProfile = process.env.MAVIO_REPLAY_CANDIDATE_PROFILE ?? "v1";
+assert.ok(Object.hasOwn(candidateProfiles, candidateProfile), "Unknown candidate profile.");
+export const CANDIDATE_CORE_HASHES = candidateProfiles[candidateProfile];
 
 export function verifyCandidateCoreAsset(name, bytes) {
   assert.ok(Object.hasOwn(CANDIDATE_CORE_HASHES, name), "Unknown candidate asset.");

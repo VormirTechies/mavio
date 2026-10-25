@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config autoconf automake libtool cmake
 
 COPY x264 /deps/x264
+COPY x264-initialization-param-cleanup.patch /recipe/x264-initialization-param-cleanup.patch
+RUN git -C /deps/x264 apply --check /recipe/x264-initialization-param-cleanup.patch && \
+    git -C /deps/x264 apply /recipe/x264-initialization-param-cleanup.patch
 COPY lame /deps/lame
 COPY zlib /deps/zlib
 COPY zlib-CVE-2026-85091.patch /recipe/zlib-CVE-2026-85091.patch
@@ -41,3 +44,5 @@ COPY --from=build /recipe/zlib-security-patch.json /zlib-security-patch.json
 COPY --from=build /deps/zlib/gzwrite.c /review/zlib/gzwrite.c
 COPY --from=build /src/config.h /review/ffmpeg/config.h
 COPY --from=build /src/ffbuild/config.mak /review/ffmpeg/config.mak
+COPY --from=build /recipe/x264-initialization-param-cleanup.patch /x264-initialization-param-cleanup.patch
+COPY --from=build /deps/x264/encoder/encoder.c /review/x264/encoder/encoder.c

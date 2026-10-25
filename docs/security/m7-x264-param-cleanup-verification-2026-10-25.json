@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-10-25T13:13:23.132Z",
+  "status": "focused-native-sanitizer-verification-passed",
+  "sourceCommit": "33cac6b77d5b9259c552156013a817ab23119612",
+  "patchedImage": "mavio-x264-leak-review:patched-0f2f36e244644b1e8f14f201272231c4",
+  "baseline": {
+    "evidence": "Previously supplied operator-run LeakSanitizer output",
+    "directLeakBytes": 136,
+    "indirectLeakBytes": 30,
+    "allocations": 3,
+    "allocationFunction": "x264_param_strdup"
+  },
+  "patchedResult": {
+    "evidence": "Operator-run Docker harness completed successfully",
+    "initializationFailureMarker": true,
+    "validInitializationCleanupMarker": true,
+    "exitCode": 0,
+    "sanitizerFindingReported": false
+  },
+  "files": {
+    "tools/browser-core-candidate/x264-initialization-param-cleanup.patch": "4efb5858259ffe5fa80f4d155ab55a66b7862757e785193e3c259d5db8d7b5d1",
+    "tools/browser-core-candidate/x264-sanitizer/initialization.c": "c28141de7f7d0999b98497db9eeba00fa7545398a02ab279cbf0803de654727c",
+    "tools/browser-core-candidate/x264-sanitizer/Dockerfile": "ff410acb4a01f3ad3cc2a205969f6cbdb8c3e2e0dee24e471eef432b44b3d1be"
+  },
+  "limitations": [
+    "Native Linux, 8-bit, assembly and threading disabled.",
+    "Valid initialization and cleanup tested; frame encoding not tested here.",
+    "Does not assess every partial-initialization or allocation-failure path.",
+    "Does not establish Browser exploitability or complete CVE remediation.",
+    "Patch is not yet integrated into the candidate WASM build.",
+    "M7-D01 and M7-L01 remain open."
+  ]
+}

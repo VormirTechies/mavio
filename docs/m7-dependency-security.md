@@ -138,3 +138,20 @@ reconstruction result is recorded in
 This strengthens source/build traceability for the experimental candidate.
 It does not resolve the x264 cleanup finding, establish vulnerability freedom,
 or approve production adoption. M7-D01 remains open.
+
+## Default-core referenced source finding — 2026-10-25
+
+The version-matching upstream release recipe references FFmpeg n5.1.4.
+The CVE-2024-7272 fix applies forward unchanged to that source and fails
+the reverse-patch check. The referenced source therefore lacks this fix.
+
+This does not independently establish exact npm binary correspondence or
+demonstrate exploitability. It prevents treating the referenced build recipe
+as evidence that this fix is present.
+
+[Source-check evidence](security/m7-default-core-resampling-source-check-2026-10-25.json).
+
+Browser support remains required for this release. A remediated engine and
+its source/notice delivery must be accepted before release. Applying this
+single patch alone would not close the broader dependency assessment.
+M7-D01 and M7-L01 remain open.

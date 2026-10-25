@@ -45,5 +45,14 @@
     "upstreamFix": "df84af25dc1942490e1d1c899a07619152a46148",
     "sha256": "110ff14375733173d8aa54574473424fbd7dfe4b81f1ca34a759c6fe14b15b14",
     "cve": "CVE-2026-85091"
+  },
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "x264CleanupPatch": {
+    "file": "x264-initialization-param-cleanup.patch",
+    "sha256": "4efb5858259ffe5fa80f4d155ab55a66b7862757e785193e3c259d5db8d7b5d1",
+    "origin": "Mavio local remediation",
+    "scope": "Release tracked parameter allocations on encoder initialization failure.",
+    "verification": "Focused native sanitizer failure and valid initialization checks passed.",
+    "limitation": "Not a complete audit of partial initialization or all CVE impact."
   }
 }

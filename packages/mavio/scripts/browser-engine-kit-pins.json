@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "status": "review-only-not-release-approved",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "rawCore": true,
+  "files": {
+    "core/ffmpeg-core.js": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+    "core/ffmpeg-core.wasm": "1eb120c8a57c1a09aa2ce178d23588a8ad168a0f382fb58e1116e6624786ad84",
+    "sources/mavio-candidate-v2-sources.tar.gz": "0dfb89431aa1a84c9acded07992724c3c112a7a8e49aac7a41072c7f633efe79",
+    "notices/MAVIO-MODIFICATIONS.md": "f96b6070fc2a3848a7d8ec43f9cdb192dd2200911cc5a937545ea33edc856e75",
+    "notices/SDL2-LICENSE.txt": "fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426",
+    "notices/bindings-current--LICENSE": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f",
+    "notices/emscripten--AUTHORS": "01f19acf8680713c8c4396ce01df9fa988e7389aede5c5fe7b1bc21ad57e2544",
+    "notices/emscripten--LICENSE": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86",
+    "notices/emscripten--system--lib--compiler-rt--LICENSE.TXT": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d",
+    "notices/emscripten--system--lib--libc--musl--COPYRIGHT": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af",
+    "notices/emscripten--system--lib--libcxx--LICENSE.TXT": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+    "notices/emscripten--system--lib--libcxxabi--LICENSE.TXT": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+    "notices/emscripten--system--lib--libunwind--LICENSE.TXT": "b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d",
+    "notices/ffmpeg--COPYING.GPLv2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/ffmpeg--COPYING.GPLv3": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "notices/ffmpeg--COPYING.LGPLv2.1": "246041b6ecf9bc32d718a62c57877c78b5eb397b6467e74ed7ae2626ab189c30",
+    "notices/ffmpeg--COPYING.LGPLv3": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+    "notices/ffmpeg--LICENSE.md": "cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2",
+    "notices/lame--COPYING": "bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd",
+    "notices/lame--LICENSE": "7a40cbd8818c57e5285e83c772a459a996d1662c824a879836b97b473c07cae4",
+    "notices/x264--AUTHORS": "783150c1bef404fc7140924f3006eff27c940ea73ef38b3bc76fcb9c173229a5",
+    "notices/x264--COPYING": "32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670",
+    "notices/zlib--LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  "limitations": [
+    "JavaScript stack restoration must be applied during asset generation.",
+    "Security and licensing acceptance remain open.",
+    "No automatic adoption or publication is authorized by this kit."
+  ]
+}

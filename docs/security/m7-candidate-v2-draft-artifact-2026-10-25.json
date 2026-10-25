@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-25T18:03:06.262Z",
+  "repository": "VormirTechies/mavio",
+  "tagName": "m7-core-v2-review",
+  "isDraftAtVerification": true,
+  "targetCommitish": "213fffd9daedf3fb1a64f3b5be8274e6cb52a474",
+  "assetId": 675701697,
+  "assetName": "mavio-candidate-v2-engine-kit.tar.gz",
+  "sizeBytes": 51321159,
+  "sha256": "d3716527590fa75336f7e1234bb097fd1b87523b17996c052981f1dd862cb838",
+  "authenticatedAccountDownloadHashVerified": true,
+  "ciTokenAccess": "not yet verified",
+  "limitations": [
+    "Draft review storage only; not a published release.",
+    "Release target predates the uncommitted v2 integration changes.",
+    "No production adoption or release acceptance is established."
+  ]
+}

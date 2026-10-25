@@ -1,0 +1,82 @@
+{
+  "recordedAt": "2026-10-25T16:20:44.253Z",
+  "status": "candidate-v2-workspace-browser-routes-passed",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "servedCoreHashes": {
+    "ffmpeg-core.js": "3b6990375eed0af258e910fef70405a7f86f0c9af5b979fd7c913476afb4241d",
+    "ffmpeg-core.wasm": "1eb120c8a57c1a09aa2ce178d23588a8ad168a0f382fb58e1116e6624786ad84"
+  },
+  "assetOverrideVariable": "MAVIO_BROWSER_ASSET_DIR",
+  "sdkScope": "workspace SDK; installed consumer override explicitly removed",
+  "browserChecksPassed": [
+    "mp4-public",
+    "resize",
+    "resize-public",
+    "compression-public",
+    "preset-quality-public",
+    "audio-public",
+    "audio-selection-public",
+    "audio-trim-public",
+    "thumbnail-public",
+    "cancellation"
+  ],
+  "processResults": [
+    {
+      "mode": "mp4-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "resize",
+      "exitCode": 0
+    },
+    {
+      "mode": "resize-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "compression-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "preset-quality-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "audio-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "audio-selection-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "audio-trim-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "thumbnail-public",
+      "exitCode": 0
+    },
+    {
+      "mode": "cancellation",
+      "exitCode": 0
+    }
+  ],
+  "priorRunCorrection": {
+    "reason": "Prior instructions used environment variable names ignored by the Browser checker.",
+    "requiredAssetVariable": "MAVIO_BROWSER_ASSET_DIR",
+    "requiredConsumerVariable": "MAVIO_BROWSER_CONSUMER_DIR",
+    "impact": "Nine route checks cannot be attributed to candidate v2.",
+    "unaffected": [
+      "Separate candidate v2 stack regression",
+      "Candidate binary hash verification",
+      "Source-archive reconstruction"
+    ],
+    "followUp": "Rerun with verified controls and refresh bundled acceptance evidence afterward."
+  },
+  "limitations": [
+    "Fresh installed-package v2 acceptance remains pending.",
+    "The source archive embeds the earlier invalidated acceptance record and must be refreshed.",
+    "Security, licensing, production integration and cross-platform acceptance remain open."
+  ]
+}
