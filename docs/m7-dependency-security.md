@@ -155,3 +155,22 @@ Browser support remains required for this release. A remediated engine and
 its source/notice delivery must be accepted before release. Applying this
 single patch alone would not close the broader dependency assessment.
 M7-D01 and M7-L01 remain open.
+
+## Candidate v2 remediation and verification — 2026-10-26
+
+The pinned x264 source reproduced a 166-byte tracked-parameter leak on
+encoder initialization failure. A local cleanup patch passed focused native
+sanitizer checks for invalid and valid initialization paths.
+
+The patch was incorporated into candidate v2. Exported source verification,
+binary hash checks, source-archive reconstruction, stack regressions, and
+explicitly selected Browser route checks passed. Cross-platform installed
+v2 verification passed in all six Browser CI jobs.
+
+[Cleanup evidence](security/m7-x264-param-cleanup-verification-2026-10-25.json).
+[CI evidence](security/m7-candidate-v2-ci-2026-10-26.json).
+
+This is bounded remediation evidence for the reproduced leak, not proof that
+every partial-initialization failure or all CVE impact is resolved.
+M7-D01 remains open pending final candidate adoption and dependency disposition.
+The original default npm core is not cleared by these v2 results.

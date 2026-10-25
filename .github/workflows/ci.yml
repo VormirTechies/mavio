@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   verify:
+    needs: candidate-kit-access
     name: ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
@@ -39,6 +40,19 @@ jobs:
 
       - name: Install browser
         run: npx playwright install --with-deps chromium --only-shell
+
+      - name: Download verified v2 archive
+        uses: actions/download-artifact@v8
+        with:
+          name: candidate-v2-engine-kit
+          path: ${{ runner.temp }}/candidate-kit-download
+
+      - name: Verify and select v2 kit
+        shell: bash
+        env:
+          KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
+          KIT_DEST: ${{ runner.temp }}/mavio-v2-engine-kit
+        run: node scripts/prepare-ci-engine-kit.mjs "$KIT_ARCHIVE" "$KIT_DEST"
 
       - name: Verify SDK
         run: npm run check
@@ -81,7 +95,6 @@ jobs:
 
   browser:
     needs: candidate-kit-access
-    if: always() && (github.event_name == 'pull_request' || needs.candidate-kit-access.result == 'success')
     name: Browser ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
@@ -113,14 +126,12 @@ jobs:
         run: npx playwright install --with-deps chromium --only-shell
 
       - name: Download verified v2 archive
-        if: github.event_name != 'pull_request'
         uses: actions/download-artifact@v8
         with:
           name: candidate-v2-engine-kit
           path: ${{ runner.temp }}/candidate-kit-download
 
       - name: Verify and select v2 kit
-        if: github.event_name != 'pull_request'
         shell: bash
         env:
           KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
@@ -212,6 +223,7 @@ jobs:
           npm run check:native:all -- "$ffmpegPath" "$ffprobePath"
 
   m6:
+    needs: candidate-kit-access
     name: M6 examples and resources / Node ${{ matrix.node }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -246,12 +258,25 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
 
+      - name: Download verified v2 archive
+        uses: actions/download-artifact@v8
+        with:
+          name: candidate-v2-engine-kit
+          path: ${{ runner.temp }}/candidate-kit-download
+
+      - name: Verify and select v2 kit
+        shell: bash
+        env:
+          KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
+          KIT_DEST: ${{ runner.temp }}/mavio-v2-engine-kit
+        run: node scripts/prepare-ci-engine-kit.mjs "$KIT_ARCHIVE" "$KIT_DEST"
+
       - name: Verify M6 examples and bounded resources
         run: npm run check:m6 -- /usr/bin/ffmpeg /usr/bin/ffprobe
 
   candidate-kit-access:
     name: Candidate v2 draft artifact access
-    if: github.repository == 'VormirTechies/mavio' && github.event_name != 'pull_request'
+    if: github.repository == 'VormirTechies/mavio' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     # Draft visibility requires push-level access; confined to this probe.

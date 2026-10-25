@@ -162,3 +162,33 @@ cleanup finding. Generation does not approve production adoption or publication.
 
 Candidate binaries and the source archive are not bundled in the SDK package.
 This route does not download or build them automatically.
+
+## Required Browser engine kit
+
+Normal Browser asset generation requires the pinned Mavio v2 engine kit.
+Installing @ffmpeg/core@0.12.10 alone no longer satisfies this command.
+The generator does not fall back to that original core.
+
+PowerShell:
+
+```powershell
+$env:MAVIO_BROWSER_ENGINE_KIT = "C:\path\to\engine-kit-reviewed"
+npx mavio-browser-assets public/mavio-engine
+```
+
+POSIX shell:
+
+```sh
+MAVIO_BROWSER_ENGINE_KIT=/path/to/engine-kit-reviewed npx mavio-browser-assets public/mavio-engine
+```
+
+The output directory must be new. The generator verifies the pinned binaries,
+source archive, and notices before creating it. Preserve the generated
+sources/ and notices/ directories with the deployment.
+
+The kit is supplied separately; the SDK does not bundle or automatically
+download engine binaries. Review storage is currently an unpublished draft
+release, not a public distribution channel.
+
+The separate experimental v1 command remains unchanged. Required v2 selection
+does not itself establish final security/licensing acceptance or publication approval.

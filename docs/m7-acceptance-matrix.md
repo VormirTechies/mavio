@@ -314,3 +314,22 @@ The default Browser asset generator remains unchanged.
 M7-D01 and M7-L01 remain open. This checkpoint does not accept the x264
 finding, establish complete redistribution clearance, or authorize merging,
 production adoption, or publication. Overall M7 acceptance remains incomplete.
+
+## Candidate v2 cross-platform verification — 2026-10-26
+
+CI push run 40225194399 passed all 19 jobs against implementation commit
+f170dd530491f7714ef3d7b95c930f07baaa8648.
+
+All six Browser jobs successfully downloaded, verified, and explicitly selected
+candidate v2 before running fresh installed-package verification. Coverage:
+Windows, macOS, and Ubuntu on Node 22 and Node 24.
+
+[Exact CI evidence](security/m7-candidate-v2-ci-2026-10-26.json).
+
+This supersedes the invalidated earlier v2 route claim. Corrected local
+ten-mode acceptance and installed-package verification also passed.
+
+The default generator still selects the original core unless the v2 kit is
+explicitly configured. Production adoption, final security/licensing
+dispositions, final package identity, and M7 closure remain pending.
+No merge or public publication is authorized by this CI result.
