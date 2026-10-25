@@ -237,8 +237,10 @@ jobs:
     if: github.repository == 'VormirTechies/mavio' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    # Draft visibility requires push-level access; confined to this probe.
+    # The commands below only inspect and download the draft asset.
     permissions:
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7

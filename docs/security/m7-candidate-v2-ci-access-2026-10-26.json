@@ -1,0 +1,18 @@
+{
+  "status": "read-only-token-access-failed-scoped-permission-retest-pending",
+  "checkpoint": "7ad91d339dcb42f84f4616e4aa898cafee2acf74",
+  "failure": "gh release view returned release not found with contents: read",
+  "scope": "candidate-kit-access job only",
+  "proposedPermission": "contents: write",
+  "controls": [
+    "Pull-request events excluded",
+    "Repository restricted to VormirTechies/mavio",
+    "Checkout credentials are not persisted",
+    "Token supplied only to the read/download verification step",
+    "Other jobs retain their existing permissions"
+  ],
+  "limitations": [
+    "CI download and hash verification have not yet succeeded.",
+    "No publication or production adoption is authorized."
+  ]
+}
