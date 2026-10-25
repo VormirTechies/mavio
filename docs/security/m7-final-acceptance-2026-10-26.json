@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-25T21:31:14.692Z",
+  "status": "m7-accepted-for-0.0.3-with-release-scoped-owner-dispositions",
+  "reviewedCommit": "894713d0f1f3c1e9c8d719ecdff1169a6331cbbc",
+  "package": {
+    "name": "@vormir/mavio",
+    "version": "0.0.3",
+    "archiveSha256": "a67ec0c9976d757a7aa97ed0acbca0abc56818b2c13d63197e80d9fbcfbb6e72",
+    "entries": 414,
+    "matchesPreviouslyVerifiedInstalledNoticeArchive": true
+  },
+  "ci": {
+    "runId": 40233213643,
+    "url": "https://github.com/VormirTechies/mavio/actions/runs/40233213643",
+    "successfulJobs": 19
+  },
+  "browserEngine": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "ownerDispositions": "m7-owner-dispositions-2026-10-26.json",
+  "nextReleaseFollowUp": "../next-release-security-follow-up.md",
+  "limitations": [
+    "Owner dispositions apply only to this release.",
+    "Acceptance is not a claim of complete vulnerability clearance.",
+    "Public engine delivery must preserve applicable notices and corresponding source.",
+    "Merge, public publication, and production deployment are not authorized."
+  ]
+}
