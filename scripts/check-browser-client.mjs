@@ -525,7 +525,7 @@ async function main() {
 
       assert.equal(capabilities.runtime, "browser");
       assert.equal(capabilities.engineId, "browser-ffmpeg");
-      assert.equal(capabilities.engineVersion, "@ffmpeg/core@0.12.10");
+      assert.equal(capabilities.engineVersion, "ffmpeg 5.1.10 (Mavio Browser core)");
       assert.deepEqual(capabilities.operations, [
         "metadata",
         "convert",

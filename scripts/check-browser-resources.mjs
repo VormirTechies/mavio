@@ -56,11 +56,25 @@ async function main() {
   const engineDirectory = join(publicDirectory, "mavio-engine");
   const manifest = JSON.parse(readFileSync(join(engineDirectory, "manifest.json"), "utf8"));
 
+  const kitPins = JSON.parse(
+    readFileSync(
+      join(consumer, "node_modules/@vormir/mavio/scripts/browser-engine-kit-pins.json"),
+      "utf8",
+    ),
+  );
+  assert.equal(manifest.candidateId, kitPins.candidateId);
+  assert.equal(manifest.ffmpegVersion, "5.1.10");
+  for (const [asset, expected] of Object.entries(manifest.files)) {
+    assert.equal(sha256(readFileSync(join(engineDirectory, asset))), expected, asset);
+  }
+  for (const [asset, expected] of Object.entries(kitPins.files)) {
+    if (!asset.startsWith("core/")) assert.equal(manifest.files[asset], expected, asset);
+  }
   assert.equal(manifest.correction, "restore-stack-after-native-entry-v1");
   assert.equal(manifest.wrapperVersion, "0.12.15");
   assert.equal(
     sha256(readFileSync(join(engineDirectory, "ffmpeg-core.wasm"))),
-    "9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7",
+    kitPins.files["core/ffmpeg-core.wasm"],
   );
 
   const sdk = JSON.parse(
@@ -252,7 +266,8 @@ async function main() {
         chromium: browser.version(),
         sdkVersion: sdk.version,
         sdkArchiveIntegrity: lock.packages?.["node_modules/@vormir/mavio"]?.integrity,
-        coreVersion: manifest.coreVersion,
+        candidateId: manifest.candidateId,
+        ffmpegVersion: manifest.ffmpegVersion,
         wrapperVersion: manifest.wrapperVersion,
       },
       fixture: {

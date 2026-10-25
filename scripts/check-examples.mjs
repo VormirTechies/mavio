@@ -83,7 +83,15 @@ for (const name of ["node", "vanilla-js", "vanilla-ts"]) {
       readFileSync(join(directory, "public/mavio-engine/manifest.json"), "utf8"),
     );
     assert.equal(manifest.wrapperVersion, "0.12.15");
-    assert.equal(manifest.coreVersion, "0.12.10");
+    const kitPins = JSON.parse(
+      readFileSync(join(root, "packages/mavio/scripts/browser-engine-kit-pins.json"), "utf8"),
+    );
+    assert.equal(manifest.candidateId, kitPins.candidateId);
+    assert.equal(manifest.ffmpegVersion, "5.1.10");
+    assert.equal(manifest.files["ffmpeg-core.wasm"], kitPins.files["core/ffmpeg-core.wasm"]);
+    for (const [asset, expected] of Object.entries(kitPins.files)) {
+      if (!asset.startsWith("core/")) assert.equal(manifest.files[asset], expected, asset);
+    }
 
     npm(["run", "build"], directory);
     if (name === "vanilla-ts") npm(["run", "typecheck"], directory);
