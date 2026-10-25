@@ -80,6 +80,8 @@ jobs:
         run: npm run check:native:all -- /usr/bin/ffmpeg /usr/bin/ffprobe
 
   browser:
+    needs: candidate-kit-access
+    if: always() && (github.event_name == 'pull_request' || needs.candidate-kit-access.result == 'success')
     name: Browser ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
@@ -109,6 +111,21 @@ jobs:
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
+
+      - name: Download verified v2 archive
+        if: github.event_name != 'pull_request'
+        uses: actions/download-artifact@v8
+        with:
+          name: candidate-v2-engine-kit
+          path: ${{ runner.temp }}/candidate-kit-download
+
+      - name: Verify and select v2 kit
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
+          KIT_DEST: ${{ runner.temp }}/mavio-v2-engine-kit
+        run: node scripts/prepare-ci-engine-kit.mjs "$KIT_ARCHIVE" "$KIT_DEST"
 
       - name: Verify installed-package browser routes
         env:
@@ -280,3 +297,11 @@ jobs:
               "d3716527590fa75336f7e1234bb097fd1b87523b17996c052981f1dd862cb838");
             console.log("PASS: Read-only CI token downloaded the exact draft kit.");
           '
+
+      - name: Share verified archive with Browser jobs
+        uses: actions/upload-artifact@v7
+        with:
+          name: candidate-v2-engine-kit
+          path: ${{ runner.temp }}/engine-kit.tar.gz
+          if-no-files-found: error
+          retention-days: 7
