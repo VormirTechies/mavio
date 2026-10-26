@@ -101,7 +101,7 @@ cancellation, cleanup, and recovery through installed-package public APIs.
 Acceptance applies to generated assets and the tested Chromium configurations;
 other browser families require separate verification.
 
-[Public API recipes](../../docs/m5-recipes.md)
+[Public API recipes](https://github.com/VormirTechies/mavio/blob/main/docs/m5-recipes.md)
 
 ## License
 

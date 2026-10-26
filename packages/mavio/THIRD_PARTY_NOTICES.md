@@ -30,4 +30,6 @@ The separate experimental v1 command remains available for evaluation.
 
 Engine redistribution acceptance and the consuming application's obligations
 are not established by Mavio's MIT declaration or passing functional tests.
-M7-L01 remains open. No public publication approval is recorded here.
+M7 acceptance for SDK 0.0.3 is subject to release-scoped owner dispositions
+and distribution conditions; it does not waive license obligations.
+Public engine delivery verification and publication approval remain M8 work.
