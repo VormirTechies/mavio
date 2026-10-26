@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-10-26T18:36:57.344Z",
+  "status": "draft-upload-download-hash-verified-not-public",
+  "repository": "VormirTechies/mavio",
+  "draftTag": "m7-core-v2-review",
+  "assetId": 679080135,
+  "archiveName": "mavio-browser-engine-0.0.3.tar.gz",
+  "sizeBytes": 51350998,
+  "sha256": "4210f97b3b37b65ca14b7ee28f3f3837f997799175be0cbf95d4568e944f0576",
+  "originalM7AssetPreserved": true,
+  "publicDeliveryVerified": false,
+  "ciDistributionTransition": "prepared-awaiting-CI"
+}
