@@ -1,0 +1,82 @@
+{
+  "source": "https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz",
+  "resolvedURL": "https://excellmedia.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz?viasf=1&fid=eb3e28106643eb5c&e=1792931240&st=F3SQNX7ubVezU6zJmw_Nog",
+  "archiveSha256": "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
+  "version": "3.100",
+  "method": "Selected source comparison, normalizing CRLF to LF only",
+  "limitation": "Archive downloaded over HTTPS; independent release-signature verification not performed. This is selected-file provenance evidence, not an exploit test.",
+  "results": [
+    {
+      "file": "libmp3lame/lame.c",
+      "candidateSha256": "561882821f4b9575e2d171d2e8f797c50e4ea2eb2f9c7a58b5f02353ba7f36c0",
+      "releaseSha256": "561882821f4b9575e2d171d2e8f797c50e4ea2eb2f9c7a58b5f02353ba7f36c0",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "libmp3lame/util.c",
+      "candidateSha256": "c9af05c4b5b834a815d37d0da4758dedab4f61b43bbf9bef0efa67f35bf97a55",
+      "releaseSha256": "c9af05c4b5b834a815d37d0da4758dedab4f61b43bbf9bef0efa67f35bf97a55",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "libmp3lame/id3tag.c",
+      "candidateSha256": "a8d9f35d8edf7d78bc14bddfc8c67ecbb8c9fae2c70db48c1700823070220cd5",
+      "releaseSha256": "a8d9f35d8edf7d78bc14bddfc8c67ecbb8c9fae2c70db48c1700823070220cd5",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "libmp3lame/vbrquantize.c",
+      "candidateSha256": "83a61036c20df8b71db2071ec5fa81dee4704b24eeffcb6da465334004bb2e54",
+      "releaseSha256": "83a61036c20df8b71db2071ec5fa81dee4704b24eeffcb6da465334004bb2e54",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "libmp3lame/mpglib_interface.c",
+      "candidateSha256": "26def6f73e3ba902ffe5ef05cab78a0afc9039700386fbd466dd160424dbc4cd",
+      "releaseSha256": "26def6f73e3ba902ffe5ef05cab78a0afc9039700386fbd466dd160424dbc4cd",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "libmp3lame/set_get.c",
+      "candidateSha256": "29b6f5b13e9317b1c116f746d71d400313af7642639edda432e5734713bc3af3",
+      "releaseSha256": "29b6f5b13e9317b1c116f746d71d400313af7642639edda432e5734713bc3af3",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "libmp3lame/version.h",
+      "candidateSha256": "6b59fde33ee149cd0b8ea6946b0a92dabf60ef9d77e26f65565a323ba3698b54",
+      "releaseSha256": "6b59fde33ee149cd0b8ea6946b0a92dabf60ef9d77e26f65565a323ba3698b54",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "mpglib/common.c",
+      "candidateSha256": "a2e718a7e26eb91e0f4105fcfcca619af8f39c6b4884044ca79dfdb6489f3ab9",
+      "releaseSha256": "a2e718a7e26eb91e0f4105fcfcca619af8f39c6b4884044ca79dfdb6489f3ab9",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "mpglib/interface.c",
+      "candidateSha256": "f0cc197c1f30cbb381c01f6c04e0133195265519dd0e25176fca1226c3be1ef0",
+      "releaseSha256": "f0cc197c1f30cbb381c01f6c04e0133195265519dd0e25176fca1226c3be1ef0",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "mpglib/layer2.c",
+      "candidateSha256": "1f8eea0d6ab2dcc73c1b68f32dcaa6feefd1006eb6feb5f91a446280a336d4a8",
+      "releaseSha256": "1f8eea0d6ab2dcc73c1b68f32dcaa6feefd1006eb6feb5f91a446280a336d4a8",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "mpglib/layer3.c",
+      "candidateSha256": "1f72aacfc1b9217aa13f2531caa9769e6ef1e79c7b01a6e6490210ba4968c8c8",
+      "releaseSha256": "1f72aacfc1b9217aa13f2531caa9769e6ef1e79c7b01a6e6490210ba4968c8c8",
+      "status": "matches-upstream-release"
+    },
+    {
+      "file": "frontend/get_audio.c",
+      "candidateSha256": "74b86d408a579365e3f66b8198fc60e4a645bf91d22cf3d7696359210025c645",
+      "releaseSha256": "74b86d408a579365e3f66b8198fc60e4a645bf91d22cf3d7696359210025c645",
+      "status": "matches-upstream-release"
+    }
+  ]
+}

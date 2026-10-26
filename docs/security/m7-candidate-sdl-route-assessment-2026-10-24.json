@@ -1,0 +1,9 @@
+{
+  "cve": "CVE-2022-4743",
+  "portVersion": "2.24.2",
+  "status": "FFmpeg SDL output route disabled",
+  "configHeaderSha256": "81fc51166bb45ec613226d44f8a4f2f08f0d8f854f6ea676ffb6bd03d9cc7bf2",
+  "configMakeSha256": "10a9c4d67a944312a45dd5253439d64532a0921ae16e9c252564cc31ca0db669",
+  "evidence": ["CONFIG_SDL2=0", "CONFIG_SDL2_OUTDEV disabled"],
+  "limitation": "SDL is still requested by the link script. This does not prove absence of all SDL code or establish general library vulnerability freedom."
+}

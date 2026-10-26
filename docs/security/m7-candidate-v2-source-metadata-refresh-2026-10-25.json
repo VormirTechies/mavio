@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-25T16:47:28.173Z",
+  "previousArchiveSha256": "da79d482ca8304c97ad220f9df9c02ade9cecbd716d9ed4820f3c14b844dae7c",
+  "refreshedArchiveSha256": "0dfb89431aa1a84c9acded07992724c3c112a7a8e49aac7a41072c7f633efe79",
+  "changedBundleContent": ["tested-candidate-evidence.json", "source-manifest.json"],
+  "otherRecordedFileHashesUnchanged": true,
+  "refreshedArchiveExtractedAndVerified": true,
+  "priorBuildReconstructionEvidence": "m7-candidate-v2-reconstruction-2026-10-25.json",
+  "limitations": [
+    "The prior reconstruction built the previous archive.",
+    "The refreshed archive changes acceptance metadata only; build inputs are identical.",
+    "Installed-package integration, final notice acceptance and release CI remain pending.",
+    "M7-D01 and M7-L01 remain open."
+  ]
+}

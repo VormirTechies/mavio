@@ -1,0 +1,67 @@
+{
+  "retrievedAt": "2026-10-24T13:05:25.385Z",
+  "status": "license-provenance-inventory",
+  "limitation": "Source metadata and license retrieval do not establish complete source-to-binary correspondence.",
+  "records": [
+    {
+      "name": "@ffmpeg/ffmpeg",
+      "version": "0.12.15",
+      "metadataURL": "https://registry.npmjs.org/%40ffmpeg%2Fffmpeg/0.12.15",
+      "declaredLicense": "MIT",
+      "repository": {
+        "url": "git+https://github.com/ffmpegwasm/ffmpeg.wasm.git",
+        "type": "git"
+      },
+      "gitHead": null,
+      "integrity": "sha512-1C8Obr4GsN3xw+/1Ww6PFM84wSQAGsdoTuTWPOj2OizsRDLT4CXTaVjPhkw6ARyDus1B9X/L2LiXHqYYsGnRFw==",
+      "tarball": "https://registry.npmjs.org/@ffmpeg/ffmpeg/-/ffmpeg-0.12.15.tgz",
+      "licenseTextStatus": "notice preserved from version-matching upstream tag",
+      "noticeSource": {
+        "tag": "v12.15",
+        "commit": "71aa99d37c02a7b4c435275ca9ef50e612f6efa1",
+        "url": "https://raw.githubusercontent.com/ffmpegwasm/ffmpeg.wasm/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/LICENSE",
+        "sha256": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f",
+        "localFile": "packages/mavio/third-party/ffmpegwasm-MIT.txt",
+        "verification": "Tag source declares the expected package version and MIT license.",
+        "limitation": "npm gitHead is absent; exact source-to-published-package correspondence remains unverified."
+      }
+    },
+    {
+      "name": "@ffmpeg/types",
+      "version": "0.12.4",
+      "metadataURL": "https://registry.npmjs.org/%40ffmpeg%2Ftypes/0.12.4",
+      "declaredLicense": "MIT",
+      "repository": {
+        "url": "git+https://github.com/ffmpegwasm/ffmpeg.wasm.git",
+        "type": "git"
+      },
+      "gitHead": null,
+      "integrity": "sha512-k9vJQNBGTxE5AhYDtOYR5rO5fKsspbg51gbcwtbkw2lCdoIILzklulcjJfIDwrtn7XhDeF2M+THwJ2FGrLeV6A==",
+      "tarball": "https://registry.npmjs.org/@ffmpeg/types/-/types-0.12.4.tgz",
+      "licenseTextStatus": "notice preserved from version-matching upstream tag",
+      "noticeSource": {
+        "tag": "v12.15",
+        "commit": "71aa99d37c02a7b4c435275ca9ef50e612f6efa1",
+        "url": "https://raw.githubusercontent.com/ffmpegwasm/ffmpeg.wasm/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/LICENSE",
+        "sha256": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f",
+        "localFile": "packages/mavio/third-party/ffmpegwasm-MIT.txt",
+        "verification": "Tag source declares the expected package version and MIT license.",
+        "limitation": "npm gitHead is absent; exact source-to-published-package correspondence remains unverified."
+      }
+    },
+    {
+      "name": "@ffmpeg/core",
+      "version": "0.12.10",
+      "metadataURL": "https://registry.npmjs.org/%40ffmpeg%2Fcore/0.12.10",
+      "declaredLicense": "GPL-2.0-or-later",
+      "repository": {
+        "url": "git+https://github.com/ffmpegwasm/ffmpeg.wasm.git",
+        "type": "git"
+      },
+      "gitHead": null,
+      "integrity": "sha512-dzNplnn2Nxle2c2i2rrDhqcB19q9cglCkWnoMTDN9Q9l3PvdjZWd1HfSPjCNWc/p8Q3CT+Es9fWOR0UhAeYQZA==",
+      "tarball": "https://registry.npmjs.org/@ffmpeg/core/-/core-0.12.10.tgz",
+      "licenseTextStatus": "not retrieved"
+    }
+  ]
+}

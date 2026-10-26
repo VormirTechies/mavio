@@ -89,3 +89,26 @@ tests cover public lifecycle and source-only behavior. Previously completed
 native and installed-package Browser acceptance checks exercised real probing.
 
 No production parser change was required for M5-01.
+
+## Restricted Native input formats
+
+Native defaults now restrict input demuxers to MOV/MP4-family containers,
+Matroska/WebM, WAV, MP3, FLAC, and direct JPEG/PNG streams.
+
+Metadata and thumbnail-output readback also allow image2 in single-file mode,
+with filename-pattern expansion disabled. This does not enable image-sequence
+processing. Processing commands retain the narrower demuxer list.
+
+Native readableContainers reports the restricted policy intersected with
+discovered demuxers. It does not expose every installed demuxer as supported.
+Container readability does not guarantee that a transformation or source profile
+is supported.
+
+Concat manifests, HLS, DASH, and other unreviewed demuxers are excluded.
+Renaming a manifest does not bypass the content-based demuxer restriction.
+Rejected Native probes currently retain EXECUTION_FAILED with reason NONZERO_EXIT
+and tool ffprobe; this classification also covers other process failures.
+
+This restriction is not a filesystem sandbox. Applications processing hostile
+media still need appropriate operating-system permissions and isolation.
+Broader Native metadata support is deferred to future work.

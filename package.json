@@ -47,6 +47,7 @@
     "benchmark:browser": "node scripts/benchmark-browser.mjs",
     "check:resources:native": "npm run build && node --expose-gc scripts/check-native-resources.mjs",
     "check:resources:browser": "node scripts/check-browser-resources.mjs",
-    "check:m6": "npm run build && node scripts/check-m6.mjs"
+    "check:m6": "npm run build && node scripts/check-m6.mjs",
+    "check:native:policy": "npm run build && node scripts/check-native-input-policy.mjs"
   }
 }

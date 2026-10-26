@@ -41,7 +41,7 @@ The browser adapter accepts `createMavio({ browser: { assets } })`. Generate the
 accepted browser assets using the packaged command:
 
 ```sh
-npm install --save-dev --save-exact @ffmpeg/core@0.12.10
+export MAVIO_BROWSER_ENGINE_KIT=/path/to/engine-kit-reviewed
 npx --no-install mavio-browser-assets public/mavio-engine
 ```
 
@@ -106,3 +106,89 @@ other browser families require separate verification.
 ## License
 
 MIT.
+
+## Native input restrictions
+
+Default Native input demuxers are restricted to MOV/MP4-family containers,
+Matroska/WebM, WAV, MP3, FLAC, and direct JPEG/PNG streams. Metadata probing
+also permits image2 with filename-pattern expansion disabled for single-file
+images and generated-thumbnail readback. Image-sequence processing is excluded.
+
+Native readableContainers reflects the restricted metadata policy and installed
+demuxer availability. Source-profile and operation restrictions still apply.
+Concat, HLS, DASH, and unreviewed demuxers are excluded; broad Native metadata
+support is deferred.
+
+The restriction is not a filesystem or process sandbox. Use trusted Native
+tools, application-controlled paths and permissions, and appropriate isolation
+for hostile media.
+
+## Diagnostics and sensitive error information
+
+Built-in diagnostic events expose selected identifiers, lifecycle fields,
+error codes, and progress values. They exclude error messages, causes,
+details, paths, and media bytes.
+
+Public errors preserve underlying causes and are not automatically redacted.
+Paths, cancellation reasons, and engine or OS information may appear in
+nested errors. Select approved fields before logging or transmitting errors;
+avoid sending whole error objects or cause chains to telemetry.
+
+## Experimental Browser engine assets
+
+An optional candidate asset generator is available for local evaluation.
+It is deferred for further exploration in a future release and is not
+production-approved. The existing mavio-browser-assets command is unchanged.
+
+Run the separate command with four explicit paths:
+
+```sh
+mavio-browser-assets-experimental <new-output-directory> <candidate-core-directory> <source-archive> <notice-directory>
+```
+
+The candidate directory must contain the exact pinned raw ffmpeg-core.js and
+ffmpeg-core.wasm files. The source archive and collected notice files must also
+match the packaged pins. Arbitrary replacement builds are rejected.
+
+The command validates its inputs before creating a new destination, applies
+the tested JavaScript stack correction, and copies the unchanged candidate
+WASM, wrapper modules, source archive, and notices into manifest-backed output.
+An existing destination is rejected.
+
+Preserve the generated sources and notices with the output. These materials
+remain under review; their inclusion does not establish complete redistribution
+clearance. M7-D01 and M7-L01 remain open, including the x264 initialization
+cleanup finding. Generation does not approve production adoption or publication.
+
+Candidate binaries and the source archive are not bundled in the SDK package.
+This route does not download or build them automatically.
+
+## Required Browser engine kit
+
+Normal Browser asset generation requires the pinned Mavio v2 engine kit.
+Installing @ffmpeg/core@0.12.10 alone no longer satisfies this command.
+The generator does not fall back to that original core.
+
+PowerShell:
+
+```powershell
+$env:MAVIO_BROWSER_ENGINE_KIT = "C:\path\to\engine-kit-reviewed"
+npx mavio-browser-assets public/mavio-engine
+```
+
+POSIX shell:
+
+```sh
+MAVIO_BROWSER_ENGINE_KIT=/path/to/engine-kit-reviewed npx mavio-browser-assets public/mavio-engine
+```
+
+The output directory must be new. The generator verifies the pinned binaries,
+source archive, and notices before creating it. Preserve the generated
+sources/ and notices/ directories with the deployment.
+
+The kit is supplied separately; the SDK does not bundle or automatically
+download engine binaries. Review storage is currently an unpublished draft
+release, not a public distribution channel.
+
+The separate experimental v1 command remains unchanged. Required v2 selection
+does not itself establish final security/licensing acceptance or publication approval.

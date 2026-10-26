@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-24T20:58:20.646Z",
+  "status": "experimental-opt-in-verified-locally",
+  "packageVersion": "0.0.3",
+  "archiveSha256": "f03ec8ea963602cf35d19022ce1a8d7fe164342e06b15d9437f0c0bcad988eff",
+  "installedScriptsMatchWorkspace": true,
+  "installedBinShimPresent": true,
+  "cliUsageRejectionPassed": true,
+  "generationAndRejectionChecksPassed": 5,
+  "limitations": [
+    "Windows local verification only.",
+    "No production adoption or release approval.",
+    "No new media-engine execution was tested by this check.",
+    "M7-D01 and M7-L01 remain open.",
+    "Earlier CI checkpoint does not cover these experimental additions."
+  ]
+}

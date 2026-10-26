@@ -1,0 +1,8 @@
+{
+  "cve": "CVE-2026-85091",
+  "upstreamFix": "df84af25dc1942490e1d1c899a07619152a46148",
+  "patchURL": "https://github.com/madler/zlib/commit/df84af25dc1942490e1d1c899a07619152a46148.patch",
+  "patchSha256": "110ff14375733173d8aa54574473424fbd7dfe4b81f1ca34a759c6fe14b15b14",
+  "baseCommit": "da607da739fa6047df13e66a2af6b8bec7c2a498",
+  "status": "applies-cleanly-not-yet-built"
+}

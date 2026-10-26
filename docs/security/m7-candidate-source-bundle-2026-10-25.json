@@ -1,0 +1,77 @@
+{
+  "recordedAt": "2026-10-24T20:04:16.081Z",
+  "archiveName": "mavio-experimental-core-sources.tar.gz",
+  "archiveSha256": "ef99cc56b118c7fbc0fcedf943fb2915ca76978b30031bdb662ccc253c542390",
+  "manifest": {
+    "schemaVersion": 1,
+    "status": "local-source-bundle-awaiting-review",
+    "sourceArchives": [
+      {
+        "file": "sources/bindings.tar",
+        "repository": "https://github.com/ffmpegwasm/ffmpeg.wasm.git",
+        "commit": "f876f907c7e9b9bf51d4ed0b913a855a63ae63fc",
+        "sha256": "4e73fda8bcb0127b36997d41061c551f591225dd92d152cc840a720919f400ec"
+      },
+      {
+        "file": "sources/ffmpeg.tar",
+        "repository": "https://github.com/FFmpeg/FFmpeg.git",
+        "commit": "19feb712f5c1821d8a3fa1ad63c5bd2e3b9672eb",
+        "sha256": "052fec07e68a5ee85be39034915af1935c0f66992dd2ffe9f6ee6956b099b1d7"
+      },
+      {
+        "file": "sources/zlib.tar",
+        "repository": "https://github.com/madler/zlib.git",
+        "commit": "da607da739fa6047df13e66a2af6b8bec7c2a498",
+        "sha256": "9b4b73310dc3bef16e5d76753d8c6db7df16f1ad90ee7be3bc02761560b0c15d"
+      },
+      {
+        "file": "sources/x264.tar",
+        "repository": "https://github.com/ffmpegwasm/x264.git",
+        "commit": "33cac6b77d5b9259c552156013a817ab23119612",
+        "sha256": "78959db6fa69927a2ed27e37a9b24e5d4b7910b73ab52e756e0422c5459532cf"
+      },
+      {
+        "file": "sources/lame.tar",
+        "repository": "https://github.com/ffmpegwasm/lame.git",
+        "commit": "2badea1974ae36cb8312afe99cff1e6b3b5decee",
+        "sha256": "db9b52da7feccae415b4caaa281dc14d2cfc8b6b0cdb227ba47b0f11f25fe328"
+      }
+    ],
+    "runtimeFiles": [
+      {
+        "file": "runtime-materials/emscripten-source.tar.gz",
+        "sha256": "60b170dc119d68745677202920164f42b1e662a6c46953e3df82f53708ccf02c"
+      },
+      {
+        "file": "runtime-materials/SDL-release-2.24.2.zip",
+        "sha256": "dc33dfdb24c28b757f32345ea8eca67a6030c9dcb084ae8c78bc27a21e737ada"
+      },
+      {
+        "file": "runtime-materials/Emscripten-LICENSE.txt",
+        "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86"
+      },
+      {
+        "file": "runtime-materials/musl-COPYRIGHT.txt",
+        "sha256": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af"
+      }
+    ],
+    "recipeFiles": [
+      ".dockerignore",
+      "Dockerfile",
+      "build.sh",
+      "export-stack-runtime.sh",
+      "fftools-maintenance.patch",
+      "prepare-sources.mjs",
+      "sources.json",
+      "stack-runtime-exports.json",
+      "zlib-CVE-2026-85091.patch",
+      "zlib-security-patch.json"
+    ],
+    "limitations": [
+      "Not an approved corresponding-source distribution.",
+      "No claim of cache-free, cross-host, or offline reproducibility.",
+      "M7-D01 and M7-L01 remain open."
+    ]
+  },
+  "status": "assembled-locally-review-pending"
+}

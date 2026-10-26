@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-25T20:55:29.056Z",
+  "decisionDate": "2026-10-26",
+  "authority": "Project owner, explicit approval in this session",
+  "scope": {
+    "sdk": "@vormir/mavio",
+    "version": "0.0.3",
+    "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+    "reviewedWorkingTreeArchiveSha256": "a67ec0c9976d757a7aa97ed0acbca0abc56818b2c13d63197e80d9fbcfbb6e72",
+    "expiry": "Does not carry forward to the next release",
+    "finalCommitAndArchiveIdentity": "Still to be recorded"
+  },
+  "security": {
+    "status": "approved-release-scoped-residual-risk-disposition",
+    "risk": "Untested x264 partial-initialization and allocation-failure paths",
+    "evidence": "Reproduced tracked-parameter leak patched; focused sanitizer and v2 acceptance passed",
+    "mitigation": "Handled encoding failures reject and discard the loaded worker; termination failures surface",
+    "rationale": "Owner accepts the documented bounded uncertainty for this reviewed release profile",
+    "accountableOwner": "VormirTechies project owner",
+    "reviewTriggers": [
+      "Before the next release",
+      "A relevant upstream cleanup change",
+      "A demonstrated additional reachable failure",
+      "A material engine or mitigation change"
+    ],
+    "limitation": "Not complete CVE remediation or vulnerability-freedom certification"
+  },
+  "distribution": {
+    "status": "approved-reviewed-candidate-distribution-model",
+    "model": "MIT SDK separate from the GPL-enabled engine; preserve generated sources, notices and modification records together",
+    "conditions": [
+      "Preserve required license obligations",
+      "Verify public binary/source delivery during M8 before distribution",
+      "Revisit notice completeness and distribution review before the next release"
+    ],
+    "limitation": "Not a license waiver or blanket clearance for consuming applications"
+  },
+  "notAuthorized": [
+    "Merge to main",
+    "Publish npm packages or engine releases",
+    "Production deployment",
+    "Automatic acceptance for a subsequent release"
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "status": "candidate-notices-collected-review-open",
+  "files": [
+    {
+      "file": "bindings-current--LICENSE",
+      "sourceMember": "bindings-current/LICENSE",
+      "sha256": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f"
+    },
+    {
+      "file": "ffmpeg--COPYING.GPLv2",
+      "sourceMember": "ffmpeg/COPYING.GPLv2",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    },
+    {
+      "file": "ffmpeg--COPYING.GPLv3",
+      "sourceMember": "ffmpeg/COPYING.GPLv3",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    {
+      "file": "ffmpeg--COPYING.LGPLv2.1",
+      "sourceMember": "ffmpeg/COPYING.LGPLv2.1",
+      "sha256": "246041b6ecf9bc32d718a62c57877c78b5eb397b6467e74ed7ae2626ab189c30"
+    },
+    {
+      "file": "ffmpeg--COPYING.LGPLv3",
+      "sourceMember": "ffmpeg/COPYING.LGPLv3",
+      "sha256": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768"
+    },
+    {
+      "file": "ffmpeg--LICENSE.md",
+      "sourceMember": "ffmpeg/LICENSE.md",
+      "sha256": "cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2"
+    },
+    {
+      "file": "zlib--LICENSE",
+      "sourceMember": "zlib/LICENSE",
+      "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+    },
+    {
+      "file": "x264--AUTHORS",
+      "sourceMember": "x264/AUTHORS",
+      "sha256": "783150c1bef404fc7140924f3006eff27c940ea73ef38b3bc76fcb9c173229a5"
+    },
+    {
+      "file": "x264--COPYING",
+      "sourceMember": "x264/COPYING",
+      "sha256": "32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670"
+    },
+    {
+      "file": "lame--COPYING",
+      "sourceMember": "lame/COPYING",
+      "sha256": "bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd"
+    },
+    {
+      "file": "lame--LICENSE",
+      "sourceMember": "lame/LICENSE",
+      "sha256": "7a40cbd8818c57e5285e83c772a459a996d1662c824a879836b97b473c07cae4"
+    },
+    {
+      "file": "emscripten--LICENSE",
+      "sourceMember": "emscripten/LICENSE",
+      "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86"
+    },
+    {
+      "file": "emscripten--AUTHORS",
+      "sourceMember": "emscripten/AUTHORS",
+      "sha256": "01f19acf8680713c8c4396ce01df9fa988e7389aede5c5fe7b1bc21ad57e2544"
+    },
+    {
+      "file": "emscripten--system--lib--libc--musl--COPYRIGHT",
+      "sourceMember": "emscripten/system/lib/libc/musl/COPYRIGHT",
+      "sha256": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af"
+    },
+    {
+      "file": "emscripten--system--lib--compiler-rt--LICENSE.TXT",
+      "sourceMember": "emscripten/system/lib/compiler-rt/LICENSE.TXT",
+      "sha256": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d"
+    },
+    {
+      "file": "emscripten--system--lib--libcxx--LICENSE.TXT",
+      "sourceMember": "emscripten/system/lib/libcxx/LICENSE.TXT",
+      "sha256": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b"
+    },
+    {
+      "file": "emscripten--system--lib--libcxxabi--LICENSE.TXT",
+      "sourceMember": "emscripten/system/lib/libcxxabi/LICENSE.TXT",
+      "sha256": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c"
+    },
+    {
+      "file": "SDL2-LICENSE.txt",
+      "sourceMember": "SDL-release-2.24.2/LICENSE.txt",
+      "sha256": "fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426"
+    }
+  ],
+  "limitations": [
+    "Collection does not establish which runtime objects are linked.",
+    "Embedded per-file notices still require review, including musl math and regex sources.",
+    "Production assets are unchanged.",
+    "M7-D01 and M7-L01 remain open."
+  ]
+}

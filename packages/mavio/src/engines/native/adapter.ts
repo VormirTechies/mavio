@@ -1,3 +1,4 @@
+import { restrictNativeReadableContainers } from "./input-policy.js";
 import type {
   EngineAdapter,
   EngineCapabilities,
@@ -528,7 +529,7 @@ export function createNativeEngine(
           ],
           inputKinds: ["path", "bytes"],
           outputKinds: anyExportEnabled || anyThumbnailEnabled ? ["bytes", "path"] : [],
-          readableContainers: [],
+          readableContainers: restrictNativeReadableContainers(discovered.demuxers),
           decoders: [],
           encodings,
           limits: {},

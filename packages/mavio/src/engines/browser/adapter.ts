@@ -337,7 +337,7 @@ export function createBrowserEngine(
 
       return {
         engineId: id,
-        engineVersion: "@ffmpeg/core@0.12.10",
+        engineVersion: "ffmpeg 5.1.10 (Mavio Browser core)",
         runtime: "browser",
         operations: [
           "metadata",

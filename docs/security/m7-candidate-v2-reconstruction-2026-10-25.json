@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-25T16:02:31.917Z",
+  "status": "reconstructed-source-archive-build-matches-tested-v2",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "sourceArchiveSha256": "da79d482ca8304c97ad220f9df9c02ade9cecbd716d9ed4820f3c14b844dae7c",
+  "assets": {
+    "ffmpeg-core.js": {
+      "sha256": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+      "sizeBytes": 107104
+    },
+    "ffmpeg-core.wasm": {
+      "sha256": "1eb120c8a57c1a09aa2ce178d23588a8ad168a0f382fb58e1116e6624786ad84",
+      "sizeBytes": 21061264
+    }
+  },
+  "limitations": [
+    "Docker cache was permitted.",
+    "OS package repositories remain unpinned.",
+    "Offline and cross-host reproducibility are not established.",
+    "Notice review, production integration, and installed v2 acceptance remain pending.",
+    "M7-D01 and M7-L01 remain open."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-25T15:32:10.615Z",
+  "status": "candidate-v2-built-source-verified-runtime-acceptance-pending",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "assets": {
+    "ffmpeg-core.js": {
+      "sha256": "e9c5f7531efe82b0c68dd63b1ac5d7ef2245a52f0b513ff012846b87811bf7b5",
+      "sizeBytes": 107104
+    },
+    "ffmpeg-core.wasm": {
+      "sha256": "1eb120c8a57c1a09aa2ce178d23588a8ad168a0f382fb58e1116e6624786ad84",
+      "sizeBytes": 21061264
+    }
+  },
+  "x264PatchSha256": "4efb5858259ffe5fa80f4d155ab55a66b7862757e785193e3c259d5db8d7b5d1",
+  "exportedEncoderSourceSha256": "c65483fa26709065c499a26ad0ee392aa0af6e2c562ad2b85af72855918b1597",
+  "reversePatchCheckPassed": true,
+  "exportedSourcePinsMatchRecipe": true,
+  "limitations": [
+    "Source verification does not prove runtime behavior or complete vulnerability clearance.",
+    "Browser regression and installed-package acceptance for these hashes remain pending.",
+    "Updated source-delivery bundle and licensing review remain pending.",
+    "Production and existing experimental asset pins remain unchanged.",
+    "M7-D01 and M7-L01 remain open."
+  ]
+}

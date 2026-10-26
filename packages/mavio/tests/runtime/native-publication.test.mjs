@@ -164,3 +164,81 @@ test("cross-filesystem failure remains an IO error after late cancellation", asy
     assert.equal(await readFile(staged, "utf8"), "complete output");
   });
 });
+
+// M7 Native publication boundary checks.
+for (const kind of ["empty-file", "directory"]) {
+  test(`publication rejects ${kind} staging before requesting commit`, async () => {
+    const { mkdir } = await import("node:fs/promises");
+
+    await withFiles(async ({ staged, target }) => {
+      await unlink(staged);
+
+      if (kind === "directory") {
+        await mkdir(staged);
+      } else {
+        await writeFile(staged, "", { flag: "wx" });
+      }
+
+      let commits = 0;
+
+      await assert.rejects(
+        publishNativeFile(
+          staged,
+          target,
+          context({
+            beginCommit() {
+              commits++;
+              return true;
+            },
+          }),
+        ),
+        {
+          code: "EXECUTION_FAILED",
+          details: { reason: "INVALID_STAGED_OUTPUT" },
+        },
+      );
+
+      assert.equal(commits, 0);
+      await assert.rejects(access(target), { code: "ENOENT" });
+    });
+  });
+}
+
+test("publication preserves a destination created immediately before linking", async () => {
+  const { link } = await import("node:fs/promises");
+
+  await withFiles(async ({ staged, target }) => {
+    let attempts = 0;
+
+    await assert.rejects(
+      publishNativeFile(staged, target, context(), {
+        async link(source, destination) {
+          attempts++;
+          await writeFile(destination, "late existing contents", { flag: "wx" });
+          await link(source, destination);
+        },
+      }),
+      {
+        code: "OUTPUT_EXISTS",
+        details: { reason: "OUTPUT_ALREADY_EXISTS" },
+      },
+    );
+
+    assert.equal(attempts, 1);
+    assert.equal(await readFile(target, "utf8"), "late existing contents");
+    assert.equal(await readFile(staged, "utf8"), "complete output");
+  });
+});
+
+test("publication preserves an existing hard-link alias of staging", async () => {
+  const { link } = await import("node:fs/promises");
+
+  await withFiles(async ({ staged, target }) => {
+    await link(staged, target);
+
+    await assert.rejects(publishNativeFile(staged, target, context()), { code: "OUTPUT_EXISTS" });
+
+    assert.equal(await readFile(staged, "utf8"), "complete output");
+    assert.equal(await readFile(target, "utf8"), "complete output");
+  });
+});

@@ -1,3 +1,4 @@
+import { NATIVE_PROBE_INPUT_ARGUMENTS } from "./input-policy.js";
 import { stat } from "node:fs/promises";
 import { posix, win32 } from "node:path";
 import type { EngineContext, MediaMetadata } from "../../contracts.js";
@@ -90,8 +91,7 @@ export async function probeNativeFileDetails(
         "-hide_banner",
         "-v",
         "error",
-        "-protocol_whitelist",
-        "file",
+        ...NATIVE_PROBE_INPUT_ARGUMENTS,
         "-of",
         "json",
         "-show_entries",

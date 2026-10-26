@@ -1,3 +1,4 @@
+import { NATIVE_INPUT_ARGUMENTS } from "./input-policy.js";
 import { posix, win32 } from "node:path";
 import type { EngineContext } from "../../contracts.js";
 import { createMavioError } from "../../core/errors.js";
@@ -109,8 +110,7 @@ export async function analyzeNativeTrimSelection(
           "-nostdin",
           "-xerror",
           ...filters.inputArgs,
-          "-protocol_whitelist",
-          "file",
+          ...NATIVE_INPUT_ARGUMENTS,
           "-i",
           inputPath,
           ...outputArgs,

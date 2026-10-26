@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-10-24",
+  "candidateCommit": "19feb712f5c1821d8a3fa1ad63c5bd2e3b9672eb",
+  "method": "git apply --reverse --check; source files were not modified",
+  "scope": "Six previously identified fixes only; not a complete advisory assessment",
+  "results": [
+    {
+      "cve": "CVE-2024-35366",
+      "upstreamFix": "4db0eb4653efad967ddcf71f564fd2f1169bafcb",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/4db0eb4653efad967ddcf71f564fd2f1169bafcb.patch",
+      "patchSha256": "c66b005c89af979a0df756c24c35fb4b041a1971ecc2ba5afe8f32b3ca6fda03",
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-36613",
+      "upstreamFix": "1f6fcc64179377114b4ecc3b9f63bd5774a64edf",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/1f6fcc64179377114b4ecc3b9f63bd5774a64edf.patch",
+      "patchSha256": "9927c83181c5f885503a83520d80c00786ba3e5e026b2dcf5bda7e5eb8d23b2d",
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-36616",
+      "upstreamFix": "a8beef67993aa267de87599007143d9f0ba67c23",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/a8beef67993aa267de87599007143d9f0ba67c23.patch",
+      "patchSha256": "89a6960284c1779149890ffd1ed066e922a251ebf24fa12c81c572fdb354a8fe",
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-36617",
+      "upstreamFix": "f0e780370cc1c437d64f10d326b1d656ef490b5f",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/f0e780370cc1c437d64f10d326b1d656ef490b5f.patch",
+      "patchSha256": "2194a0276000b85329a37260a5624260bb7c0bb192576ac879ec8a711cb04a53",
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-7055",
+      "upstreamFix": "5372bfe01e4a04357ab4465c1426cf8c6412dfd5",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/5372bfe01e4a04357ab4465c1426cf8c6412dfd5.patch",
+      "patchSha256": "ee7ab10c2a7fd82e17eb875e4f5df68ad2dd3d450e8d035d4c4319b5c4fb261b",
+      "status": "reverse-patch-check-passed",
+      "diagnostic": ""
+    },
+    {
+      "cve": "CVE-2024-7272",
+      "upstreamFix": "a937b3c58babae893fb46b286a4792cd24a01d3d",
+      "patchURL": "https://github.com/FFmpeg/FFmpeg/commit/a937b3c58babae893fb46b286a4792cd24a01d3d.patch",
+      "patchSha256": "4d03bff204970d587823266a98656fe4722a7e3057e466ed983e350ae0022921",
+      "status": "manual-source-review-passed",
+      "diagnostic": "error: patch failed: libswresample/swresample.c:240\nerror: libswresample/swresample.c: patch does not apply",
+      "reversePatchCheck": {
+        "status": "requires-source-inspection",
+        "diagnostic": "error: patch failed: libswresample/swresample.c:240\nerror: libswresample/swresample.c: patch does not apply"
+      },
+      "manualReview": {
+        "sourceFile": "libswresample/swresample.c",
+        "sourceSha256": "a66354a14af32f4567aa98bd74b5cba9a19ddbdcfd2b51d31abaf6717cb31d35",
+        "findings": [
+          "Legacy branch validates input and output layouts and rejects invalid or excessive channel counts.",
+          "New-layout branch calls swri_check_chlayout for both layouts before copying.",
+          "The helper checks layout validity and SWR_CH_MAX, returning AVERROR(EINVAL) on failure.",
+          "Default-layout reconstruction is restricted to AV_CHANNEL_ORDER_UNSPEC."
+        ],
+        "limitation": "Source-level verification of this identified fix; no malicious-input exploit test performed."
+      }
+    }
+  ]
+}

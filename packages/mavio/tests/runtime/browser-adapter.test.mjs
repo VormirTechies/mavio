@@ -104,7 +104,7 @@ test("browser capabilities initialize once and reuse the loaded worker", async (
     assert.equal(workers[0].loadCalls, 1);
     assert.equal(first.runtime, "browser");
     assert.equal(first.engineId, "browser-ffmpeg");
-    assert.equal(first.engineVersion, "@ffmpeg/core@0.12.10");
+    assert.equal(first.engineVersion, "ffmpeg 5.1.10 (Mavio Browser core)");
     assert.deepEqual(first.operations, ["metadata"]);
     assert.deepEqual(first.encodings, []);
     assert.deepEqual(second, first);

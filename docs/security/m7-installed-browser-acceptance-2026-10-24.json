@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-24T14:15:06.9965461Z",
+  "status": "local-installed-package-browser-acceptance-passed",
+  "archiveSha256": "d33aa81bf8dd67451adc2b406ade3a1965dcf40c71bb0342515b1b3fdc274fba",
+  "assetManifest": {
+    "wrapperVersion": "0.12.15",
+    "coreVersion": "0.12.10",
+    "correction": "restore-stack-after-native-entry-v1",
+    "files": {
+      "ffmpeg-core.js": "c3f8f02416f82a9d18eb549d7e44725405b95f002b503bcfed02acba449ac79b",
+      "ffmpeg-core.wasm": "9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7",
+      "wrapper/classes.js": "7a829c898bdbc3a8806652a5502d9101178ce4e988a2c50b3abc1306ce4fc919",
+      "wrapper/const.js": "9e3bc9dd84781c81daf459e2c46eeec815edac35089832681d9a9a0f383060d0",
+      "wrapper/errors.js": "619310d7ef5fe5fefa0a31927db862b7c291713cfef4d71753fa8aafd18f4db6",
+      "wrapper/index.js": "cad19572420f7ead17272082d9582ebaed7f2856e19875542f83daf8d25d3b5d",
+      "wrapper/types.js": "72f80e6fd44fcd18b55c9a0deb3bc70b9bb37480cf969045ca4521f5a11300f5",
+      "wrapper/utils.js": "8c2e0e16445f8d3a0acbb812f2c60541a92c88ed0bf9ffe96c52e7fb6c8b1d72",
+      "wrapper/worker.js": "feff0ac937ea225e997e1fae997a74f8b8d572423a526da59eb56624b1f3cde7",
+      "ffmpegwasm-MIT.txt": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f",
+      "GNU-GPL-2.0.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "ENGINE-LICENSING.md": "ea79ce636c4019a8236e93ae8b54c700cab56d1f35f05b523c6bf37ff124f527"
+    }
+  },
+  "checks": [
+    {
+      "check": "default",
+      "status": "passed"
+    },
+    {
+      "check": "resize-public",
+      "status": "passed"
+    },
+    {
+      "check": "compression-public",
+      "status": "passed"
+    },
+    {
+      "check": "preset-quality-public",
+      "status": "passed"
+    },
+    {
+      "check": "audio-public",
+      "status": "passed"
+    },
+    {
+      "check": "audio-selection-public",
+      "status": "passed"
+    },
+    {
+      "check": "audio-trim-public",
+      "status": "passed"
+    },
+    {
+      "check": "thumbnail-public",
+      "status": "passed"
+    },
+    {
+      "check": "cancellation",
+      "status": "passed"
+    }
+  ],
+  "limitations": [
+    "Production core 0.12.10; experimental core is not adopted.",
+    "M7-D01 and M7-L01 remain open.",
+    "Final reviewed commit identity and required CI remain pending."
+  ]
+}
