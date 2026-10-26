@@ -52,7 +52,8 @@ export async function prepareBrowserAssetsFromKit(destination, kitDirectory) {
       [
         "# Mavio candidate v2 engine deployment",
         "",
-        "Status: review-only; security and licensing release acceptance remain open.",
+        "Status: M7 accepted for SDK 0.0.3 under release-scoped owner dispositions.",
+        "Public release delivery and publication approval are tracked separately in M8.",
         "Candidate: " + pins.candidateId,
         "",
         "Preserve the notices/ and sources/ directories with these generated assets.",
@@ -73,7 +74,7 @@ export async function prepareBrowserAssetsFromKit(destination, kitDirectory) {
   );
 
   const manifest = {
-    status: "candidate-v2-integration-under-review",
+    status: "m7-accepted-release-0.0.3-publication-pending",
     candidateId: pins.candidateId,
     wrapperVersion: "0.12.15",
     ffmpegVersion: "5.1.10",

@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-26T18:04:50.490Z",
+  "status": "local-distribution-archive-verified-publication-pending",
+  "sdkVersion": "0.0.3",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "archiveName": "mavio-browser-engine-0.0.3.tar.gz",
+  "archiveSha256": "4210f97b3b37b65ca14b7ee28f3f3837f997799175be0cbf95d4568e944f0576",
+  "sizeBytes": 51350998,
+  "extractedFiles": 28,
+  "distributionManifestSha256": "3382e3dbf8da1c508d2a2b4e29952f099b0192d059be98082d1e52fc040335a0",
+  "reviewedKitPinsUnchanged": true,
+  "supplementalMuslNoticeVerified": true,
+  "unexpectedFilesAbsent": true,
+  "limitations": [
+    "Local archive verification only; public download remains unverified.",
+    "No publication or deployment performed."
+  ]
+}
