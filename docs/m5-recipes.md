@@ -12,7 +12,7 @@ installed. Run `node mavio-example.mjs input.mp4 output.mp4`.
 Use a supported video input and an output path that does not already exist.
 
 ```js
-import { createMavio } from "@vormir/mavio/node";
+import { createMavio } from "@vormirtech/mavio/node";
 
 const [inputPath, outputPath] = process.argv.slice(2);
 
@@ -73,7 +73,7 @@ Use this module in a bundled browser application.
 Pass a supported video File or Blob longer than 1.25 seconds:
 
 ```js
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 
 export async function makeClip(file, signal) {
   const client = createMavio({

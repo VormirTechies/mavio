@@ -27,7 +27,7 @@ Unknown core builds are rejected rather than patched heuristically.
 Serve the directory on the application's origin and configure:
 
 ```js
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 
 const client = createMavio({
   browser: {

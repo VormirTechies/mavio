@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createMavio } from "@vormir/mavio/node";
+import { createMavio } from "@vormirtech/mavio/node";
 import { createDiagnosticReporter } from "../../dist/core/diagnostics.js";
 import { createMavioError } from "../../dist/core/errors.js";
 

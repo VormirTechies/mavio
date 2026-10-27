@@ -1,4 +1,4 @@
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 
 let source;
 let sourceHash;

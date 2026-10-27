@@ -2,7 +2,7 @@
 
 ## Scope
 
-Prepare @vormir/mavio 0.0.3 for public release.
+Prepare @vormirtech/mavio 0.0.3 for public release.
 Merged baseline: 336f928394ca21df502310ebece6851a71cf0c0b; PR #1.
 
 Retain the M7-reviewed Browser and Native runtime profiles, supported

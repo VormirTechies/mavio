@@ -23,10 +23,10 @@
     "typescript-eslint": "8.70.1"
   },
   "scripts": {
-    "build": "npm run build --workspace=@vormir/mavio",
-    "typecheck": "npm run typecheck --workspace=@vormir/mavio",
-    "test:types": "npm run test:types --workspace=@vormir/mavio",
-    "test": "npm run test --workspace=@vormir/mavio && node --test scripts/minimize-browser-regression.test.mjs scripts/browser-core.test.mjs",
+    "build": "npm run build --workspace=@vormirtech/mavio",
+    "typecheck": "npm run typecheck --workspace=@vormirtech/mavio",
+    "test:types": "npm run test:types --workspace=@vormirtech/mavio",
+    "test": "npm run test --workspace=@vormirtech/mavio && node --test scripts/minimize-browser-regression.test.mjs scripts/browser-core.test.mjs",
     "test:package": "npm run build && node scripts/check-package.mjs",
     "lint": "eslint packages scripts examples eslint.config.mjs --max-warnings=0",
     "format": "prettier . --write",

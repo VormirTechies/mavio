@@ -68,7 +68,7 @@ export function createFactory(
     if (runtimeProvider === undefined) {
       throw createMavioError(
         "UNSUPPORTED_RUNTIME",
-        "Use the @vormir/mavio/node or @vormir/mavio/browser entry point.",
+        "Use the @vormirtech/mavio/node or @vormirtech/mavio/browser entry point.",
       );
     }
 

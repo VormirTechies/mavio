@@ -1,12 +1,12 @@
-import type { DiagnosticEvent } from "@vormir/mavio";
-import { SDK_VERSION } from "@vormir/mavio";
-import type { MavioClient, MediaResult, PresetId } from "@vormir/mavio";
-import type { MavioClient as BrowserClient } from "@vormir/mavio/browser";
-import type { MavioClient as NodeClient } from "@vormir/mavio/node";
-import { createMavio } from "@vormir/mavio";
-import { createMavio as createBrowserMavio } from "@vormir/mavio/browser";
-import { createMavio as createNodeMavio } from "@vormir/mavio/node";
-import type { EngineAdapter } from "@vormir/mavio";
+import type { DiagnosticEvent } from "@vormirtech/mavio";
+import { SDK_VERSION } from "@vormirtech/mavio";
+import type { MavioClient, MediaResult, PresetId } from "@vormirtech/mavio";
+import type { MavioClient as BrowserClient } from "@vormirtech/mavio/browser";
+import type { MavioClient as NodeClient } from "@vormirtech/mavio/node";
+import { createMavio } from "@vormirtech/mavio";
+import { createMavio as createBrowserMavio } from "@vormirtech/mavio/browser";
+import { createMavio as createNodeMavio } from "@vormirtech/mavio/node";
+import type { EngineAdapter } from "@vormirtech/mavio";
 
 declare const client: MavioClient;
 declare const adapter: EngineAdapter;

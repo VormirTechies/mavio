@@ -59,7 +59,7 @@ modification records, licensing guide, and manifest.
 Configure the Browser client:
 
 ```js
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 
 const client = createMavio({
   browser: {

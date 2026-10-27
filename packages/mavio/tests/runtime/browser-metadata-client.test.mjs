@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 import { createMavioError } from "../../dist/core/errors.js";
 import { createBrowserEngine } from "../../dist/engines/browser/adapter.js";
 

@@ -1,5 +1,5 @@
-import { createMavio } from "@vormir/mavio/browser";
-import type { MavioClient } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
+import type { MavioClient } from "@vormirtech/mavio/browser";
 
 function requireElement<T extends HTMLElement>(id: string, constructor: new () => T): T {
   const element = document.getElementById(id);

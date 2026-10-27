@@ -48,8 +48,8 @@ async function main() {
 
   const consumerRequire = createRequire(join(consumer, "package.json"));
   assert.equal(
-    realpathSync(consumerRequire.resolve("@vormir/mavio/browser")),
-    realpathSync(join(consumer, "node_modules/@vormir/mavio/dist/browser.js")),
+    realpathSync(consumerRequire.resolve("@vormirtech/mavio/browser")),
+    realpathSync(join(consumer, "node_modules/@vormirtech/mavio/dist/browser.js")),
   );
 
   const publicDirectory = join(consumer, "public");
@@ -58,7 +58,7 @@ async function main() {
 
   const kitPins = JSON.parse(
     readFileSync(
-      join(consumer, "node_modules/@vormir/mavio/scripts/browser-engine-kit-pins.json"),
+      join(consumer, "node_modules/@vormirtech/mavio/scripts/browser-engine-kit-pins.json"),
       "utf8",
     ),
   );
@@ -78,7 +78,7 @@ async function main() {
   );
 
   const sdk = JSON.parse(
-    readFileSync(join(consumer, "node_modules/@vormir/mavio/package.json"), "utf8"),
+    readFileSync(join(consumer, "node_modules/@vormirtech/mavio/package.json"), "utf8"),
   );
   const lock = JSON.parse(readFileSync(join(consumer, "package-lock.json"), "utf8"));
   const fixture = readFileSync(fixturePath);
@@ -265,7 +265,7 @@ async function main() {
         totalMemoryBytes: totalmem(),
         chromium: browser.version(),
         sdkVersion: sdk.version,
-        sdkArchiveIntegrity: lock.packages?.["node_modules/@vormir/mavio"]?.integrity,
+        sdkArchiveIntegrity: lock.packages?.["node_modules/@vormirtech/mavio"]?.integrity,
         candidateId: manifest.candidateId,
         ffmpegVersion: manifest.ffmpegVersion,
         wrapperVersion: manifest.wrapperVersion,

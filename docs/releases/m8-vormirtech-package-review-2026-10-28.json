@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-27T19:10:37.944Z",
+  "status": "renamed-archive-inspected-CI-and-publication-pending",
+  "packageName": "@vormirtech/mavio",
+  "version": "0.0.3",
+  "archiveName": "vormirtech-mavio-0.0.3.tgz",
+  "sha256": "3c80f5ab4865aa095c6cd162314c5242f15891b7eeae01307fb063457b9e00da",
+  "integrity": "sha512-Jr5tIIAej+U8vGG/6HeC2Ur1ynUc8BrxD72C1xgVP7hi+ZGjpREO2mqsidxyHVuYHCIPWP51/CIllUpuqN4TKg==",
+  "entryCount": 414,
+  "allPackagedFilesMatchTestedWorkspace": true,
+  "engineDistributionUnchanged": true,
+  "limitations": [
+    "Full installed Browser acceptance tested a separately packed workspace archive.",
+    "This retained archive was statically inspected and byte-compared.",
+    "Renamed-package CI and publication approval remain pending.",
+    "Historical owner dispositions retain their original identity; applicability to the renamed release must be recorded."
+  ]
+}

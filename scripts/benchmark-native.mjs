@@ -32,10 +32,10 @@ async function main() {
   }
 
   const consumerRequire = createRequire(join(consumer, "package.json"));
-  const entry = consumerRequire.resolve("@vormir/mavio/node");
+  const entry = consumerRequire.resolve("@vormirtech/mavio/node");
   assert.equal(
     realpathSync(entry),
-    realpathSync(join(consumer, "node_modules/@vormir/mavio/dist/node.js")),
+    realpathSync(join(consumer, "node_modules/@vormirtech/mavio/dist/node.js")),
   );
 
   const { createMavio, SDK_VERSION } = await import(pathToFileURL(entry).href);
@@ -60,7 +60,7 @@ async function main() {
       logicalCpuCount: cpus().length,
       totalMemoryBytes: totalmem(),
       sdkVersion: SDK_VERSION,
-      sdkArchiveIntegrity: lock?.packages?.["node_modules/@vormir/mavio"]?.integrity,
+      sdkArchiveIntegrity: lock?.packages?.["node_modules/@vormirtech/mavio"]?.integrity,
       ffmpeg: run(ffmpegPath, ["-version"]).split(/\r?\n/)[0],
       ffprobe: run(ffprobePath, ["-version"]).split(/\r?\n/)[0],
     },

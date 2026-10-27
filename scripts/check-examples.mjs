@@ -53,7 +53,7 @@ console.info("Preparing SDK archive.");
 const [packed] = JSON.parse(
   npm([
     "pack",
-    "--workspace=@vormir/mavio",
+    "--workspace=@vormirtech/mavio",
     "--ignore-scripts",
     "--json",
     "--pack-destination",
@@ -71,8 +71,8 @@ for (const name of ["node", "vanilla-js", "vanilla-ts"]) {
   const consumerRequire = createRequire(join(directory, "package.json"));
   const entry = name === "node" ? "node" : "browser";
   assert.equal(
-    realpathSync(consumerRequire.resolve("@vormir/mavio/" + entry)),
-    realpathSync(join(directory, "node_modules/@vormir/mavio/dist/" + entry + ".js")),
+    realpathSync(consumerRequire.resolve("@vormirtech/mavio/" + entry)),
+    realpathSync(join(directory, "node_modules/@vormirtech/mavio/dist/" + entry + ".js")),
   );
 
   if (name !== "node") {

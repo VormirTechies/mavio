@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
 import test from "node:test";
-import { createMavio as createBrowser } from "@vormir/mavio/browser";
-import { createMavio as createNode } from "@vormir/mavio/node";
+import { createMavio as createBrowser } from "@vormirtech/mavio/browser";
+import { createMavio as createNode } from "@vormirtech/mavio/node";
 
 function mockEngine(runtime, source, outputMetadata) {
   const calls = [];

@@ -1,4 +1,4 @@
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 
 export async function runBrowserBenchmark(fixtureURL) {
   const response = await fetch(fixtureURL);

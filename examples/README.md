@@ -16,7 +16,7 @@ From the SDK repository, build and create an archive in an existing directory:
 
 ```sh
 npm run build
-npm pack --workspace=@vormir/mavio --pack-destination <existing-directory>
+npm pack --workspace=@vormirtech/mavio --pack-destination <existing-directory>
 ```
 
 Use the absolute path of the resulting archive in the commands below.
