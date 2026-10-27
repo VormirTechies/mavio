@@ -1,4 +1,4 @@
-import { createMavio } from "@vormir/mavio/browser";
+import { createMavio } from "@vormirtech/mavio/browser";
 function requireElement(id, constructor) {
   const element = document.getElementById(id);
   if (!(element instanceof constructor)) {

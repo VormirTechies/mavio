@@ -47,7 +47,7 @@ function withWorkerErrorStacks(source) {
 
 async function main() {
   const sdkEntry = consumerDirectory
-    ? sdkRequire.resolve("@vormir/mavio/browser")
+    ? sdkRequire.resolve("@vormirtech/mavio/browser")
     : fileURLToPath(new URL("../packages/mavio/dist/browser.js", import.meta.url));
   // Use the asset correction shipped in the SDK being tested, including packs.
   const { prepareBrowserAssets } = await import(
@@ -67,7 +67,7 @@ async function main() {
     assert.equal(
       await realpath(sdkEntry),
       await realpath(
-        join(consumerDirectory, "node_modules", "@vormir", "mavio", "dist", "browser.js"),
+        join(consumerDirectory, "node_modules", "@vormirtech", "mavio", "dist", "browser.js"),
       ),
       "Packaged verification must load the installed browser entry.",
     );

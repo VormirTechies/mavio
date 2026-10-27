@@ -25,7 +25,7 @@ console.log(`Consumer directory: ${consumerDir}`);
 const [packed] = JSON.parse(
   npm([
     "pack",
-    "--workspace=@vormir/mavio",
+    "--workspace=@vormirtech/mavio",
     "--ignore-scripts",
     "--json",
     "--pack-destination",
@@ -78,9 +78,9 @@ const consumerCode = `
   import assert from "node:assert/strict";
 
   for (const entry of [
-    "@vormir/mavio",
-    "@vormir/mavio/browser",
-    "@vormir/mavio/node"
+    "@vormirtech/mavio",
+    "@vormirtech/mavio/browser",
+    "@vormirtech/mavio/node"
   ]) {
     const sdk = await import(entry);
     assert.equal(sdk.SDK_VERSION, ${JSON.stringify(packed.version)});
@@ -144,7 +144,7 @@ if (process.env.MAVIO_PACKAGE_BROWSER === "1") {
       [
         path.join(root, "scripts/check-browser-engine-kit.mjs"),
         selectedKit,
-        path.join(consumerDir, "node_modules/@vormir/mavio/scripts/browser-assets.mjs"),
+        path.join(consumerDir, "node_modules/@vormirtech/mavio/scripts/browser-assets.mjs"),
       ],
       {
         cwd: root,

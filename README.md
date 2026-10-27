@@ -25,7 +25,7 @@ See the acceptance matrix for tested profiles, evidence, and limitations.
 
 ## Getting started
 
-Use `@vormir/mavio/node` for Node and `@vormir/mavio/browser` for browsers.
+Use `@vormirtech/mavio/node` for Node and `@vormirtech/mavio/browser` for browsers.
 The root entry selects the implementation through package export conditions.
 
 Node requires separately installed FFmpeg and FFprobe. Mavio discovers them

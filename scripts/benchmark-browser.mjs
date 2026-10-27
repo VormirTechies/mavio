@@ -35,10 +35,10 @@ async function main() {
   assert.ok(["vanilla-js", "vanilla-ts"].includes(name));
 
   const consumerRequire = createRequire(join(consumer, "package.json"));
-  const sdkEntry = consumerRequire.resolve("@vormir/mavio/browser");
+  const sdkEntry = consumerRequire.resolve("@vormirtech/mavio/browser");
   assert.equal(
     realpathSync(sdkEntry),
-    realpathSync(join(consumer, "node_modules/@vormir/mavio/dist/browser.js")),
+    realpathSync(join(consumer, "node_modules/@vormirtech/mavio/dist/browser.js")),
   );
 
   const manifest = JSON.parse(
@@ -47,7 +47,7 @@ async function main() {
   assert.equal(manifest.correction, "restore-stack-after-native-entry-v1");
 
   const sdk = JSON.parse(
-    readFileSync(join(consumer, "node_modules/@vormir/mavio/package.json"), "utf8"),
+    readFileSync(join(consumer, "node_modules/@vormirtech/mavio/package.json"), "utf8"),
   );
   const lockPath = join(consumer, "package-lock.json");
   const lock = existsSync(lockPath) ? JSON.parse(readFileSync(lockPath, "utf8")) : undefined;
@@ -171,7 +171,7 @@ async function main() {
         totalMemoryBytes: totalmem(),
         chromium: browser.version(),
         sdkVersion: sdk.version,
-        sdkArchiveIntegrity: lock?.packages?.["node_modules/@vormir/mavio"]?.integrity,
+        sdkArchiveIntegrity: lock?.packages?.["node_modules/@vormirtech/mavio"]?.integrity,
         coreVersion: manifest.coreVersion,
         wrapperVersion: manifest.wrapperVersion,
         ...measured.browserEnvironment,

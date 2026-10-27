@@ -1,5 +1,5 @@
-import { createMavio as m6CreateNodeMavio } from "@vormir/mavio/node";
-import { createMavio as m6CreateBrowserMavio } from "@vormir/mavio/browser";
+import { createMavio as m6CreateNodeMavio } from "@vormirtech/mavio/node";
+import { createMavio as m6CreateBrowserMavio } from "@vormirtech/mavio/browser";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createCapabilityClient } from "../../dist/core/capability-client.js";

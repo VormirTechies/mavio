@@ -1,4 +1,4 @@
-import { createMavio } from "@vormir/mavio/node";
+import { createMavio } from "@vormirtech/mavio/node";
 
 async function main() {
   const args = process.argv.slice(2);

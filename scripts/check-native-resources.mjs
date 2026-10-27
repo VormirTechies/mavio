@@ -52,7 +52,7 @@ async function main() {
   const [packed] = JSON.parse(
     npm([
       "pack",
-      "--workspace=@vormir/mavio",
+      "--workspace=@vormirtech/mavio",
       "--ignore-scripts",
       "--json",
       "--pack-destination",
@@ -91,10 +91,10 @@ async function main() {
   process.env.TMP = sdkTemporary;
 
   const requireConsumer = createRequire(join(consumer, "package.json"));
-  const entry = requireConsumer.resolve("@vormir/mavio/node");
+  const entry = requireConsumer.resolve("@vormirtech/mavio/node");
   assert.equal(
     realpathSync(entry),
-    realpathSync(join(consumer, "node_modules/@vormir/mavio/dist/node.js")),
+    realpathSync(join(consumer, "node_modules/@vormirtech/mavio/dist/node.js")),
   );
   const { createMavio, SDK_VERSION } = await import(pathToFileURL(entry).href);
   const lock = JSON.parse(readFileSync(join(consumer, "package-lock.json"), "utf8"));
@@ -273,7 +273,7 @@ async function main() {
         architecture: process.arch,
         cpu: cpus()[0]?.model,
         sdkVersion: SDK_VERSION,
-        sdkArchiveIntegrity: lock.packages["node_modules/@vormir/mavio"].integrity,
+        sdkArchiveIntegrity: lock.packages["node_modules/@vormirtech/mavio"].integrity,
       },
       fixture: { sha256: fixtureHash, sizeBytes: fixture.byteLength },
       counts,

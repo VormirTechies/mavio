@@ -8,7 +8,7 @@ The SDK does not automatically print these events or send them over a network.
 This Node example requires separately installed FFmpeg and FFprobe on PATH.
 
 ```js
-import { createMavio } from "@vormir/mavio/node";
+import { createMavio } from "@vormirtech/mavio/node";
 
 const client = createMavio({
   onDiagnostic(event) {

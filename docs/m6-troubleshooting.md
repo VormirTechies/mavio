@@ -9,7 +9,7 @@ processing plan must also be supported.
 
 ### Node
 
-Use `@vormir/mavio/node`. Install FFmpeg and FFprobe separately and make both
+Use `@vormirtech/mavio/node`. Install FFmpeg and FFprobe separately and make both
 available on PATH, or configure their absolute executable paths through
 `native.ffmpegPath` and `native.ffprobePath`.
 
@@ -23,7 +23,7 @@ destination automatically when handling `OUTPUT_EXISTS`.
 
 ### Browser
 
-Use `@vormir/mavio/browser` with application-hosted, same-origin assets.
+Use `@vormirtech/mavio/browser` with application-hosted, same-origin assets.
 Generate the accepted corrected assets with the CLI shipped in the SDK.
 Copying the unmodified upstream core is not the accepted configuration.
 

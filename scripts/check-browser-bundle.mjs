@@ -10,13 +10,13 @@ assert.ok(consumerDir, "Provide the temporary consumer directory.");
 const resolveDir = path.resolve(consumerDir);
 
 assert.ok(
-  existsSync(path.join(resolveDir, "node_modules/@vormir/mavio/package.json")),
+  existsSync(path.join(resolveDir, "node_modules/@vormirtech/mavio/package.json")),
   "The consumer directory must contain the installed Mavio archive.",
 );
 
 const result = await build({
   stdin: {
-    contents: 'export { SDK_VERSION, createMavio } from "@vormir/mavio";',
+    contents: 'export { SDK_VERSION, createMavio } from "@vormirtech/mavio";',
     resolveDir,
     sourcefile: "consumer.js",
     loader: "js",
@@ -33,12 +33,12 @@ const result = await build({
 const inputs = Object.keys(result.metafile.inputs).map((file) => file.replaceAll("\\", "/"));
 
 assert.ok(
-  inputs.some((file) => file.endsWith("/@vormir/mavio/dist/browser.js")),
+  inputs.some((file) => file.endsWith("/@vormirtech/mavio/dist/browser.js")),
   "The bundle must use Mavio's browser entry.",
 );
 
 assert.ok(
-  !inputs.some((file) => file.endsWith("/@vormir/mavio/dist/node.js")),
+  !inputs.some((file) => file.endsWith("/@vormirtech/mavio/dist/node.js")),
   "The bundle must exclude Mavio's Node entry.",
 );
 
@@ -50,7 +50,7 @@ console.log("Browser bundle passed");
 console.log("Inputs:", inputs);
 
 const installedPackage = JSON.parse(
-  readFileSync(path.join(resolveDir, "node_modules/@vormir/mavio/package.json"), "utf8"),
+  readFileSync(path.join(resolveDir, "node_modules/@vormirtech/mavio/package.json"), "utf8"),
 );
 
 const browser = await chromium.launch({

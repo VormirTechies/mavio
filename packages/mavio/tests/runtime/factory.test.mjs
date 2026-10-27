@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
 
-import { createMavio as createRoot } from "@vormir/mavio";
-import { createMavio as createNode } from "@vormir/mavio/node";
-import { createMavio as createBrowser } from "@vormir/mavio/browser";
+import { createMavio as createRoot } from "@vormirtech/mavio";
+import { createMavio as createNode } from "@vormirtech/mavio/node";
+import { createMavio as createBrowser } from "@vormirtech/mavio/browser";
 
 function fixture(runtime = "node") {
   const calls = [];

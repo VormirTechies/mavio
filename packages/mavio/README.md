@@ -1,4 +1,4 @@
-# @vormir/mavio
+# @vormirtech/mavio
 
 JavaScript multimedia SDK for browser and Node.js runtimes.
 
@@ -9,9 +9,9 @@ adapters. The package remains private and has not been published to npm.
 
 Public entry points:
 
-- `@vormir/mavio`
-- `@vormir/mavio/browser`
-- `@vormir/mavio/node`
+- `@vormirtech/mavio`
+- `@vormirtech/mavio/browser`
+- `@vormirtech/mavio/node`
 
 Each entry exposes `createMavio`, `SDK_VERSION`, and public contract types. The root entry selects the Node or browser implementation through package export conditions.
 
