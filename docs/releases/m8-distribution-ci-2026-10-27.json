@@ -1,0 +1,95 @@
+{
+  "recordedAt": "2026-10-27T03:40:12.535Z",
+  "status": "release-distribution-ci-passed-publication-pending",
+  "runId": 40387771193,
+  "reviewedCommit": "dfac848e1fb153d25850be72decb8baa5f52b61e",
+  "event": "push",
+  "url": "https://github.com/VormirTechies/mavio/actions/runs/40387771193",
+  "successfulJobs": 19,
+  "verifiedDistributionConsumerJobs": 12,
+  "browserMatrixJobs": 6,
+  "jobs": [
+    {
+      "name": "Native Ubuntu 24.04 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native windows-2025 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native Ubuntu 24.04 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native windows-2025 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native macos-15 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Release distribution draft access",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native macos-15 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "M6 examples and resources / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "M6 examples and resources / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "windows-latest / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "windows-latest / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser ubuntu-24.04 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser windows-2025 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "ubuntu-latest / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser windows-2025 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser macos-15 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "ubuntu-latest / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser ubuntu-24.04 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser macos-15 / Node 22",
+      "conclusion": "success"
+    }
+  ],
+  "limitations": [
+    "Distribution downloaded from an unpublished draft.",
+    "Public anonymous delivery remains unverified.",
+    "SDK private publication guard remains enabled.",
+    "Cancelled companion run is not counted as passing evidence."
+  ]
+}
