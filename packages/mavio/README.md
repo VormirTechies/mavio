@@ -101,11 +101,14 @@ cancellation, cleanup, and recovery through installed-package public APIs.
 Acceptance applies to generated assets and the tested Chromium configurations;
 other browser families require separate verification.
 
-[Public API recipes](../../docs/m5-recipes.md)
+[Public API recipes](https://github.com/VormirTechies/mavio/blob/main/docs/m5-recipes.md)
 
 ## License
 
-MIT.
+Mavio SDK code is MIT. Separately supplied Browser engines and Native tools
+have their own licenses. Preserve engine notices, corresponding source, and
+modification records. See [third-party notices](THIRD_PARTY_NOTICES.md) and
+[engine licensing guidance](third-party/ENGINE-LICENSING.md).
 
 ## Native input restrictions
 
@@ -137,8 +140,9 @@ avoid sending whole error objects or cause chains to telemetry.
 ## Experimental Browser engine assets
 
 An optional candidate asset generator is available for local evaluation.
-It is deferred for further exploration in a future release and is not
-production-approved. The existing mavio-browser-assets command is unchanged.
+This separate command targets the older experimental v1 profile and is deferred
+for further exploration. Normal mavio-browser-assets generation requires v2;
+use the required-kit instructions below for the reviewed release candidate.
 
 Run the separate command with four explicit paths:
 
@@ -157,8 +161,8 @@ An existing destination is rejected.
 
 Preserve the generated sources and notices with the output. These materials
 remain under review; their inclusion does not establish complete redistribution
-clearance. M7-D01 and M7-L01 remain open, including the x264 initialization
-cleanup finding. Generation does not approve production adoption or publication.
+clearance. The release-scoped M7 acceptance for required v2 does not approve
+this older v1 profile. Generation does not authorize publication.
 
 Candidate binaries and the source archive are not bundled in the SDK package.
 This route does not download or build them automatically.
@@ -190,5 +194,6 @@ The kit is supplied separately; the SDK does not bundle or automatically
 download engine binaries. Review storage is currently an unpublished draft
 release, not a public distribution channel.
 
-The separate experimental v1 command remains unchanged. Required v2 selection
-does not itself establish final security/licensing acceptance or publication approval.
+The separate experimental v1 command remains unchanged. Required v2 has M7
+acceptance for SDK 0.0.3 under release-scoped owner dispositions and distribution
+conditions. Public delivery verification and publication approval remain M8 work.

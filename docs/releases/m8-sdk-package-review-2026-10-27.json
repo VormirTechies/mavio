@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-10-26T19:32:22.2314153Z",
+  "status": "static-package-review-passed-publication-pending",
+  "archiveName": "vormir-mavio-0.0.3.tgz",
+  "sha256": "f0479bebc145e7e00f9a2029eef997bce3f0bf8e87ac32f027fd7471ba83fc83",
+  "sizeBytes": 196090,
+  "entryCount": 414,
+  "previousArchiveSha256": "0e30d2d06a312c8741e28c003f9136d55189b5d4377b04279f4282ee6b4df390",
+  "changedFiles": ["package/README.md", "package/THIRD_PARTY_NOTICES.md"],
+  "otherPackagedFilesByteIdentical": true,
+  "privateGuardRetained": true,
+  "reviewScope": "Static archive inspection and byte comparison; packaged code not executed."
+}

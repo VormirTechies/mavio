@@ -1,6 +1,35 @@
 # Changelog
 
-## [0.0.3] — M2 core
+## [0.0.3] — Release preparation
+
+Publication is pending. This entry summarizes the M2–M7 implementation
+included in the current 0.0.3 release candidate.
+
+### Added
+
+- Default Native FFmpeg/FFprobe and Browser WebAssembly adapters.
+- Source metadata, MP4 video export and trim, resize, compression, preset
+  quality selection, audio export and trim, audio-track selection, and thumbnails
+  within the reviewed runtime and media profiles.
+- Installed-consumer examples and checks for cancellation, cleanup, recovery,
+  and bounded resource behavior.
+- Required hash-pinned v2 Browser engine kit, JavaScript stack restoration,
+  corresponding-source delivery, modification records, and component notices.
+- Restricted Native input demuxers and selected-field diagnostic events.
+
+### Acceptance and limitations
+
+- M7 acceptance identifies the reviewed candidate and release-scoped owner
+  dispositions. Remaining follow-up is required before the next release.
+- Browser acceptance covers the tested Chromium configurations.
+- Native tools are installed separately; their provenance and maintenance
+  remain the responsibility of the distributing application or operator.
+- Browser engine binaries are supplied separately from the MIT SDK.
+- Public engine delivery and npm publication remain M8 work.
+- Hosted documentation, landing page, and comprehensive demo are not included
+  in this SDK release preparation.
+
+### M2 core implementation history
 
 - Added public Node and browser client factories with explicit adapter ownership and lazy initialization.
 - Implemented immutable pipelines, preset/composition validation, source preflight, and runtime input/output restrictions.
@@ -10,7 +39,9 @@
 - Added adapter-response validation, independent output snapshots, and Node path resolution.
 - Expanded the runtime suite to 161 tests, including browser Blob-to-video and Node path-to-audio mock-adapter acceptance flows.
 
-### Scope and limitations
+### Historical M2 scope
+
+The following describes the earlier M2 checkpoint, not the current release candidate.
 
 - An explicit engine adapter is required. Default and automatic engines remain pending.
 - Native FFmpeg integration belongs to M3; browser ffmpeg.wasm integration belongs to M4.

@@ -31,8 +31,16 @@ Installed generation and cross-platform verification passed.
 
 These technical checks do not themselves establish complete licensing
 clearance for every consuming application or distribution.
-Final notice completeness and distribution-model review remain M7-L01 work.
-Review storage is an unpublished GitHub draft, not a public delivery channel.
+M7 acceptance for SDK 0.0.3 includes release-scoped owner dispositions and
+distribution conditions. These decisions do not waive license obligations
+or carry forward automatically to another release.
+
+M8 must verify the final public distribution notice set and durable delivery
+of the actual engine and corresponding source before publication.
+The current unpublished GitHub draft remains a review channel.
+
+Preserve the supplemental musl-EMBEDDED-NOTICES.txt supplied by the SDK
+generator, together with the kit notices, source archive, and modifications.
 
 The separate experimental v1 command retains its own pins and generated guide.
 No public publication is authorized by this document.

@@ -3,7 +3,6 @@
   "version": "0.0.3",
   "description": "A universal JavaScript multimedia SDK for browser and Node.js runtimes.",
   "license": "MIT",
-  "private": true,
   "type": "module",
   "files": [
     "dist",
@@ -54,5 +53,30 @@
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "0.12.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VormirTechies/mavio.git",
+    "directory": "packages/mavio"
+  },
+  "homepage": "https://github.com/VormirTechies/mavio/tree/main/packages/mavio#readme",
+  "bugs": {
+    "url": "https://github.com/VormirTechies/mavio/issues"
+  },
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0"
+  },
+  "keywords": [
+    "media",
+    "video",
+    "audio",
+    "ffmpeg",
+    "webassembly",
+    "browser",
+    "typescript"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

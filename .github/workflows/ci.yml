@@ -41,18 +41,18 @@ jobs:
       - name: Install browser
         run: npx playwright install --with-deps chromium --only-shell
 
-      - name: Download verified v2 archive
+      - name: Download verified release distribution
         uses: actions/download-artifact@v8
         with:
-          name: candidate-v2-engine-kit
+          name: release-engine-distribution-0.0.3
           path: ${{ runner.temp }}/candidate-kit-download
 
-      - name: Verify and select v2 kit
+      - name: Verify and select release distribution
         shell: bash
         env:
           KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
           KIT_DEST: ${{ runner.temp }}/mavio-v2-engine-kit
-        run: node scripts/prepare-ci-engine-kit.mjs "$KIT_ARCHIVE" "$KIT_DEST"
+        run: node scripts/prepare-release-engine-distribution.mjs "$KIT_ARCHIVE" "$KIT_DEST"
 
       - name: Verify SDK
         run: npm run check
@@ -125,18 +125,18 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
 
-      - name: Download verified v2 archive
+      - name: Download verified release distribution
         uses: actions/download-artifact@v8
         with:
-          name: candidate-v2-engine-kit
+          name: release-engine-distribution-0.0.3
           path: ${{ runner.temp }}/candidate-kit-download
 
-      - name: Verify and select v2 kit
+      - name: Verify and select release distribution
         shell: bash
         env:
           KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
           KIT_DEST: ${{ runner.temp }}/mavio-v2-engine-kit
-        run: node scripts/prepare-ci-engine-kit.mjs "$KIT_ARCHIVE" "$KIT_DEST"
+        run: node scripts/prepare-release-engine-distribution.mjs "$KIT_ARCHIVE" "$KIT_DEST"
 
       - name: Verify installed-package browser routes
         env:
@@ -258,24 +258,24 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
 
-      - name: Download verified v2 archive
+      - name: Download verified release distribution
         uses: actions/download-artifact@v8
         with:
-          name: candidate-v2-engine-kit
+          name: release-engine-distribution-0.0.3
           path: ${{ runner.temp }}/candidate-kit-download
 
-      - name: Verify and select v2 kit
+      - name: Verify and select release distribution
         shell: bash
         env:
           KIT_ARCHIVE: ${{ runner.temp }}/candidate-kit-download/engine-kit.tar.gz
           KIT_DEST: ${{ runner.temp }}/mavio-v2-engine-kit
-        run: node scripts/prepare-ci-engine-kit.mjs "$KIT_ARCHIVE" "$KIT_DEST"
+        run: node scripts/prepare-release-engine-distribution.mjs "$KIT_ARCHIVE" "$KIT_DEST"
 
       - name: Verify M6 examples and bounded resources
         run: npm run check:m6 -- /usr/bin/ffmpeg /usr/bin/ffprobe
 
   candidate-kit-access:
-    name: Candidate v2 draft artifact access
+    name: Release distribution draft access
     if: github.repository == 'VormirTechies/mavio' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -307,26 +307,26 @@ jobs:
             import {readFile} from "node:fs/promises";
             const release = JSON.parse(await readFile("draft.json", "utf8"));
             assert.equal(release.isDraft, true);
-            const asset = release.assets.find(item => item.name === "mavio-candidate-v2-engine-kit.tar.gz");
+            const asset = release.assets.find(item => item.name === "mavio-browser-engine-0.0.3.tar.gz");
             assert.ok(asset);
-            assert.equal(asset.size, 51321159);
+            assert.equal(asset.size, 51350998);
           '
-          gh api -H 'Accept: application/octet-stream' repos/VormirTechies/mavio/releases/assets/675701697 > engine-kit.tar.gz
+          gh api -H 'Accept: application/octet-stream' repos/VormirTechies/mavio/releases/assets/679080135 > engine-kit.tar.gz
           node --input-type=module -e '
             import assert from "node:assert/strict";
             import {createHash} from "node:crypto";
             import {readFile} from "node:fs/promises";
             const bytes = await readFile("engine-kit.tar.gz");
-            assert.equal(bytes.length, 51321159);
+            assert.equal(bytes.length, 51350998);
             assert.equal(createHash("sha256").update(bytes).digest("hex"),
-              "d3716527590fa75336f7e1234bb097fd1b87523b17996c052981f1dd862cb838");
-            console.log("PASS: Read-only CI token downloaded the exact draft kit.");
+              "4210f97b3b37b65ca14b7ee28f3f3837f997799175be0cbf95d4568e944f0576");
+            console.log("PASS: CI provisioning token downloaded the exact draft release distribution.");
           '
 
       - name: Share verified archive with Browser jobs
         uses: actions/upload-artifact@v7
         with:
-          name: candidate-v2-engine-kit
+          name: release-engine-distribution-0.0.3
           path: ${{ runner.temp }}/engine-kit.tar.gz
           if-no-files-found: error
           retention-days: 7
