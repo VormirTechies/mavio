@@ -1,0 +1,96 @@
+{
+  "recordedAt": "2026-10-27T05:02:40.610Z",
+  "status": "publishable-candidate-ci-passed-publication-pending",
+  "reviewedCommit": "5356b6a636644e6558071e9070bd115e6745cda4",
+  "runId": 40450005926,
+  "event": "pull_request",
+  "url": "https://github.com/VormirTechies/mavio/actions/runs/40450005926",
+  "successfulJobs": 19,
+  "verifiedDistributionConsumerJobs": 12,
+  "sdkArchiveSha256": "1a6d1848b488daef768c1d7ad988c03d4538959659b37aad4eee84faf1b0b1fc",
+  "engineArchiveSha256": "4210f97b3b37b65ca14b7ee28f3f3837f997799175be0cbf95d4568e944f0576",
+  "cancelledCompanionRun": 40450000441,
+  "limitations": [
+    "Cancelled push run is not counted as passing evidence.",
+    "CI provisions the engine from an unpublished draft.",
+    "Public delivery, merge approval, and publication approval remain pending."
+  ],
+  "jobs": [
+    {
+      "name": "Native Ubuntu 24.04 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native Ubuntu 24.04 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native windows-2025 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Release distribution draft access",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native macos-15 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native macos-15 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native windows-2025 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "M6 examples and resources / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "M6 examples and resources / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "ubuntu-latest / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser ubuntu-24.04 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "ubuntu-latest / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser windows-2025 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "windows-latest / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "windows-latest / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser macos-15 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser windows-2025 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser macos-15 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser ubuntu-24.04 / Node 22",
+      "conclusion": "success"
+    }
+  ]
+}
