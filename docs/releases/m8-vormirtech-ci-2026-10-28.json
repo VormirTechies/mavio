@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-27T19:35:59.391Z",
+  "status": "renamed-candidate-ci-passed-publication-pending",
+  "packageName": "@vormirtech/mavio",
+  "version": "0.0.3",
+  "reviewedCommit": "b2d3e0e68657a8d6dabb222ebc6f7b78dc01523e",
+  "runId": 40567008187,
+  "event": "push",
+  "url": "https://github.com/VormirTechies/mavio/actions/runs/40567008187",
+  "successfulJobs": 19,
+  "verifiedDistributionConsumerJobs": 12,
+  "sdkArchiveSha256": "3c80f5ab4865aa095c6cd162314c5242f15891b7eeae01307fb063457b9e00da",
+  "engineDistributionUnchanged": true,
+  "jobs": [
+    {
+      "name": "Native macos-15 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native Ubuntu 24.04 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native Ubuntu 24.04 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native macos-15 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native windows-2025 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Release distribution draft access",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native windows-2025 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "ubuntu-latest / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "ubuntu-latest / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser windows-2025 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "M6 examples and resources / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "windows-latest / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser ubuntu-24.04 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "windows-latest / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "M6 examples and resources / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser windows-2025 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser macos-15 / Node 22",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser macos-15 / Node 24",
+      "conclusion": "success"
+    },
+    {
+      "name": "Browser ubuntu-24.04 / Node 24",
+      "conclusion": "success"
+    }
+  ],
+  "limitations": [
+    "Release-only owner disposition applicability awaits confirmation for the renamed package.",
+    "Merge and npm publication approval remain pending.",
+    "CI still downloads the distribution from the historical draft release."
+  ]
+}

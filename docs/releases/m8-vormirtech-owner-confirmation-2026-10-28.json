@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-27T19:37:42.812Z",
+  "status": "owner-confirmed-release-only-disposition-applicability",
+  "authority": "Explicit project-owner confirmation in this conversation",
+  "originalPackage": "@vormir/mavio",
+  "packageName": "@vormirtech/mavio",
+  "version": "0.0.3",
+  "reviewedCommit": "b2d3e0e68657a8d6dabb222ebc6f7b78dc01523e",
+  "sdkArchiveSha256": "3c80f5ab4865aa095c6cd162314c5242f15891b7eeae01307fb063457b9e00da",
+  "candidateId": "ffmpeg-5.1.10-mavio-x264-cleanup-v2",
+  "originalDispositions": "../security/m7-owner-dispositions-2026-10-26.json",
+  "scope": [
+    "Existing security and distribution dispositions apply to the renamed 0.0.3 release.",
+    "Reviewed engine, limitations, and distribution conditions remain unchanged.",
+    "Mandatory next-release follow-up remains required.",
+    "No automatic applicability to later releases."
+  ],
+  "notAuthorized": ["npm publication", "Merge of PR #3", "Waiver of applicable license obligations"]
+}
