@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-28T03:45:01.351Z",
+  "status": "public-delivery-verified-handover-merge-pending",
+  "packageName": "@vormirtech/mavio",
+  "version": "0.0.3",
+  "npmURL": "https://www.npmjs.com/package/@vormirtech/mavio",
+  "distTag": "latest",
+  "sdkSha256": "3c80f5ab4865aa095c6cd162314c5242f15891b7eeae01307fb063457b9e00da",
+  "sdkIntegrity": "sha512-Jr5tIIAej+U8vGG/6HeC2Ur1ynUc8BrxD72C1xgVP7hi+ZGjpREO2mqsidxyHVuYHCIPWP51/CIllUpuqN4TKg==",
+  "engineURL": "https://github.com/VormirTechies/mavio/releases/download/mavio-browser-engine-0.0.3/mavio-browser-engine-0.0.3.tar.gz",
+  "engineSha256": "4210f97b3b37b65ca14b7ee28f3f3837f997799175be0cbf95d4568e944f0576",
+  "publicInstallationAndImportsPassed": true,
+  "publicBrowserMP4SmokePassed": true,
+  "publicEngineSourceAndNoticesVerified": true,
+  "ci": {
+    "reviewedCommit": "b7f2fd811305f0c1bea610631410b499b77e45a6",
+    "url": "https://github.com/VormirTechies/mavio/actions/runs/40627473156",
+    "successfulJobs": 19,
+    "distributionConsumerJobs": 12,
+    "provisioning": "anonymous public download; contents read; no draft token"
+  },
+  "nextReleaseFollowUp": "../next-release-security-follow-up.md",
+  "limitations": [
+    "Owner dispositions apply only to this release.",
+    "Published SDK and engine preparation-status labels remain historical metadata.",
+    "Handover branch still requires review and merge."
+  ]
+}

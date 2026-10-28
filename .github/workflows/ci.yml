@@ -275,14 +275,11 @@ jobs:
         run: npm run check:m6 -- /usr/bin/ffmpeg /usr/bin/ffprobe
 
   candidate-kit-access:
-    name: Release distribution draft access
-    if: github.repository == 'VormirTechies/mavio' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    name: Public release distribution access
     runs-on: ubuntu-24.04
     timeout-minutes: 10
-    # Draft visibility requires push-level access; confined to this probe.
-    # The commands below only inspect and download the draft asset.
     permissions:
-      contents: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -294,24 +291,14 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Verify draft access and artifact hash
+      - name: Download public distribution and verify hash
         shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           cd "$RUNNER_TEMP"
-          gh release view m7-core-v2-review --repo VormirTechies/mavio --json isDraft,assets > draft.json
-          node --input-type=module -e '
-            import assert from "node:assert/strict";
-            import {readFile} from "node:fs/promises";
-            const release = JSON.parse(await readFile("draft.json", "utf8"));
-            assert.equal(release.isDraft, true);
-            const asset = release.assets.find(item => item.name === "mavio-browser-engine-0.0.3.tar.gz");
-            assert.ok(asset);
-            assert.equal(asset.size, 51350998);
-          '
-          gh api -H 'Accept: application/octet-stream' repos/VormirTechies/mavio/releases/assets/679080135 > engine-kit.tar.gz
+          curl -q --fail --location --retry 3 \
+            --output engine-kit.tar.gz \
+            "https://github.com/VormirTechies/mavio/releases/download/mavio-browser-engine-0.0.3/mavio-browser-engine-0.0.3.tar.gz"
           node --input-type=module -e '
             import assert from "node:assert/strict";
             import {createHash} from "node:crypto";
@@ -320,7 +307,7 @@ jobs:
             assert.equal(bytes.length, 51350998);
             assert.equal(createHash("sha256").update(bytes).digest("hex"),
               "4210f97b3b37b65ca14b7ee28f3f3837f997799175be0cbf95d4568e944f0576");
-            console.log("PASS: CI provisioning token downloaded the exact draft release distribution.");
+            console.log("PASS: Anonymous public distribution download matches the approved hash.");
           '
 
       - name: Share verified archive with Browser jobs

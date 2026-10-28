@@ -2,9 +2,19 @@
 
 ## Availability
 
-The distribution is locally verified. Public download and npm publication
-are pending. These instructions describe the prepared release artifacts;
-they do not claim that a public download is available.
+SDK @vormirtech/mavio@0.0.3 and the Browser engine distribution are published.
+Registry integrity, anonymous engine download, installed imports, asset
+generation, and real Browser MP4 smoke checks passed.
+
+- [npm package](https://www.npmjs.com/package/@vormirtech/mavio)
+- [Engine release](https://github.com/VormirTechies/mavio/releases/tag/mavio-browser-engine-0.0.3)
+- [Engine archive](https://github.com/VormirTechies/mavio/releases/download/mavio-browser-engine-0.0.3/mavio-browser-engine-0.0.3.tar.gz)
+
+Install the SDK:
+
+```sh
+npm install --save-exact @vormirtech/mavio@0.0.3
+```
 
 Archive: mavio-browser-engine-0.0.3.tar.gz
 
@@ -16,8 +26,7 @@ SHA-256:
 
 ## Verify and extract on Windows
 
-Use the approved release download when its URL has been published and verified.
-Until then, use the locally reviewed archive.
+Download the engine archive linked above and verify its hash before extraction.
 Run the following from the directory containing the archive:
 
 ```powershell
